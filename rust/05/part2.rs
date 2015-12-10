@@ -25,7 +25,9 @@ fn main(){
 fn contains_repeating_letter(word: String) -> bool {
 
     for ii in 0..word.len() - 2 {
-        if word[ii] == word[ii+2] {
+        let tripple = &word[ii..ii+3];
+
+        if tripple.chars().nth(0) == tripple.chars().nth(2) {
             return true;
         }
     }
@@ -49,7 +51,7 @@ fn contains_pair(word: String) -> bool {
 
 // This function simply imports the data set from a file called input.txt
 fn import_data() -> String {
-    let mut file = match File::open("input.txt") {
+    let mut file = match File::open("../../inputs/05.txt") {
         Ok(f) => f,
         Err(e) => panic!("file error: {}", e),
     };

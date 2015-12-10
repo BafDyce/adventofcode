@@ -32,7 +32,7 @@ fn main(){
 
 // This function simply imports the data set from a file called input.txt
 fn import_data() -> String {
-    let mut file = match File::open("input.txt") {
+    let mut file = match File::open("../../inputs/08.txt") {
         Ok(f) => f,
         Err(e) => panic!("file error: {}", e),
     };
