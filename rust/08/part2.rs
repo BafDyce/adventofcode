@@ -1,11 +1,11 @@
 // adventofcode - day 8
-// part 1
+// part 2
 
 use std::io::prelude::*;
 use std::fs::File;
 
 fn main(){
-    println!("Advent of Code - day 8 | part 1");
+    println!("Advent of Code - day 8 | part 2");
 
     // import data
     let data = import_data();
