@@ -10,6 +10,10 @@ fn main(){
     // import data
     let data = import_data();
 
+    // logic is, that we don't compute the length of either of the strings,
+    // however, we simply calculate differences on the fly
+    // i.e. if we discover a '\' we know that this is one character "too much"
+    // -> we simply increment our counter ;)
     let mut total_char_diff = 0u32;
     for line in data.lines() {
         // substract first and last "

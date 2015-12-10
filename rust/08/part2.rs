@@ -10,11 +10,18 @@ fn main(){
     // import data
     let data = import_data();
 
+    // logic is, that we don't compute the length of either of the strings,
+    // however, we simply calculate differences on the fly
+    // this is easer than in part 1 because we know that we only have to escape
+    // '\' and '"' characters -> everytime we see such a character, we increment
+    // our counter :P
     let mut total_char_diff = 0u32;
     for line in data.lines() {
         let backslashes: Vec<&str> = line.matches('\\').collect();
         let doublequotes: Vec<&str> = line.matches('\"').collect();
 
+        // '2' because we need to append double quotes at the beginning and the
+        // end of every string
         total_char_diff += 2
                             + backslashes.len() as u32
                             + doublequotes.len() as u32;
