@@ -21,8 +21,8 @@ pub fn main(){
 }
 
 fn look_and_say(input: String) -> String {
-    // experience has shown that the strings grows by factor 1.3-1.4 each Round
-    // therefore, we pre-reserve this memory to save later re-allocations
+    // Conway's constant is 1.3035, however we use a factor of 1.4 to avoid
+    // re-allocation
     let mut output = String::with_capacity((input.len() as f64 * 1.4) as usize);
 
     let mut last_char = '\x00';
