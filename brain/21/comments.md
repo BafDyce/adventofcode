@@ -85,3 +85,6 @@ Part 2 requires us to **lose as expensive as possible**.
 We know that we win, when we have at least 10 points, therefore we'll simply
 look for the **most expensive combination to buy 9 points**. (Again, based on
 the assumption that it is more expensive to buy 9 points than it is to buy less)
+
+### Notes (paper)
+![Day 21 solved on Paper](part1_2.jpg "Day 21 solved on Paper")
