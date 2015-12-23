@@ -21,7 +21,7 @@ fn main(){
     containers.reverse();
 
     let store = 150;
-    let (combi, times) = count_combinations(store, &containers[0..]);
+    let (combi, times) = count_min_combination(store, &containers[0..]);
 
     println!("Minimum combi: {} ({} times)", combi, times);
 
