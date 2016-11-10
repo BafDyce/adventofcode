@@ -1,0 +1,15 @@
+# depslib dependency file v1.0
+1478819322 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day01/Day01p1.cpp
+	"Day01p1.h"
+	<iostream>
+
+1478819107 /home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day01/Day01p1.h
+	<iostream>
+
+1478819270 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/main.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<limits>
+	"day01/Day01p1.h"
+
