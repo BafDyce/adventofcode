@@ -6,6 +6,7 @@
 
 #include "day01/Day01p1.h"
 #include "day01/Day01p2.h"
+#include "day02/Day02.h"
 
 using namespace std;
 
@@ -50,6 +51,10 @@ bool run_solver(int day, int part, vector<string> input, string& result){
             Day01p2 solver(input);
             return solver.solve(result);
         }
+        break;
+    case 2:
+        Day02 solver(input);
+        return solver.solve(part, result);
     }
 
     return false;
