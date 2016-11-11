@@ -36,6 +36,8 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="DayTemplate.cpp" />
+		<Unit filename="DayTemplate.h" />
 		<Unit filename="day01/Day01.cpp" />
 		<Unit filename="day01/Day01.h" />
 		<Unit filename="day01/part1.cpp" />

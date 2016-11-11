@@ -4,23 +4,23 @@
 #include <iostream>
 #include <vector>
 
+#include "../DayTemplate.h"
+
 using namespace std;
 
-class Day01 {
+class Day01 : public DayTemplate {
     public:
-        /** Default constructor */
-        Day01();
         Day01(vector<string> input);
-        /** Default destructor */
         virtual ~Day01();
-        bool solve(int part, string& result);
 
     protected:
-
-    private:
         string data;
         bool solve_p1(string& result);
         bool solve_p2(string& result);
+
+    private:
+        Day01();
+
 };
 
 #endif // DAY01_H

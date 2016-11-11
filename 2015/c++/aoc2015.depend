@@ -8,14 +8,13 @@
 	<iostream>
 	<vector>
 
-1478862982 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/main.cpp
+1478869049 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/main.cpp
 	<iostream>
 	<fstream>
 	<sstream>
 	<limits>
 	<vector>
-	"day01/Day01p1.h"
-	"day01/Day01p2.h"
+	"day01/Day01.h"
 	"day02/Day02.h"
 
 1478862950 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day01/Day01p2.cpp
@@ -27,16 +26,18 @@
 	<iostream>
 	<vector>
 
-1478864823 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day02/Day02.cpp
+1478894740 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day02/Day02.cpp
 	"Day02.h"
 	<iostream>
 	<vector>
+	"../DayTemplate.h"
 
-1478862810 /home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day02/Day02.h
+1478896782 /home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day02/Day02.h
 	<iostream>
 	<vector>
+	"../DayTemplate.h"
 
-1478867995 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day02/part1.cpp
+1478896460 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day02/part1.cpp
 	"Day02.h"
 	<iostream>
 	<vector>
@@ -48,9 +49,10 @@
 	<iostream>
 	<vector>
 
-1478868969 /home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day01/Day01.h
+1478896799 /home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day01/Day01.h
 	<iostream>
 	<vector>
+	"../DayTemplate.h"
 
 1478868972 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day01/part1.cpp
 	"Day01.h"
@@ -68,4 +70,13 @@
 	<vector>
 	<sstream>
 	<algorithm>
+
+1478896547 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/DayTemplate.cpp
+	"DayTemplate.h"
+	<iostream>
+	<vector>
+
+1478896735 /home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/DayTemplate.h
+	<iostream>
+	<vector>
 

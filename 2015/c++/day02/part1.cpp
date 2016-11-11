@@ -9,7 +9,7 @@ using namespace std;
 
 unsigned int calc_paper_for_present(const string present);
 
-bool Day02::solve_p1(string& result){
+bool Day02::solve_p1(string& result) {
     unsigned int paper = 0;
     unsigned int length = data.size();
     for( unsigned int ii = 0; ii < length; ii++){
