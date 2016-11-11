@@ -15,6 +15,7 @@
 					<Add option="-g" />
 					<Add directory="day01" />
 					<Add directory="day02" />
+					<Add directory="day03" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -26,6 +27,7 @@
 					<Add option="-O2" />
 					<Add directory="day01" />
 					<Add directory="day02" />
+					<Add directory="day03" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -36,6 +38,7 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="Day03.h" />
 		<Unit filename="DayTemplate.cpp" />
 		<Unit filename="DayTemplate.h" />
 		<Unit filename="day01/Day01.cpp" />
@@ -46,6 +49,10 @@
 		<Unit filename="day02/Day02.h" />
 		<Unit filename="day02/part1.cpp" />
 		<Unit filename="day02/part2.cpp" />
+		<Unit filename="day03/Day03.cpp" />
+		<Unit filename="day03/Day03.h" />
+		<Unit filename="day03/part1.cpp" />
+		<Unit filename="day03/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
