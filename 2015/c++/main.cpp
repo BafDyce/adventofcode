@@ -4,8 +4,7 @@
 #include <limits>
 #include <vector>
 
-#include "day01/Day01p1.h"
-#include "day01/Day01p2.h"
+#include "day01/Day01.h"
 #include "day02/Day02.h"
 
 using namespace std;
@@ -43,18 +42,14 @@ int main(int argc, char *argv[]) {
 bool run_solver(int day, int part, vector<string> input, string& result){
 
     switch(day){
-    case 1:
-        if( part == 1 ){
-            Day01p1 solver(input);
-            return solver.solve(result);
-        } else if( part == 2 ){
-            Day01p2 solver(input);
-            return solver.solve(result);
-        }
-        break;
-    case 2:
+    case 1: {
+        Day01 solver(input);
+        return solver.solve(part, result);
+    }
+    case 2: {
         Day02 solver(input);
         return solver.solve(part, result);
+    }
     }
 
     return false;

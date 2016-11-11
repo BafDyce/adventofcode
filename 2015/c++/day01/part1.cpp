@@ -1,20 +1,13 @@
-#include "Day01p1.h"
+#include "Day01.h"
 
 #include <iostream>
 #include <vector>
 
 using namespace std;
 
-Day01p1::Day01p1(vector<string> input) {
-    // we just want the first (and only) line
-    data = input[0];
-}
+unsigned int calc_paper_for_present(const string present);
 
-Day01p1::~Day01p1() {
-    //dtor
-}
-
-bool Day01p1::solve(string& result){
+bool Day01::solve_p1(string& result){
     int floor = 0;
     for(unsigned int ii = 0; ii < data.length(); ii++){
         switch(data[ii]){

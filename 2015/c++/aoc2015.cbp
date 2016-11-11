@@ -36,10 +36,10 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
-		<Unit filename="day01/Day01p1.cpp" />
-		<Unit filename="day01/Day01p1.h" />
-		<Unit filename="day01/Day01p2.cpp" />
-		<Unit filename="day01/Day01p2.h" />
+		<Unit filename="day01/Day01.cpp" />
+		<Unit filename="day01/Day01.h" />
+		<Unit filename="day01/part1.cpp" />
+		<Unit filename="day01/part2.cpp" />
 		<Unit filename="day02/Day02.cpp" />
 		<Unit filename="day02/Day02.h" />
 		<Unit filename="day02/part1.cpp" />
