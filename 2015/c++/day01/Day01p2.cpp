@@ -1,10 +1,13 @@
 #include "Day01p2.h"
 
 #include <iostream>
+#include <vector>
+
 using namespace std;
 
-Day01p2::Day01p2(string input) {
-    data = input;
+Day01p2::Day01p2(vector<string> input) {
+    // we just want the first (and only) line
+    data = input[0];
 }
 
 Day01p2::~Day01p2() {

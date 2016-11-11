@@ -2,6 +2,7 @@
 #include <fstream>
 #include <sstream>
 #include <limits>
+#include <vector>
 
 #include "day01/Day01p1.h"
 #include "day01/Day01p2.h"
@@ -9,17 +10,17 @@
 using namespace std;
 
 bool get_day_part_input(const int argc, char** const argv, int& day, int& part,
-        string& input);
+        vector<string>& input);
 bool get_day_part(const int argc, char** const argv, int& day, int& part);
-bool get_input_for_day_part(int day, int part, string& input);
-bool run_solver(int day, int part, string input, string& result);
+bool get_input_for_day_part(int day, int part, vector<string>& input);
+bool run_solver(int day, int part, vector<string> input, string& result);
 
 int main(int argc, char *argv[]) {
     cout << "Advent of Code 2015 - C++ implementations" << endl;
 
     int day;
     int part;
-    string input;
+    vector<string> input;
     bool check = get_day_part_input(argc, argv, day, part, input);
     if( !check ){
         cout << "Setting up the solver failed. Aborting" << endl;
@@ -38,7 +39,7 @@ int main(int argc, char *argv[]) {
     return 1;
 }
 
-bool run_solver(int day, int part, string input, string& result){
+bool run_solver(int day, int part, vector<string> input, string& result){
 
     switch(day){
     case 1:
@@ -55,7 +56,7 @@ bool run_solver(int day, int part, string input, string& result){
 }
 
 bool get_day_part_input(const int argc, char** const argv, int& day, int& part,
-        string& input) {
+        vector<string>& input) {
 
     bool check = get_day_part(argc, argv, day, part);
     int counter = 0;
@@ -149,7 +150,7 @@ bool get_day_part(const int argc, char** const argv, int& day, int& part){
     return false;
 }
 
-bool get_input_for_day_part(int day, int part, string& input){
+bool get_input_for_day_part(int day, int part, vector<string>& input){
     string day_string = to_string(day);
     while( day_string.length() < 2 ){
         day_string = "0" + day_string;
@@ -157,10 +158,11 @@ bool get_input_for_day_part(int day, int part, string& input){
     string fname = "../inputs/" + day_string + ".txt";
 
     ifstream file(fname);
-    if( file && file >> input){
-        return true;
+    string line;
+    while(getline(file, line)){
+        input.push_back(line);
     }
 
-    return false;
+    return input.size() > 0;
 
 }
