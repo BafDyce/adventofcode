@@ -8,7 +8,7 @@
 	<iostream>
 	<vector>
 
-1478897729 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/main.cpp
+1478937816 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/main.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -17,6 +17,7 @@
 	"day01/Day01.h"
 	"day02/Day02.h"
 	"day03/Day03.h"
+	"day04/Day04.h"
 
 1478862950 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day01/Day01p2.cpp
 	"Day01p2.h"
@@ -95,4 +96,35 @@
 	"Day03.h"
 	<iostream>
 	<unordered_map>
+
+1478900161 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day03/part2.cpp
+	"Day03.h"
+	<iostream>
+	<unordered_map>
+
+1478954874 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day04/Day04.cpp
+	"Day04.h"
+	<iostream>
+	<vector>
+	<ctime>
+	<openssl/crypto.h>
+	<openssl/evp.h>
+	<openssl/md5.h>
+
+1478954553 /home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day04/Day04.h
+	<iostream>
+	<vector>
+	<openssl/crypto.h>
+	<openssl/evp.h>
+	<../DayTemplate.h>
+
+1478954023 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day04/part1.cpp
+	"Day04.h"
+	<iostream>
+	<limits>
+
+1478952622 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2015/c++/day04/part2.cpp
+	"Day04.h"
+	<iostream>
+	<limits>
 
