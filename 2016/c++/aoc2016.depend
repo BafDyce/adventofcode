@@ -1,0 +1,47 @@
+# depslib dependency file v1.0
+1479027698 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/aoc2016/main.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<limits>
+	<vector>
+	"boost/program_options.hpp"
+
+1479048909 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/main.cpp
+	<iostream>
+	<fstream>
+	<sstream>
+	<limits>
+	<vector>
+	"boost/program_options.hpp"
+	"AoC.hpp"
+	"day00/Day00.hpp"
+
+1479047418 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/Day00.cpp
+	"Day00.hpp"
+
+1479048999 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/Day00.hpp
+	<iostream>
+	<vector>
+	<../DayTemplate.hpp>
+
+1479046961 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/DayTemplate.hpp
+	<iostream>
+	<vector>
+	"AoC.hpp"
+
+1479047587 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/AoC.hpp
+	<iostream>
+
+1479048669 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/DayTemplate.cpp
+	"DayTemplate.hpp"
+	<iostream>
+	<vector>
+	"AoC.hpp"
+
+1479048497 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/part1.cpp
+	"Day00.hpp"
+	"../AoC.hpp"
+	<iostream>
+	<algorithm>
+
