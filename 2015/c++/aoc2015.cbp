@@ -43,7 +43,6 @@
 		<Linker>
 			<Add option="-lssl -lcrypto" />
 		</Linker>
-		<Unit filename="Day03.h" />
 		<Unit filename="DayTemplate.cpp" />
 		<Unit filename="DayTemplate.h" />
 		<Unit filename="day01/Day01.cpp" />
