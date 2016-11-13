@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="aoc2015" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/aoc2015" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="day01" />
+					<Add directory="day02" />
+					<Add directory="day03" />
+					<Add directory="day04" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/aoc2015" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add directory="day01" />
+					<Add directory="day02" />
+					<Add directory="day03" />
+					<Add directory="day04" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Linker>
+			<Add option="-lssl -lcrypto" />
+		</Linker>
+		<Unit filename="DayTemplate.cpp" />
+		<Unit filename="DayTemplate.h" />
+		<Unit filename="day01/Day01.cpp" />
+		<Unit filename="day01/Day01.h" />
+		<Unit filename="day01/part1.cpp" />
+		<Unit filename="day01/part2.cpp" />
+		<Unit filename="day02/Day02.cpp" />
+		<Unit filename="day02/Day02.h" />
+		<Unit filename="day02/part1.cpp" />
+		<Unit filename="day02/part2.cpp" />
+		<Unit filename="day03/Day03.cpp" />
+		<Unit filename="day03/Day03.h" />
+		<Unit filename="day03/part1.cpp" />
+		<Unit filename="day03/part2.cpp" />
+		<Unit filename="day04/Day04.cpp" />
+		<Unit filename="day04/Day04.h" />
+		<Unit filename="day04/part1.cpp" />
+		<Unit filename="day04/part2.cpp" />
+		<Unit filename="main.cpp" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
