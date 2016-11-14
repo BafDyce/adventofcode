@@ -8,6 +8,7 @@
 #include "day02/Day02.h"
 #include "day03/Day03.h"
 #include "day04/Day04.h"
+#include "day25/Day25.h"
 
 using namespace std;
 
@@ -58,6 +59,10 @@ bool run_solver(int day, int part, vector<string> input, string& result){
     }
     case 4: {
         Day04 solver(input);
+        return solver.solve(part, result);
+    }
+    case 25: {
+        Day25 solver(input);
         return solver.solve(part, result);
     }
     }
