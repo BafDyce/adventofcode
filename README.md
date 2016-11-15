@@ -18,8 +18,8 @@ adventofcode/
 │   │   └── dayXX.md
 │   └── language
 │       └── dayXX
-│           ├── part1.rs
-│           └── part2.rs
+│           ├── part1.extension
+│           └── part2.extension
 ├── LICENSE
 └── README.md
 ```
