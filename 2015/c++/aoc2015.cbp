@@ -69,6 +69,10 @@
 		<Unit filename="day05/Day05.h" />
 		<Unit filename="day05/part1.cpp" />
 		<Unit filename="day05/part2.cpp" />
+		<Unit filename="day06/Day06.cpp" />
+		<Unit filename="day06/Day06.h" />
+		<Unit filename="day06/part1.cpp" />
+		<Unit filename="day06/part2.cpp" />
 		<Unit filename="day25/Day25.cpp" />
 		<Unit filename="day25/Day25.h" />
 		<Unit filename="day25/part1.cpp" />
