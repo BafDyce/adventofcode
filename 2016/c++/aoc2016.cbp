@@ -14,6 +14,7 @@
 				<Compiler>
 					<Add option="-g" />
 					<Add directory="day00" />
+					<Add directory="day01" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -24,6 +25,7 @@
 				<Compiler>
 					<Add option="-O2" />
 					<Add directory="day00" />
+					<Add directory="day01" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -43,6 +45,10 @@
 		<Unit filename="day00/Day00.cpp" />
 		<Unit filename="day00/Day00.hpp" />
 		<Unit filename="day00/part1.cpp" />
+		<Unit filename="day01/Day01.cpp" />
+		<Unit filename="day01/Day01.hpp" />
+		<Unit filename="day01/part1.cpp" />
+		<Unit filename="day01/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
