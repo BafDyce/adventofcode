@@ -2,10 +2,15 @@
 #define DAY01_HPP
 
 #include <iostream>
+#include <sstream>
 #include <vector>
 
 #include <../DayTemplate.hpp>
 
+struct Direction {
+    char direction;
+    int distance;
+};
 
 class Day01 : public DayTemplate {
     public:
@@ -17,6 +22,7 @@ class Day01 : public DayTemplate {
         Result solve_p2();
 
     private:
+        vector<Direction> data;
 };
 
 #endif // DAY01_HPP

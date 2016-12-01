@@ -10,6 +10,7 @@
 #include "AoC.hpp"
 // puzzle solvers
 #include "day00/Day00.hpp"
+#include "day01/Day01.hpp"
 
 using namespace std;
 namespace po = boost::program_options;
@@ -186,6 +187,10 @@ Result run_solver(const PuzzleData puzzle){
     switch(puzzle.day){
     case 0: {
         Day00 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 1: {
+        Day01 solver(puzzle.input);
         return solver.solve(puzzle.part);
     }
     }
