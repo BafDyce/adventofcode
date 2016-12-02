@@ -5,11 +5,11 @@ Result Day02::solve_p1() {
 
     string res = "";
 
+    // remember where we point to
+    int finger = 5;
+
     for(unsigned ii = 0; ii < data.size(); ii++){
         string instructions = data[ii];
-
-        // remember where we point to
-        int finger = 5;
 
         for(unsigned instr = 0; instr < instructions.length(); instr++){
 
