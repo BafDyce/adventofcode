@@ -13,7 +13,8 @@ adventofcode/
 │   ├── _inputs
 │   │   └── dayXX
 │   │       ├── test.input
-│   │       └── test.solution
+│   │       ├── test.solution1
+│   │       └── test.solution2
 │   ├── _tasks
 │   │   └── dayXX.md
 │   └── language
@@ -27,11 +28,12 @@ adventofcode/
 * Each `_inputs/dayXX/`-directory can contain any number of possible input sets.
     * Each set can have an arbitrary name (use of whitespace-characters is
       **highly discouraged**)
-    * Each `.input` file **should** have a coresponding `.solution` file
+    * Each `.input` file **should** have coresponding `.solutionX` files (Where
+      `X` is either `1` or `2` and stands for the part the solution is for)
     * Format of the content of the `.input`-files **MUST** be in the same format
     as AoC provides it.
     * Format of the content of the `.solution`-files **MUST** be in the same
-    format as AoC expects it.
+    format as AoC expects it (= a simple string without any metadata).
     * It is **recommended** that implementations provide a possibility to chose
     a specific input set by its name
 * Depending on the language, the actual (language-internal) structure *may* be
