@@ -16,7 +16,7 @@ CFLAGS = -Wall -fexceptions
 RESINC = 
 LIBDIR = 
 LIB = 
-LDFLAGS = -lboost_program_options
+LDFLAGS = -lboost_program_options -lssl -lcrypto
 
 INC_DEBUG = $(INC) -Iday00 -Iday01 -Iday02 -Iday03 -Iday04
 CFLAGS_DEBUG = $(CFLAGS) -g
@@ -40,9 +40,9 @@ OBJDIR_RELEASE = obj/Release
 DEP_RELEASE = 
 OUT_RELEASE = bin/Release/aoc2016
 
-OBJ_DEBUG = $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/day04/part2.o $(OBJDIR_DEBUG)/day04/part1.o $(OBJDIR_DEBUG)/day04/Day04.o $(OBJDIR_DEBUG)/day03/part2.o $(OBJDIR_DEBUG)/day03/part1.o $(OBJDIR_DEBUG)/day03/Day03.o $(OBJDIR_DEBUG)/day02/part2.o $(OBJDIR_DEBUG)/day02/part1.o $(OBJDIR_DEBUG)/day02/Day02.o $(OBJDIR_DEBUG)/day01/part2.o $(OBJDIR_DEBUG)/day01/part1.o $(OBJDIR_DEBUG)/day01/Day01.o $(OBJDIR_DEBUG)/day00/part1.o $(OBJDIR_DEBUG)/day00/Day00.o $(OBJDIR_DEBUG)/DayTemplate.o
+OBJ_DEBUG = $(OBJDIR_DEBUG)/day02/part2.o $(OBJDIR_DEBUG)/main.o $(OBJDIR_DEBUG)/day05/part2.o $(OBJDIR_DEBUG)/day05/part1.o $(OBJDIR_DEBUG)/day05/Day05.o $(OBJDIR_DEBUG)/day04/part2.o $(OBJDIR_DEBUG)/day04/part1.o $(OBJDIR_DEBUG)/day04/Day04.o $(OBJDIR_DEBUG)/day03/part2.o $(OBJDIR_DEBUG)/day03/part1.o $(OBJDIR_DEBUG)/day03/Day03.o $(OBJDIR_DEBUG)/day02/part1.o $(OBJDIR_DEBUG)/day02/Day02.o $(OBJDIR_DEBUG)/day01/part2.o $(OBJDIR_DEBUG)/day01/part1.o $(OBJDIR_DEBUG)/day01/Day01.o $(OBJDIR_DEBUG)/day00/part1.o $(OBJDIR_DEBUG)/day00/Day00.o $(OBJDIR_DEBUG)/DayTemplate.o
 
-OBJ_RELEASE = $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/day04/part2.o $(OBJDIR_RELEASE)/day04/part1.o $(OBJDIR_RELEASE)/day04/Day04.o $(OBJDIR_RELEASE)/day03/part2.o $(OBJDIR_RELEASE)/day03/part1.o $(OBJDIR_RELEASE)/day03/Day03.o $(OBJDIR_RELEASE)/day02/part2.o $(OBJDIR_RELEASE)/day02/part1.o $(OBJDIR_RELEASE)/day02/Day02.o $(OBJDIR_RELEASE)/day01/part2.o $(OBJDIR_RELEASE)/day01/part1.o $(OBJDIR_RELEASE)/day01/Day01.o $(OBJDIR_RELEASE)/day00/part1.o $(OBJDIR_RELEASE)/day00/Day00.o $(OBJDIR_RELEASE)/DayTemplate.o
+OBJ_RELEASE = $(OBJDIR_RELEASE)/day02/part2.o $(OBJDIR_RELEASE)/main.o $(OBJDIR_RELEASE)/day05/part2.o $(OBJDIR_RELEASE)/day05/part1.o $(OBJDIR_RELEASE)/day05/Day05.o $(OBJDIR_RELEASE)/day04/part2.o $(OBJDIR_RELEASE)/day04/part1.o $(OBJDIR_RELEASE)/day04/Day04.o $(OBJDIR_RELEASE)/day03/part2.o $(OBJDIR_RELEASE)/day03/part1.o $(OBJDIR_RELEASE)/day03/Day03.o $(OBJDIR_RELEASE)/day02/part1.o $(OBJDIR_RELEASE)/day02/Day02.o $(OBJDIR_RELEASE)/day01/part2.o $(OBJDIR_RELEASE)/day01/part1.o $(OBJDIR_RELEASE)/day01/Day01.o $(OBJDIR_RELEASE)/day00/part1.o $(OBJDIR_RELEASE)/day00/Day00.o $(OBJDIR_RELEASE)/DayTemplate.o
 
 all: debug release
 
@@ -50,10 +50,11 @@ clean: clean_debug clean_release
 
 before_debug: 
 	test -d bin/Debug || mkdir -p bin/Debug
+	test -d $(OBJDIR_DEBUG)/day02 || mkdir -p $(OBJDIR_DEBUG)/day02
 	test -d $(OBJDIR_DEBUG) || mkdir -p $(OBJDIR_DEBUG)
+	test -d $(OBJDIR_DEBUG)/day05 || mkdir -p $(OBJDIR_DEBUG)/day05
 	test -d $(OBJDIR_DEBUG)/day04 || mkdir -p $(OBJDIR_DEBUG)/day04
 	test -d $(OBJDIR_DEBUG)/day03 || mkdir -p $(OBJDIR_DEBUG)/day03
-	test -d $(OBJDIR_DEBUG)/day02 || mkdir -p $(OBJDIR_DEBUG)/day02
 	test -d $(OBJDIR_DEBUG)/day01 || mkdir -p $(OBJDIR_DEBUG)/day01
 	test -d $(OBJDIR_DEBUG)/day00 || mkdir -p $(OBJDIR_DEBUG)/day00
 
@@ -64,8 +65,20 @@ debug: before_debug out_debug after_debug
 out_debug: before_debug $(OBJ_DEBUG) $(DEP_DEBUG)
 	$(LD) $(LIBDIR_DEBUG) -o $(OUT_DEBUG) $(OBJ_DEBUG)  $(LDFLAGS_DEBUG) $(LIB_DEBUG)
 
+$(OBJDIR_DEBUG)/day02/part2.o: day02/part2.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c day02/part2.cpp -o $(OBJDIR_DEBUG)/day02/part2.o
+
 $(OBJDIR_DEBUG)/main.o: main.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c main.cpp -o $(OBJDIR_DEBUG)/main.o
+
+$(OBJDIR_DEBUG)/day05/part2.o: day05/part2.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c day05/part2.cpp -o $(OBJDIR_DEBUG)/day05/part2.o
+
+$(OBJDIR_DEBUG)/day05/part1.o: day05/part1.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c day05/part1.cpp -o $(OBJDIR_DEBUG)/day05/part1.o
+
+$(OBJDIR_DEBUG)/day05/Day05.o: day05/Day05.cpp
+	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c day05/Day05.cpp -o $(OBJDIR_DEBUG)/day05/Day05.o
 
 $(OBJDIR_DEBUG)/day04/part2.o: day04/part2.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c day04/part2.cpp -o $(OBJDIR_DEBUG)/day04/part2.o
@@ -84,9 +97,6 @@ $(OBJDIR_DEBUG)/day03/part1.o: day03/part1.cpp
 
 $(OBJDIR_DEBUG)/day03/Day03.o: day03/Day03.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c day03/Day03.cpp -o $(OBJDIR_DEBUG)/day03/Day03.o
-
-$(OBJDIR_DEBUG)/day02/part2.o: day02/part2.cpp
-	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c day02/part2.cpp -o $(OBJDIR_DEBUG)/day02/part2.o
 
 $(OBJDIR_DEBUG)/day02/part1.o: day02/part1.cpp
 	$(CXX) $(CFLAGS_DEBUG) $(INC_DEBUG) -c day02/part1.cpp -o $(OBJDIR_DEBUG)/day02/part1.o
@@ -115,19 +125,21 @@ $(OBJDIR_DEBUG)/DayTemplate.o: DayTemplate.cpp
 clean_debug: 
 	rm -f $(OBJ_DEBUG) $(OUT_DEBUG)
 	rm -rf bin/Debug
+	rm -rf $(OBJDIR_DEBUG)/day02
 	rm -rf $(OBJDIR_DEBUG)
+	rm -rf $(OBJDIR_DEBUG)/day05
 	rm -rf $(OBJDIR_DEBUG)/day04
 	rm -rf $(OBJDIR_DEBUG)/day03
-	rm -rf $(OBJDIR_DEBUG)/day02
 	rm -rf $(OBJDIR_DEBUG)/day01
 	rm -rf $(OBJDIR_DEBUG)/day00
 
 before_release: 
 	test -d bin/Release || mkdir -p bin/Release
+	test -d $(OBJDIR_RELEASE)/day02 || mkdir -p $(OBJDIR_RELEASE)/day02
 	test -d $(OBJDIR_RELEASE) || mkdir -p $(OBJDIR_RELEASE)
+	test -d $(OBJDIR_RELEASE)/day05 || mkdir -p $(OBJDIR_RELEASE)/day05
 	test -d $(OBJDIR_RELEASE)/day04 || mkdir -p $(OBJDIR_RELEASE)/day04
 	test -d $(OBJDIR_RELEASE)/day03 || mkdir -p $(OBJDIR_RELEASE)/day03
-	test -d $(OBJDIR_RELEASE)/day02 || mkdir -p $(OBJDIR_RELEASE)/day02
 	test -d $(OBJDIR_RELEASE)/day01 || mkdir -p $(OBJDIR_RELEASE)/day01
 	test -d $(OBJDIR_RELEASE)/day00 || mkdir -p $(OBJDIR_RELEASE)/day00
 
@@ -138,8 +150,20 @@ release: before_release out_release after_release
 out_release: before_release $(OBJ_RELEASE) $(DEP_RELEASE)
 	$(LD) $(LIBDIR_RELEASE) -o $(OUT_RELEASE) $(OBJ_RELEASE)  $(LDFLAGS_RELEASE) $(LIB_RELEASE)
 
+$(OBJDIR_RELEASE)/day02/part2.o: day02/part2.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c day02/part2.cpp -o $(OBJDIR_RELEASE)/day02/part2.o
+
 $(OBJDIR_RELEASE)/main.o: main.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c main.cpp -o $(OBJDIR_RELEASE)/main.o
+
+$(OBJDIR_RELEASE)/day05/part2.o: day05/part2.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c day05/part2.cpp -o $(OBJDIR_RELEASE)/day05/part2.o
+
+$(OBJDIR_RELEASE)/day05/part1.o: day05/part1.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c day05/part1.cpp -o $(OBJDIR_RELEASE)/day05/part1.o
+
+$(OBJDIR_RELEASE)/day05/Day05.o: day05/Day05.cpp
+	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c day05/Day05.cpp -o $(OBJDIR_RELEASE)/day05/Day05.o
 
 $(OBJDIR_RELEASE)/day04/part2.o: day04/part2.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c day04/part2.cpp -o $(OBJDIR_RELEASE)/day04/part2.o
@@ -158,9 +182,6 @@ $(OBJDIR_RELEASE)/day03/part1.o: day03/part1.cpp
 
 $(OBJDIR_RELEASE)/day03/Day03.o: day03/Day03.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c day03/Day03.cpp -o $(OBJDIR_RELEASE)/day03/Day03.o
-
-$(OBJDIR_RELEASE)/day02/part2.o: day02/part2.cpp
-	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c day02/part2.cpp -o $(OBJDIR_RELEASE)/day02/part2.o
 
 $(OBJDIR_RELEASE)/day02/part1.o: day02/part1.cpp
 	$(CXX) $(CFLAGS_RELEASE) $(INC_RELEASE) -c day02/part1.cpp -o $(OBJDIR_RELEASE)/day02/part1.o
@@ -189,10 +210,11 @@ $(OBJDIR_RELEASE)/DayTemplate.o: DayTemplate.cpp
 clean_release: 
 	rm -f $(OBJ_RELEASE) $(OUT_RELEASE)
 	rm -rf bin/Release
+	rm -rf $(OBJDIR_RELEASE)/day02
 	rm -rf $(OBJDIR_RELEASE)
+	rm -rf $(OBJDIR_RELEASE)/day05
 	rm -rf $(OBJDIR_RELEASE)/day04
 	rm -rf $(OBJDIR_RELEASE)/day03
-	rm -rf $(OBJDIR_RELEASE)/day02
 	rm -rf $(OBJDIR_RELEASE)/day01
 	rm -rf $(OBJDIR_RELEASE)/day00
 

@@ -43,7 +43,7 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Linker>
-			<Add option="-lboost_program_options" />
+			<Add option="-lboost_program_options -lssl -lcrypto" />
 		</Linker>
 		<Unit filename="AoC.hpp" />
 		<Unit filename="DayTemplate.cpp" />
@@ -67,6 +67,10 @@
 		<Unit filename="day04/Day04.hpp" />
 		<Unit filename="day04/part1.cpp" />
 		<Unit filename="day04/part2.cpp" />
+		<Unit filename="day05/Day05.cpp" />
+		<Unit filename="day05/Day05.hpp" />
+		<Unit filename="day05/part1.cpp" />
+		<Unit filename="day05/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
