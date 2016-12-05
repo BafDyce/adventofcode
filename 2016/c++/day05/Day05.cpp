@@ -26,6 +26,14 @@ Day05::~Day05()
     EVP_cleanup();
 }
 
+Result Day05::solve(const int part){
+    if( part == 3 ){
+        return this->solve_p3();
+    }
+
+    return DayTemplate::solve(part);
+}
+
 string Day05::compute_md5(const string from) {
     // init
     //EVP_DigestInit_ex(md5, EVP_md5(), NULL);

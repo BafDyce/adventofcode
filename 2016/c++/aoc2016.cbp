@@ -71,6 +71,7 @@
 		<Unit filename="day05/Day05.hpp" />
 		<Unit filename="day05/part1.cpp" />
 		<Unit filename="day05/part2.cpp" />
+		<Unit filename="day05/part3.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
