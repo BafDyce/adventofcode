@@ -16,7 +16,7 @@ class Day00 : public DayTemplate {
         Result solve_p1();
 
     private:
-        string data;
+        vector<string> data;
 
 };
 

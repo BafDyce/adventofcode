@@ -17,6 +17,8 @@
 					<Add directory="day01" />
 					<Add directory="day02" />
 					<Add directory="day03" />
+					<Add directory="day04" />
+					<Add directory="day" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -30,6 +32,8 @@
 					<Add directory="day01" />
 					<Add directory="day02" />
 					<Add directory="day03" />
+					<Add directory="day04" />
+					<Add directory="day" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -41,11 +45,12 @@
 			<Add option="-fexceptions" />
 		</Compiler>
 		<Linker>
-			<Add option="-lboost_program_options" />
+			<Add option="-lboost_program_options -lssl -lcrypto" />
 		</Linker>
 		<Unit filename="AoC.hpp" />
 		<Unit filename="DayTemplate.cpp" />
 		<Unit filename="DayTemplate.hpp" />
+		<Unit filename="day/Day06.hpp" />
 		<Unit filename="day00/Day00.cpp" />
 		<Unit filename="day00/Day00.hpp" />
 		<Unit filename="day00/part1.cpp" />
@@ -61,6 +66,19 @@
 		<Unit filename="day03/Day03.hpp" />
 		<Unit filename="day03/part1.cpp" />
 		<Unit filename="day03/part2.cpp" />
+		<Unit filename="day04/Day04.cpp" />
+		<Unit filename="day04/Day04.hpp" />
+		<Unit filename="day04/part1.cpp" />
+		<Unit filename="day04/part2.cpp" />
+		<Unit filename="day05/Day05.cpp" />
+		<Unit filename="day05/Day05.hpp" />
+		<Unit filename="day05/part1.cpp" />
+		<Unit filename="day05/part2.cpp" />
+		<Unit filename="day05/part3.cpp" />
+		<Unit filename="day06/Day06.cpp" />
+		<Unit filename="day06/Day06.hpp" />
+		<Unit filename="day06/part1.cpp" />
+		<Unit filename="day06/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
