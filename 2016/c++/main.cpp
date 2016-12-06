@@ -15,6 +15,7 @@
 #include "day03/Day03.hpp"
 #include "day04/Day04.hpp"
 #include "day05/Day05.hpp"
+#include "day06/Day06.hpp"
 
 using namespace std;
 namespace po = boost::program_options;
@@ -33,7 +34,7 @@ struct PuzzleData {
     int part;
     vector<string> input;
 
-    PuzzleData(Options options){
+    PuzzleData(Options options) {
         day = options.day;
         part = options.part;
 
@@ -42,11 +43,11 @@ struct PuzzleData {
         solution = read_solution(pathname, options.inputset);
     }
 
-    bool has_solution(){
+    bool has_solution() {
         return solution != "";
     }
 
-    bool verify_solution(const string check){
+    bool verify_solution(const string check) {
         return solution == check;
     }
 
@@ -57,35 +58,35 @@ private:
 
     string get_path_name() {
         string day_string = to_string(day);
-        while( day_string.length() < 2 ){
+        while( day_string.length() < 2 ) {
             day_string = "0" + day_string;
         }
 
         return "../_inputs/day" + day_string + "/";
     }
 
-    vector<string> read_input_set(const string pathname, const string inputset){
+    vector<string> read_input_set(const string pathname, const string inputset) {
         string fname = pathname + "/" + inputset + ".input";
         return read_file_contents(fname);
     }
 
-    string read_solution(const string pathname, const string inputset){
+    string read_solution(const string pathname, const string inputset) {
         string fname = pathname + "/" + inputset + ".solution";
         vector<string> tmp = read_file_contents(fname);
 
         string retval;
-        if( tmp.size() > 0){
+        if( tmp.size() > 0) {
             retval = tmp[0];
         }
 
         return retval;
     }
 
-    vector<string> read_file_contents(const string fname){
+    vector<string> read_file_contents(const string fname) {
         vector<string> content;
         ifstream file(fname);
         string line;
-        while(getline(file, line)){
+        while(getline(file, line)) {
             content.push_back(line);
         }
 
@@ -103,20 +104,20 @@ int main(int argc, char *argv[]) {
 
     Options options = get_options_interactive(argc, argv);
     cout << "Day: " << options.day
-        << " part: " << options.part
-        << " input set: \"" << options.inputset
-        << "\" verify: " << options.verify << endl;
+         << " part: " << options.part
+         << " input set: \"" << options.inputset
+         << "\" verify: " << options.verify << endl;
     PuzzleData puzzle(options);
     Result res = run_solver(puzzle);
 
-    if( res.success ){
+    if( res.success ) {
         cout << "Result:\n" << res.result << endl;
 
-        if( options.verify ){
-            if( puzzle.has_solution() ){
+        if( options.verify ) {
+            if( puzzle.has_solution() ) {
                 bool check = puzzle.verify_solution(res.result);
                 cout << "[VERIFY] This is "
-                    << (check ? "" : " NOT ") << "correct!" << endl;
+                     << (check ? "" : " NOT ") << "correct!" << endl;
                 return !check;
             }
 
@@ -131,18 +132,18 @@ int main(int argc, char *argv[]) {
     return 1;
 }
 
-Options get_options_interactive(const int argc, char** const argv){
+Options get_options_interactive(const int argc, char** const argv) {
     Options options;
 
     po::options_description desc("Allowed options");
     desc.add_options()
-        ("help", "Show this help message and exit")
-        ("day", po::value<int>(&options.day),  "day")
-        ("part", po::value<int>(&options.part), "part")
-        ("inputset", po::value<string>(&options.inputset),
-            "Name of the input set to use")
-        ("verify", "Verify result with inputset.solution")
-        ;
+    ("help", "Show this help message and exit")
+    ("day", po::value<int>(&options.day),  "day")
+    ("part", po::value<int>(&options.part), "part")
+    ("inputset", po::value<string>(&options.inputset),
+     "Name of the input set to use")
+    ("verify", "Verify result with inputset.solution")
+    ;
 
     po::variables_map vm;
     po::store(po::parse_command_line(argc, argv, desc), vm);
@@ -153,25 +154,25 @@ Options get_options_interactive(const int argc, char** const argv){
         exit(0);
     }
 
-    if( !vm.count("day") ){
+    if( !vm.count("day") ) {
         cout << "Please enter a day to run: ";
-        while( !(cin >> options.day) ){
+        while( !(cin >> options.day) ) {
             cout << "Please enter a valid number! " << flush;
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         };
     }
 
-    if( !vm.count("part") ){
+    if( !vm.count("part") ) {
         cout << "Please enter a part to run: ";
-        while( !(cin >> options.part) ){
+        while( !(cin >> options.part) ) {
             cout << "Please enter a valid number! " << flush;
             cin.clear();
             cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         };
     }
 
-    if( !vm.count("inputset") ){
+    if( !vm.count("inputset") ) {
         cout << "Please enter the name of the input set to use: ";
         cin >> options.inputset;
     }
@@ -181,14 +182,14 @@ Options get_options_interactive(const int argc, char** const argv){
     return options;
 }
 
-Result run_solver(const PuzzleData puzzle){
+Result run_solver(const PuzzleData puzzle) {
 
-    if( puzzle.input.size() < 1 ){
+    if( puzzle.input.size() < 1 ) {
         return {false, "No input data found! Either the specified input set "
-            "doesn\'t exist or it is empty."};
+                "doesn\'t exist or it is empty."};
     }
 
-    switch(puzzle.day){
+    switch(puzzle.day) {
     case 0: {
         Day00 solver(puzzle.input);
         return solver.solve(puzzle.part);
@@ -211,6 +212,10 @@ Result run_solver(const PuzzleData puzzle){
     }
     case 5: {
         Day05 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 6: {
+        Day06 solver(puzzle.input);
         return solver.solve(puzzle.part);
     }
     }
