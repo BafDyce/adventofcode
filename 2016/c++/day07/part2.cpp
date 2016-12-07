@@ -2,7 +2,7 @@
 
 #include <vector>
 #include <iostream>
-#include <queue>
+#include <deque>
 
 using namespace std;
 
