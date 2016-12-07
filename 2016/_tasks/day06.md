@@ -1,4 +1,8 @@
 # Day 6: Signals and Noise
+Link: http://adventofcode.com/2016/day/7
+
+Reddit solution thread (SPOILER ALERT!!):
+https://www.reddit.com/r/adventofcode/comments/5gr0xf/2016_day_6_solutions/
 
 Something is jamming your communications with Santa. Fortunately, your signal
 is only partially jammed, and protocol in situations like this is to switch to
