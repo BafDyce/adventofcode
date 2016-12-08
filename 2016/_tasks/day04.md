@@ -1,5 +1,5 @@
 # Day 4: Security Through Obscurity
-Link: http://adventofcode.com/2016/day/4
+Link: https://adventofcode.com/2016/day/4
 
 Reddit solution thread (SPOILER ALERT!!):
 https://www.reddit.com/r/adventofcode/comments/5gdvve/2016_day_4_solutions/

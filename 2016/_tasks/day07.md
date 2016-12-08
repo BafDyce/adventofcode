@@ -1,5 +1,5 @@
 # Day 7: Internet Protocol Version 7
-Link: http://adventofcode.com/2016/day/7
+Link: https://adventofcode.com/2016/day/7
 
 Reddit solution thread (SPOILER ALERT!!):
 https://www.reddit.com/r/adventofcode/comments/5gy1f2/2016_day_7_solutions/
