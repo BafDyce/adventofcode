@@ -1,0 +1,21 @@
+#ifndef DAY08_HPP
+#define DAY08_HPP
+
+#include <../DayTemplate.hpp>
+#include <vector>
+#include <string>
+
+class Day08 : public DayTemplate {
+public:
+    Day08(vector<string> input);
+    virtual ~Day08();
+
+protected:
+    Result solve_p1();
+    Result solve_p2();
+
+private:
+    vector<string> data;
+};
+
+#endif // DAY08_HPP
