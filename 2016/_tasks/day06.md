@@ -1,5 +1,5 @@
 # Day 6: Signals and Noise
-Link: https://adventofcode.com/2016/day/7
+Link: https://adventofcode.com/2016/day/6
 
 Reddit solution thread (SPOILER ALERT!!):
 https://www.reddit.com/r/adventofcode/comments/5gr0xf/2016_day_6_solutions/
