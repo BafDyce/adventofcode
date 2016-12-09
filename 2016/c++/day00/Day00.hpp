@@ -5,18 +5,20 @@
 #include <vector>
 
 #include <../DayTemplate.hpp>
-
+#include <vector>
+#include <string>
 
 class Day00 : public DayTemplate {
-    public:
-        Day00(vector<string> input);
-        virtual ~Day00();
+public:
+    Day00(vector<string> input);
+    virtual ~Day00();
 
-    protected:
-        Result solve_p1();
+protected:
+    Result solve_p1();
+    Result solve_p2();
 
-    private:
-        vector<string> data;
+private:
+    vector<string> data;
 
 };
 
