@@ -92,6 +92,10 @@
 		<Unit filename="day08/Day08.hpp" />
 		<Unit filename="day08/part1.cpp" />
 		<Unit filename="day08/part2.cpp" />
+		<Unit filename="day09/Day09.cpp" />
+		<Unit filename="day09/Day09.hpp" />
+		<Unit filename="day09/part1.cpp" />
+		<Unit filename="day09/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
