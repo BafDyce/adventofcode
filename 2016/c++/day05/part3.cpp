@@ -35,7 +35,7 @@ Result Day05::solve_p3(){
                 if( display[cc] == '-' ){
                     display[cc] = hash[8 + cc];
                 }
-                cout << "\r\e[APassword: " << display << endl;
+                cout << "\r\x1b[APassword: " << display << endl;
             }
         }
 

@@ -9,7 +9,28 @@ using namespace std;
 // offset: at which offset of the string we start looking at
 // new_offset: where the caller should continue scanning
 // returns: output length after decompressing
-unsigned long decompress2(string &input, unsigned offset, unsigned &new_offset){
+static unsigned long
+decompress(string &input, unsigned offset, unsigned &new_offset);
+
+Result Day09::solve_p2(){
+    unsigned long result = 0;
+    for(unsigned ii = 0; ii < data.length(); ii++){
+        if( data[ii] == '(' ){
+            result += decompress(data, ii+1, ii);
+        } else {
+            result++;
+        }
+    }
+
+    return {true, to_string(result)};
+}
+
+// input: the entire string
+// offset: at which offset of the string we start looking at
+// new_offset: where the caller should continue scanning
+// returns: output length after decompressing
+static unsigned long
+decompress(string &input, unsigned offset, unsigned &new_offset){
     int length;
     int repeat;
     char ch;
@@ -27,24 +48,11 @@ unsigned long decompress2(string &input, unsigned offset, unsigned &new_offset){
     unsigned long output_length = 0;
     for(unsigned ii = offset; ii <= new_offset; ii++){
         if( input[ii] == '(' ){
-            output_length += repeat * decompress2(input, ii+1, ii);
+            output_length += repeat * decompress(input, ii+1, ii);
         } else {
             output_length += repeat;
         }
     }
 
     return output_length;
-}
-
-Result Day09::solve_p2(){
-    unsigned long result = 0;
-    for(unsigned ii = 0; ii < data.length(); ii++){
-        if( data[ii] == '(' ){
-            result += decompress2(data, ii+1, ii);
-        } else {
-            result++;
-        }
-    }
-
-    return {true, to_string(result)};
 }

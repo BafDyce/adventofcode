@@ -30,22 +30,25 @@ struct Options {
     int part;
     string inputset;
     bool verify;
+
+    Options() : day(0), part(0), inputset(""), verify(false) {};
 };
 
 // contains general data about a puzzle, as well as a constructor from Options
-struct PuzzleData {
+class PuzzleData {
+public:
     int day;
     int part;
     vector<string> input;
 
-    PuzzleData(Options options) {
-        day = options.day;
-        part = options.part;
-
-        string pathname = get_path_name();
-        input = read_input_set(pathname, options.inputset);
-        solution = read_solution(pathname, options.inputset);
+    PuzzleData(Options options) :
+        day(options.day),
+        part(options.part),
+        input( read_input_set(get_path_name(), options.inputset) ),
+        solution( read_solution(get_path_name(), options.inputset) ) {
     }
+
+    ~PuzzleData(){};
 
     bool has_solution() {
         return solution != "";
@@ -238,7 +241,9 @@ Result run_solver(const PuzzleData puzzle) {
         Day10 solver(puzzle.input);
         return solver.solve(puzzle.part);
     }
+    default:
+        return Result {false, "This day has no implementation (yet)!"};
     }
 
-    return Result {false, "This day has no implementation (yet)!"};
+    return Result {false, "Internal error!"};
 }

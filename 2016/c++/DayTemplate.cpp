@@ -7,15 +7,11 @@
 
 using namespace std;
 
-DayTemplate::DayTemplate() {
-}
+DayTemplate::DayTemplate() : data({}) {}
 
-DayTemplate::DayTemplate(const vector<string> input) {
-    data = input;
-}
+DayTemplate::DayTemplate(const vector<string> input) : data(input) {}
 
-DayTemplate::~DayTemplate() {
-}
+DayTemplate::~DayTemplate() {}
 
 Result DayTemplate::solve(const int part) {
     switch(part){
@@ -23,6 +19,8 @@ Result DayTemplate::solve(const int part) {
         return solve_p1();
     case 2:
         return solve_p2();
+    default:
+        break;
     }
 
     return {false,"Specified part (" + to_string(part) + ") is not available!"};

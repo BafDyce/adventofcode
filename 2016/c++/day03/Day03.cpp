@@ -4,9 +4,7 @@
 #include <vector>
 #include <iostream>
 
-Day03::Day03(vector<string> input)
-{
-    this->data = input;
+Day03::Day03(vector<string> input) : data(input){
 }
 
 Day03::~Day03()

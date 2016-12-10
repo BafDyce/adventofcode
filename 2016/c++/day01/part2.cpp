@@ -83,6 +83,8 @@ Result Day01::solve_p2(){
             case 'W':
                 santa.pos.x--;
                 break;
+            default:
+                return {false, "Input error"};
             }
 
             Position pos {santa.pos.x, santa.pos.y};

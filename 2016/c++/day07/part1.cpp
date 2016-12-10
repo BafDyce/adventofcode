@@ -20,7 +20,6 @@ Result Day07::solve_p1(){
     return {true, to_string(counter)};
 }
 
-
 bool supports_TLS(string ipv7){
     bool result = false;
     bool in_hypernet_seq = false;

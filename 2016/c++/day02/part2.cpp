@@ -31,6 +31,7 @@ Result Day02::solve_p2() {
                 case 7: finger-=4; break;
                 case 11: finger-=4; break;
                 case 13: finger-=2; break;
+                default: return {false, "Input error"};
                 }
                 break;
             case 'D':
@@ -41,6 +42,7 @@ Result Day02::solve_p2() {
                 case 3: finger+=4; break;
                 case 7: finger+=4; break;
                 case 11: finger+=2; break;
+                default: return {false, "Input error"};
                 }
                 break;
             case 'R':

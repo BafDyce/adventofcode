@@ -10,8 +10,8 @@
 using namespace std;
 using namespace boost;
 
-Day01::Day01(vector<string> input) {
-    char_separator<char> sep(", ");
+Day01::Day01(vector<string> input) : data({}) {
+    char_separator<char> sep(", ", nullptr);
     tokenizer<char_separator<char> > tokens(input[0], sep);
     BOOST_FOREACH(string t, tokens) {
         char direction = t[0];
@@ -24,7 +24,6 @@ Day01::Day01(vector<string> input) {
     }
 }
 
-Day01::~Day01()
-{
+Day01::~Day01() {
     //dtor
 }
