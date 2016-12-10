@@ -12,14 +12,14 @@ LD = g++
 WINDRES = windres
 
 INC = 
-CFLAGS = -Wextra -Wall -fexceptions
+CFLAGS = -Wnon-virtual-dtor -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal -Winline -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Wswitch-enum -Wswitch-default -Weffc++ -Wzero-as-null-pointer-constant -Wmain -pedantic -Wextra -Wall -fexceptions
 RESINC = 
 LIBDIR = 
 LIB = 
 LDFLAGS = -lboost_program_options -lssl -lcrypto
 
-INC_DEBUG = $(INC) -Iday00 -Iday01 -Iday02 -Iday03 -Iday04 -Iday -Iday07 -Iday08
-CFLAGS_DEBUG = $(CFLAGS) -g
+INC_DEBUG = $(INC) -Iday00 -Iday01 -Iday02 -Iday03 -Iday04 -Iday07 -Iday08
+CFLAGS_DEBUG = $(CFLAGS) -Wnon-virtual-dtor -Wshadow -Winit-self -Wredundant-decls -Wcast-align -Wundef -Wfloat-equal -Winline -Wunreachable-code -Wmissing-declarations -Wmissing-include-dirs -Wswitch-enum -Wswitch-default -Weffc++ -Wzero-as-null-pointer-constant -Wmain -pedantic -Wextra -Wall -g
 RESINC_DEBUG = $(RESINC)
 RCFLAGS_DEBUG = $(RCFLAGS)
 LIBDIR_DEBUG = $(LIBDIR)
