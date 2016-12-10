@@ -89,31 +89,3 @@ Result Day04::solve_p2(){
 
     return {true, result};
 }
-/*
-static bool sortPair(Pair a, Pair b){
-    if( a.n == b.n ){
-        return a.ch < b.ch;
-    }
-
-    return a.n > b.n;
-}
-
-static string decrypt(string name, int salt){
-    string result = "";
-    for(unsigned ii = 0; ii < name.length(); ii++){
-        if ( name[ii] == '-' ){
-            result += ' ';
-            continue;
-        }
-
-        int letter = name[ii] + salt % 26;
-        if( letter > 'z' ){
-            int tmp = letter - 'z' + 'a' - 1;
-            result += (char) tmp;
-        } else if( letter >= 'a' && letter <= 'z' ){
-            result += letter;
-        }
-    }
-
-    return result;
-}*/
