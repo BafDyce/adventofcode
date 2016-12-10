@@ -45,6 +45,7 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wextra" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
@@ -96,6 +97,10 @@
 		<Unit filename="day09/Day09.hpp" />
 		<Unit filename="day09/part1.cpp" />
 		<Unit filename="day09/part2.cpp" />
+		<Unit filename="day10/Day10.cpp" />
+		<Unit filename="day10/Day10.hpp" />
+		<Unit filename="day10/part1.cpp" />
+		<Unit filename="day10/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

@@ -7,7 +7,7 @@
 	<vector>
 	"boost/program_options.hpp"
 
-1479048909 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/main.cpp
+1481297943 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/main.cpp
 	<iostream>
 	<fstream>
 	<sstream>
@@ -16,14 +16,26 @@
 	"boost/program_options.hpp"
 	"AoC.hpp"
 	"day00/Day00.hpp"
+	"day01/Day01.hpp"
+	"day02/Day02.hpp"
+	"day03/Day03.hpp"
+	"day04/Day04.hpp"
+	"day05/Day05.hpp"
+	"day06/Day06.hpp"
+	"day07/Day07.hpp"
+	"day08/Day08.hpp"
+	"day09/Day09.hpp"
+	"day10/Day10.hpp"
 
-1480499364 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/Day00.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/Day00.cpp
 	"Day00.hpp"
 
-1480499364 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/Day00.hpp
+1481139367 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/Day00.hpp
 	<iostream>
 	<vector>
 	<../DayTemplate.hpp>
+	<vector>
+	<string>
 
 1480499363 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/DayTemplate.hpp
 	<iostream>
@@ -39,10 +51,11 @@
 	<vector>
 	"AoC.hpp"
 
-1480499364 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/part1.cpp
+1481085955 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/part1.cpp
 	"Day00.hpp"
-	"../AoC.hpp"
+	<vector>
 	<iostream>
+	<sstream>
 	<algorithm>
 
 1480746063 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day01/Day01.cpp
@@ -59,7 +72,7 @@
 	<vector>
 	<../DayTemplate.hpp>
 
-1480746063 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day01/part1.cpp
+1481298038 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day01/part1.cpp
 	"Day01.hpp"
 	"../AoC.hpp"
 
@@ -110,31 +123,31 @@
 	<iostream>
 	<sstream>
 
-1480746165 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day04/Day04.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day04/Day04.cpp
 	"Day04.hpp"
 	<vector>
 	<iostream>
 
-1480760389 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day04/Day04.hpp
+1481004491 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day04/Day04.hpp
 	<../DayTemplate.hpp>
 	<vector>
 	<iostream>
 
-1480832542 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day04/part1.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day04/part1.cpp
 	"Day04.hpp"
 	<vector>
 	<iostream>
 	<sstream>
 	<algorithm>
 
-1480832795 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day04/part2.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day04/part2.cpp
 	"Day04.hpp"
 	<vector>
 	<iostream>
 	<sstream>
 	<algorithm>
 
-1480916925 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/Day05.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/Day05.cpp
 	"Day05.hpp"
 	<vector>
 	<iostream>
@@ -143,7 +156,7 @@
 	<openssl/evp.h>
 	<openssl/md5.h>
 
-1480917024 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/Day05.hpp
+1481004491 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/Day05.hpp
 	<../DayTemplate.hpp>
 	<vector>
 	<iostream>
@@ -151,38 +164,126 @@
 	<openssl/evp.h>
 	<openssl/md5.h>
 
-1480916536 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/part1.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/part1.cpp
 	"Day05.hpp"
 	<iostream>
 	<limits>
 
-1480919203 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/part2.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/part2.cpp
 	"Day05.hpp"
 	<iostream>
 	<limits>
 
-1480919644 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/part3.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day05/part3.cpp
 	"Day05.hpp"
 	<iostream>
 	<limits>
 
-1480999433 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day06/Day06.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day06/Day06.cpp
 	"Day06.hpp"
 
-1480999416 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day06/Day06.hpp
+1481004491 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day06/Day06.hpp
 	<../DayTemplate.hpp>
 	<vector>
 	<iostream>
 
-1480999513 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day06/part1.cpp
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day06/part1.cpp
 	"Day06.hpp"
+
+1481004491 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day06/part2.cpp
+	"Day06.hpp"
+	<limits>
+
+1481139327 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/part2.cpp
+	"Day00.hpp"
+	<vector>
+	<iostream>
+	<sstream>
+	<algorithm>
+
+1481085515 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day07/Day07.cpp
+	"Day07.hpp"
+
+1481085565 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day07/Day07.hpp
+	<../DayTemplate.hpp>
+	<vector>
+	<iostream>
+
+1481089904 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day07/part1.cpp
+	"Day07.hpp"
+	<vector>
+	<iostream>
+	<deque>
+
+1481091899 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day07/part2.cpp
+	"Day07.hpp"
+	<vector>
+	<iostream>
+	<deque>
+
+1481139092 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day08/Day08.cpp
+	"Day08.hpp"
+
+1481177942 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day08/Day08.hpp
+	<../DayTemplate.hpp>
+	<vector>
+	<string>
+
+1481178433 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day08/part1.cpp
+	"Day08.hpp"
+	<vector>
+	<iostream>
+	<sstream>
+	<algorithm>
+
+1481308261 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day08/part2.cpp
+	"Day08.hpp"
 	<vector>
 	<iostream>
 	<sstream>
 
-1480999533 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day06/part2.cpp
-	"Day06.hpp"
+1481259735 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day09/Day09.cpp
+	"Day09.hpp"
+
+1481259729 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day09/Day09.hpp
+	<../DayTemplate.hpp>
+	<vector>
+	<string>
+	<iostream>
+	<vector>
+
+1481266494 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day09/part1.cpp
+	"Day09.hpp"
+	<iostream>
+	<sstream>
+
+1481266545 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day09/part2.cpp
+	"Day09.hpp"
+	<iostream>
+	<sstream>
+
+1481297629 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day10/Day10.cpp
+	"Day10.hpp"
+
+1481349197 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day10/Day10.hpp
+	<iostream>
+	<vector>
+	<../DayTemplate.hpp>
+	<vector>
+	<string>
+
+1481297583 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day10/part2.cpp
+	"Day10.hpp"
 	<vector>
 	<iostream>
 	<sstream>
+	<algorithm>
+
+1481369299 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day10/part1.cpp
+	"Day10.hpp"
+	<vector>
+	<iostream>
+	<sstream>
+	<algorithm>
+	<queue>
 
