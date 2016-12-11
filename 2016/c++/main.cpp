@@ -20,6 +20,7 @@
 #include "day08/Day08.hpp"
 #include "day09/Day09.hpp"
 #include "day10/Day10.hpp"
+#include "day11/Day11.hpp"
 
 using namespace std;
 namespace po = boost::program_options;
@@ -239,6 +240,10 @@ Result run_solver(const PuzzleData puzzle) {
     }
     case 10: {
         Day10 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 11: {
+        Day11 solver(puzzle.input);
         return solver.solve(puzzle.part);
     }
     default:

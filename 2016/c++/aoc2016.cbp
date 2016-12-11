@@ -143,6 +143,10 @@
 		<Unit filename="day10/OutputBin.hpp" />
 		<Unit filename="day10/part1.cpp" />
 		<Unit filename="day10/part2.cpp" />
+		<Unit filename="day11/Day11.cpp" />
+		<Unit filename="day11/Day11.hpp" />
+		<Unit filename="day11/part1.cpp" />
+		<Unit filename="day11/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
