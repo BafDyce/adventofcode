@@ -1,5 +1,5 @@
 # Day 1: No Time for a Taxicab
-Link: http://adventofcode.com/2016/day/1
+Link: https://adventofcode.com/2016/day/1
 
 Reddit solution thread (SPOILER ALERT!!):
 https://www.reddit.com/r/adventofcode/comments/5fur6q/2016_day_1_solutions/

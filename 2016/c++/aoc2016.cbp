@@ -12,13 +12,35 @@
 				<Option type="1" />
 				<Option compiler="gcc" />
 				<Compiler>
+					<Add option="-Wnon-virtual-dtor" />
+					<Add option="-Wshadow" />
+					<Add option="-Winit-self" />
+					<Add option="-Wredundant-decls" />
+					<Add option="-Wcast-align" />
+					<Add option="-Wundef" />
+					<Add option="-Wfloat-equal" />
+					<Add option="-Winline" />
+					<Add option="-Wunreachable-code" />
+					<Add option="-Wmissing-declarations" />
+					<Add option="-Wmissing-include-dirs" />
+					<Add option="-Wswitch-enum" />
+					<Add option="-Wswitch-default" />
+					<Add option="-Weffc++" />
+					<Add option="-Wzero-as-null-pointer-constant" />
+					<Add option="-Wmain" />
+					<Add option="-pedantic" />
+					<Add option="-Wextra" />
+					<Add option="-Wall" />
 					<Add option="-g" />
 					<Add directory="day00" />
 					<Add directory="day01" />
 					<Add directory="day02" />
 					<Add directory="day03" />
 					<Add directory="day04" />
-					<Add directory="day" />
+					<Add directory="day07" />
+					<Add directory="day08" />
+					<Add directory="day10" />
+					<Add directory="day12" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -33,7 +55,10 @@
 					<Add directory="day02" />
 					<Add directory="day03" />
 					<Add directory="day04" />
-					<Add directory="day" />
+					<Add directory="day07" />
+					<Add directory="day08" />
+					<Add directory="day10" />
+					<Add directory="day12" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -41,6 +66,24 @@
 			</Target>
 		</Build>
 		<Compiler>
+			<Add option="-Wnon-virtual-dtor" />
+			<Add option="-Wshadow" />
+			<Add option="-Winit-self" />
+			<Add option="-Wredundant-decls" />
+			<Add option="-Wcast-align" />
+			<Add option="-Wundef" />
+			<Add option="-Wfloat-equal" />
+			<Add option="-Winline" />
+			<Add option="-Wunreachable-code" />
+			<Add option="-Wmissing-declarations" />
+			<Add option="-Wmissing-include-dirs" />
+			<Add option="-Wswitch-enum" />
+			<Add option="-Wswitch-default" />
+			<Add option="-Weffc++" />
+			<Add option="-Wzero-as-null-pointer-constant" />
+			<Add option="-Wmain" />
+			<Add option="-pedantic" />
+			<Add option="-Wextra" />
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
@@ -54,6 +97,7 @@
 		<Unit filename="day00/Day00.cpp" />
 		<Unit filename="day00/Day00.hpp" />
 		<Unit filename="day00/part1.cpp" />
+		<Unit filename="day00/part2.cpp" />
 		<Unit filename="day01/Day01.cpp" />
 		<Unit filename="day01/Day01.hpp" />
 		<Unit filename="day01/part1.cpp" />
@@ -79,6 +123,46 @@
 		<Unit filename="day06/Day06.hpp" />
 		<Unit filename="day06/part1.cpp" />
 		<Unit filename="day06/part2.cpp" />
+		<Unit filename="day07/Day07.cpp" />
+		<Unit filename="day07/Day07.hpp" />
+		<Unit filename="day07/part1.cpp" />
+		<Unit filename="day07/part2.cpp" />
+		<Unit filename="day08/Day08.cpp" />
+		<Unit filename="day08/Day08.hpp" />
+		<Unit filename="day08/part1.cpp" />
+		<Unit filename="day08/part2.cpp" />
+		<Unit filename="day09/Day09.cpp" />
+		<Unit filename="day09/Day09.hpp" />
+		<Unit filename="day09/part1.cpp" />
+		<Unit filename="day09/part2.cpp" />
+		<Unit filename="day10/Bot.cpp" />
+		<Unit filename="day10/Bot.hpp" />
+		<Unit filename="day10/BotInstruction.cpp" />
+		<Unit filename="day10/BotInstruction.hpp" />
+		<Unit filename="day10/Day10.cpp" />
+		<Unit filename="day10/Day10.hpp" />
+		<Unit filename="day10/OutputBin.cpp" />
+		<Unit filename="day10/OutputBin.hpp" />
+		<Unit filename="day10/part1.cpp" />
+		<Unit filename="day10/part2.cpp" />
+		<Unit filename="day11/Day11.cpp" />
+		<Unit filename="day11/Day11.hpp" />
+		<Unit filename="day11/part1.cpp" />
+		<Unit filename="day11/part2.cpp" />
+		<Unit filename="day12/Day12.cpp" />
+		<Unit filename="day12/Day12.hpp" />
+		<Unit filename="day12/Instruction.cpp" />
+		<Unit filename="day12/Instruction.hpp" />
+		<Unit filename="day12/part1.cpp" />
+		<Unit filename="day12/part2.cpp" />
+		<Unit filename="day13/Day13.cpp" />
+		<Unit filename="day13/Day13.hpp" />
+		<Unit filename="day13/part1.cpp" />
+		<Unit filename="day13/part2.cpp" />
+		<Unit filename="day14/Day14.cpp" />
+		<Unit filename="day14/Day14.hpp" />
+		<Unit filename="day14/part1.cpp" />
+		<Unit filename="day14/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />

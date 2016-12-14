@@ -12,8 +12,11 @@ Result Day00::solve_p1(){
 
     string result = "";
 
-    for(unsigned ii = 0; ii < data.size(); ii++){
-        result += data[ii][0];
+    for(string line: this->data){
+        string var;
+        stringstream stream(line);
+        stream >> var;
+        result += var;
     }
 
     return {true, result};

@@ -1,5 +1,5 @@
 # Day 5: How About a Nice Game of Chess?
-Link: http://adventofcode.com/2016/day/5
+Link: https://adventofcode.com/2016/day/5
 
 Reddit solution thread (SPOILER ALERT!!):
 https://www.reddit.com/r/adventofcode/comments/5gk2yv/2016_day_5_solutions/

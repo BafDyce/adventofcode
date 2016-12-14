@@ -10,7 +10,7 @@ struct Pair {
     int n;
 };
 
-bool sortPair(Pair a, Pair b){
+static bool sortPair(Pair a, Pair b){
     if( a.n == b.n ){
         return a.ch < b.ch;
     }
@@ -47,16 +47,16 @@ Result Day04::solve_p2(){
         stringstream line(this->data[ii]);
         line >> content;
 
-        Pair letters[26] = {0};
-        for( unsigned ii = 0; ii < 26; ii++){
-            letters[ii].ch = 'a' + ii;
+        Pair letters[26] = {0, 0};
+        for( unsigned jj = 0; jj < 26; jj++){
+            letters[jj].ch = 'a' + jj;
         }
 
         int id = 0;
         string checksum = "";
         string name = "";
-        for(unsigned ii = 0; ii < content.length(); ii++){
-            char letter = content[ii];
+        for(unsigned jj = 0; jj < content.length(); jj++){
+            char letter = content[jj];
             if( letter == '-' ){
                 name += letter;
                 continue;
@@ -64,10 +64,10 @@ Result Day04::solve_p2(){
                 name += letter;
                 letters[ letter - 'a' ].n++;
             } else if ( letter >= '0' && letter <= '9' && id == 0 ){
-                stringstream numberString(content.substr(ii));
+                stringstream numberString(content.substr(jj));
                 numberString >> id;
             } else if ( letter == '[') {
-                checksum = content.substr(ii+1);
+                checksum = content.substr(jj+1);
                 checksum.pop_back();
                 break;
             }
@@ -75,8 +75,8 @@ Result Day04::solve_p2(){
 
         sort(letters, letters + 26, sortPair);
         string check = "";
-        for( unsigned ii = 0; ii < 5; ii++){
-            check += letters[ii].ch;
+        for( unsigned jj = 0; jj < 5; jj++){
+            check += letters[jj].ch;
         }
 
         if( checksum == check ){

@@ -25,6 +25,9 @@ class Day05 : public DayTemplate
         string data;
         EVP_MD_CTX *md5;
 
+        Day05(const Day05 &);
+        Day05 & operator=(const Day05 &);
+
         string compute_md5(const string);
         char get_hex_char(unsigned char nibble);
 };

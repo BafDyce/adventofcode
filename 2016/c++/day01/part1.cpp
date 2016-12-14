@@ -12,7 +12,7 @@ struct Santa {
 Result Day01::solve_p1(){
     Santa santa {'N', 0, 0};
 
-    for(int ii = 0; ii < this->data.size(); ii++){
+    for(unsigned ii = 0; ii < this->data.size(); ii++){
         Direction dir = this->data[ii];
         switch( santa.facing ){
             case 'N':

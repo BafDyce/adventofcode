@@ -16,6 +16,14 @@
 #include "day04/Day04.hpp"
 #include "day05/Day05.hpp"
 #include "day06/Day06.hpp"
+#include "day07/Day07.hpp"
+#include "day08/Day08.hpp"
+#include "day09/Day09.hpp"
+#include "day10/Day10.hpp"
+#include "day11/Day11.hpp"
+#include "day12/Day12.hpp"
+#include "day13/Day13.hpp"
+#include "day14/Day14.hpp"
 
 using namespace std;
 namespace po = boost::program_options;
@@ -26,22 +34,25 @@ struct Options {
     int part;
     string inputset;
     bool verify;
+
+    Options() : day(0), part(0), inputset(""), verify(false) {};
 };
 
 // contains general data about a puzzle, as well as a constructor from Options
-struct PuzzleData {
+class PuzzleData {
+public:
     int day;
     int part;
     vector<string> input;
 
-    PuzzleData(Options options) {
-        day = options.day;
-        part = options.part;
-
-        string pathname = get_path_name();
-        input = read_input_set(pathname, options.inputset);
-        solution = read_solution(pathname, options.inputset);
+    PuzzleData(Options options) :
+        day(options.day),
+        part(options.part),
+        input( read_input_set(get_path_name(), options.inputset) ),
+        solution( read_solution(get_path_name(), options.inputset) ) {
     }
+
+    ~PuzzleData(){};
 
     bool has_solution() {
         return solution != "";
@@ -218,7 +229,42 @@ Result run_solver(const PuzzleData puzzle) {
         Day06 solver(puzzle.input);
         return solver.solve(puzzle.part);
     }
+    case 7: {
+        Day07 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 8: {
+        Day08 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 9: {
+        Day09 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 10: {
+        Day10 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 11: {
+        Day11 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 12: {
+        Day12 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 13: {
+        Day13 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    case 14: {
+        Day14 solver(puzzle.input);
+        return solver.solve(puzzle.part);
+    }
+    default:
+        return Result {false, "Solver for day "
+            + to_string(puzzle.day) + " not found!"};
     }
 
-    return Result {false, "This day has no implementation (yet)!"};
+    return Result {false, "Internal error!"};
 }

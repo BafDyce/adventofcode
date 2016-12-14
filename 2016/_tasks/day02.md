@@ -1,5 +1,5 @@
 # Day 2: Bathroom Security
-Link: http://adventofcode.com/2016/day/2
+Link: https://adventofcode.com/2016/day/2
 
 Reddit solution thread (SPOILER ALERT!!):
 https://www.reddit.com/r/adventofcode/comments/5g1hfm/2016_day_2_solutions/

@@ -1,5 +1,5 @@
 # Day 3: Squares With Three Sides
-Link: http://adventofcode.com/2016/day/3
+Link: https://adventofcode.com/2016/day/3
 
 Reddit solution thread (SPOILER ALERT!!):
 https://www.reddit.com/r/adventofcode/comments/5g80ck/2016_day_3_solutions/
