@@ -159,6 +159,10 @@
 		<Unit filename="day13/Day13.hpp" />
 		<Unit filename="day13/part1.cpp" />
 		<Unit filename="day13/part2.cpp" />
+		<Unit filename="day14/Day14.cpp" />
+		<Unit filename="day14/Day14.hpp" />
+		<Unit filename="day14/part1.cpp" />
+		<Unit filename="day14/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Extensions>
 			<code_completion />
