@@ -2,8 +2,61 @@
 My personal implementations for
 [Advent of Code (AoC)](https://adventofcode.com/)
 
-Currently I'm only doing Rust implementations, however other languages will
-(hopefully) come too eventually.
+# Solved challenges
+Implementations for other languages will hopefully come to some day.
+Lanaguages in tables are ordered by name.
+
+## 2016
+| [AoC](https://adventofcode.com/2016) | C++ |
+|---|-----|
+|[Day 1](./2016/_tasks/day01.md)| [1](./2016/c++/day01/part1.cpp) & [2](./2016/c++/day01/part2.cpp) |
+|[Day 2](./2016/_tasks/day02.md)| [1](./2016/c++/day02/part1.cpp) & [2](./2016/c++/day02/part2.cpp) |
+|[Day 3](./2016/_tasks/day03.md)| [1](./2016/c++/day03/part1.cpp) & [2](./2016/c++/day03/part2.cpp) |
+|[Day 4](./2016/_tasks/day04.md)| [1](./2016/c++/day04/part1.cpp) & [2](./2016/c++/day04/part2.cpp) |
+|[Day 5](./2016/_tasks/day05.md)| [1](./2016/c++/day05/part1.cpp) & [2](./2016/c++/day05/part2.cpp) |
+|[Day 6](./2016/_tasks/day06.md)| [1](./2016/c++/day06/part1.cpp) & [2](./2016/c++/day06/part2.cpp) |
+|[Day 7](./2016/_tasks/day07.md)| [1](./2016/c++/day07/part1.cpp) & [2](./2016/c++/day07/part2.cpp) |
+|[Day 8](./2016/_tasks/day08.md)| [1](./2016/c++/day08/part1.cpp) & [2](./2016/c++/day08/part2.cpp) |
+|[Day 9](./2016/_tasks/day09.md)| [1](./2016/c++/day09/part1.cpp) & [2](./2016/c++/day09/part2.cpp) |
+|[Day 10](./2016/_tasks/day10.md)| [1](./2016/c++/day10/part1.cpp) & [2](./2016/c++/day10/part2.cpp) |
+|[Day 11](./2016/_tasks/day11.md)| * |
+|[Day 12](./2016/_tasks/day12.md)| [1](./2016/c++/day12/part1.cpp) & [2](./2016/c++/day12/part2.cpp) |
+|[Day 13](./2016/_tasks/day13.md)| [1](./2016/c++/day13/part1.cpp) & [2](./2016/c++/day13/part2.cpp) |
+|[Day 14](./2016/_tasks/day14.md)| [1](./2016/c++/day14/part1.cpp) & [2](./2016/c++/day14/part2.cpp) |
+
+\* solved and implemented together with Chrissi. See collaborated code in
+Chrissis Repo
+[here](https://gitlab.com/erdferkel2/AdventOfCode2016/blob/master/src/day11.c).
+A port to C++ is in progress.
+
+## 2015
+| [AoC](https://adventofcode.com/2015) | C | C++ | Pen & paper | Rust |
+|---|---|-----|-------------|------|
+| [Day 1](./2015/tasks/01.md) | | [1](./2015/c++/day01/part1.cpp) & [2](./2015/c++/day01/part2.cpp) | | [1](./2015/rust/01/part1.rs) & [2](./2015/rust/01/part2.rs) |
+| [Day 2](./2015/tasks/02.md) | | [1](./2015/c++/day02/part1.cpp) & [2](./2015/c++/day02/part2.cpp) | | [1](./2015/rust/02/part1.rs) & [2](./2015/rust/02/part2.rs) |
+| [Day 3](./2015/tasks/03.md) | | [1](./2015/c++/day03/part1.cpp) & [2](./2015/c++/day03/part2.cpp) | | [1](./2015/rust/03/part1.rs) & [2](./2015/rust/03/part2.rs) |
+| [Day 4](./2015/tasks/04.md) | | [1](./2015/c++/day04/part1.cpp) & [2](./2015/c++/day04/part2.cpp) | | [1](./2015/rust/04/src/part1.rs) & [2](./2015/rust/04/src/part2.rs) |
+| [Day 5](./2015/tasks/05.md) | | [1](./2015/c++/day05/part1.cpp) & [2](./2015/c++/day05/part2.cpp) | | [1](./2015/rust/05/part1.rs) & [2](./2015/rust/05/part2.rs) |
+| [Day 6](./2015/tasks/06.md) | |  | | [1](./2015/rust/06/part1.rs) & [2](./2015/rust/06/part2.rs) |
+| [Day 7](./2015/tasks/07.md) | | | | [1](./2015/rust/07/part1.rs) & [2](./2015/rust/07/part2.rs) |
+| [Day 8](./2015/tasks/08.md) | | | | [1](./2015/rust/08/part1.rs) & [2](./2015/rust/08/part2.rs) |
+| [Day 9](./2015/tasks/09.md) | | | | [1](./2015/rust/09/part1.rs) & [2](./2015/rust/09/part2.rs) |
+| [Day 10](./2015/tasks/10.md) | | | | [1](./2015/rust/10/part1.rs) & [2](./2015/rust/10/part2.rs) |
+| [Day 11](./2015/tasks/11.md) | [1](./2015/C/11/part1.c) & [2](./2015/C/11/part2.c) | | | [1](./2015/rust/11/part1.rs) & [2](./2015/rust/11/part2.rs) |
+| [Day 12](./2015/tasks/12.md) | | | | [1](./2015/rust/12/part1.rs) & [2](./2015/rust/12/part2.rs) |
+| [Day 13](./2015/tasks/13.md) | | | | [1](./2015/rust/13/part1.rs) & [2](./2015/rust/13/part2.rs) |
+| [Day 14](./2015/tasks/14.md) | | | | [1](./2015/rust/14/part1.rs) & [2](./2015/rust/14/part2.rs) |
+| [Day 15](./2015/tasks/15.md) | | | | [1](./2015/rust/15/part1.rs) & [2](./2015/rust/15/part2.rs) |
+| [Day 16](./2015/tasks/16.md) | | | | [1](./2015/rust/16/part1.rs) & [2](./2015/rust/16/part2.rs) |
+| [Day 17](./2015/tasks/17.md) | | | | [1](./2015/rust/17/part1.rs) & [2](./2015/rust/17/part2.rs) |
+| [Day 18](./2015/tasks/18.md) | | | | [1](./2015/rust/18/part1.rs) ([optimized](./2015/rust/18/part1_optimized.rs)) & [2](./2015/rust/18/part2.rs) ([optimized](./2015/rust/18/part1_optimized.rs)) |
+| [Day 19](./2015/tasks/19.md) | | | | [1](./2015/rust/19/part1.rs) & [2](./2015/rust/19/part2.rs) |
+| [Day 20](./2015/tasks/20.md) | | | | [1](./2015/rust/20/part1.rs) & [2](./2015/rust/20/part2.rs) |
+| [Day 21](./2015/tasks/21.md) | | | [1 & 2](./2015/brain/21/comments.md) | [1](./2015/rust/21/part1.rs) & [2](./2015/rust/21/part2.rs) |
+| [Day 22](./2015/tasks/22.md) | | | | [1](./2015/rust/22/part1.rs) & [2](./2015/rust/22/part2.rs) |
+| [Day 23](./2015/tasks/23.md) | | | | [1](./2015/rust/23/part1.rs) & [2](./2015/rust/23/part2.rs) |
+| [Day 24](./2015/tasks/24.md) | | | | [1](./2015/rust/24/src/part1.rs) & [2](./2015/rust/24/src/part2.rs) |
+| [Day 25](./2015/tasks/25.md) | | [1](./2015/c++/day25/part1.cpp) & [2](./2015/c++/day25/part2.cpp) | | | |
 
 # Directory structure
 Beginning from 2016 (maybe, I'll adapt 2015 too some day) I will use the
