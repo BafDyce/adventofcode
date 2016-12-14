@@ -22,7 +22,7 @@ Result Day14::solve_p1(){
                     keys.insert({hit, true});
                     cout << "Found key " << keys.size()
                         <<  " at " << hit << endl;
-                    if( keys.size() == 64 ){
+                    if( keys.size() == 512 ){
                         cout << "Caluclated " << md5_computations
                             << " md5-hashes." << endl;
                         return {true, to_string(hit)};

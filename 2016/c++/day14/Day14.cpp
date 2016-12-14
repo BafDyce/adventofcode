@@ -67,7 +67,7 @@ char Day14::get_first_tripple(string &hash){
             last.push_back(ch);
         } else {
             last.push_back(ch);
-            if( last.size() == 3 ){
+            if( last.size() == 4 ){
                 return ch;
             }
         }
@@ -87,7 +87,7 @@ vector<char> Day14::get_quintuples(string &hash){
             last.push_back(ch);
         } else {
             last.push_back(ch);
-            if( last.size() == 5 ){
+            if( last.size() == 7 ){
                 quintuples.push_back(ch);
                 last.erase(last.begin(), last.begin() + last.size());
             }
@@ -113,7 +113,7 @@ bool Day14::is_key(vector<Key> hits[16], string &hash, int counter, vector<int> 
         }
 
         for(Key key: hits[idx]){
-            if(  key.counter >= (counter - 1000)){
+            if(  key.counter >= (counter - 100000)){
                 result.push_back(key.counter);
             }
 
