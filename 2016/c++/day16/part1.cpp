@@ -37,7 +37,7 @@ string Day16::generate_data(const string &source, const unsigned length){
 string Day16::calc_checksum(const string to_hash){
 
     if( to_hash.length() % 2 == 1 ){
-        return data;
+        return to_hash;
     }
 
     string checksum = "";
