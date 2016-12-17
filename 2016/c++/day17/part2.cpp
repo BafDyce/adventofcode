@@ -2,6 +2,8 @@
 
 #include <queue>
 
+#include "../util/Md5Provider.hpp"
+
 using namespace std;
 
 Result Day17::solve_p2(){
@@ -30,6 +32,7 @@ Result Day17::solve_p2(){
     queue<Task> tasks;
     tasks.push({0, 0, ""});
 
+    Md5Provider md5;
     unsigned longest = 0;
 
     while( !tasks.empty() ){
@@ -45,7 +48,7 @@ Result Day17::solve_p2(){
             continue;
         }
 
-        string digest = compute_md5(data + task.path);
+        string digest = md5.compute(data + task.path);
         // up
         if( cell->up == DOOR && is_open(digest[0]) ){
             tasks.push({task.x - 1, task.y, task.path + "U"});

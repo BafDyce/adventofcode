@@ -3,11 +3,10 @@
 
 #include <iostream>
 #include <vector>
-
-#include <../DayTemplate.hpp>
-#include <vector>
 #include <string>
 #include <queue>
+
+#include "../DayTemplate.hpp"
 
 struct Position {
     unsigned x;

@@ -4,12 +4,9 @@
 #include <iostream>
 #include <vector>
 
-#include <../DayTemplate.hpp>
+#include "../DayTemplate.hpp"
 #include <vector>
 #include <string>
-#include <openssl/crypto.h>
-#include <openssl/evp.h>
-#include <openssl/md5.h>
 
 enum Wall {
     WALL,
@@ -41,18 +38,9 @@ protected:
 
 private:
     string data;
-    EVP_MD_CTX *md5;
-    unsigned md5_computations;
     static unsigned const MAZE_SIZE = 4;
 
-    Day17(const Day17 &);
-    Day17 & operator=(const Day17 &);
-
     static bool is_open(char ch);
-
-    string compute_md5(const string);
-    string compute_stretched_md5(const string from);
-    char get_hex_char(unsigned char nibble);
 };
 
 #endif // DAY17_HPP

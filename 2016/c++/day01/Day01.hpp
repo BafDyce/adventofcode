@@ -5,7 +5,7 @@
 #include <sstream>
 #include <vector>
 
-#include <../DayTemplate.hpp>
+#include "../DayTemplate.hpp"
 
 struct Direction {
     char direction;

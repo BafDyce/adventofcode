@@ -1,10 +1,10 @@
 #ifndef DAY15_HPP
 #define DAY15_HPP
 
-#include <../DayTemplate.hpp>
-
 #include <vector>
 #include <iostream>
+
+#include "../DayTemplate.hpp"
 
 class Day15 : public DayTemplate {
 public:

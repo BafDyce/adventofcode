@@ -1,9 +1,10 @@
 #ifndef DAY08_HPP
 #define DAY08_HPP
 
-#include <../DayTemplate.hpp>
 #include <vector>
 #include <string>
+
+#include "../DayTemplate.hpp"
 
 class Day08 : public DayTemplate {
 public:
