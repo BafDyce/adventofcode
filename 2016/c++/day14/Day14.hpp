@@ -1,13 +1,10 @@
 #ifndef DAY14_HPP
 #define DAY14_HPP
 
-#include <../DayTemplate.hpp>
-
 #include <vector>
 #include <iostream>
-#include <openssl/crypto.h>
-#include <openssl/evp.h>
-#include <openssl/md5.h>
+
+#include "../DayTemplate.hpp"
 
 struct Key {
     string hash;
@@ -26,15 +23,6 @@ protected:
 
 private:
     string data;
-    EVP_MD_CTX *md5;
-    unsigned md5_computations;
-
-    Day14(const Day14 &);
-    Day14 & operator=(const Day14 &);
-
-    string compute_md5(const string);
-    string compute_stretched_md5(const string from);
-    char get_hex_char(unsigned char nibble);
 
     char get_first_tripple(string &hash);
     vector<char> get_quintuples(string &hash);

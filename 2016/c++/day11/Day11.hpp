@@ -4,9 +4,10 @@
 #include <iostream>
 #include <vector>
 
-#include <../DayTemplate.hpp>
 #include <vector>
 #include <string>
+
+#include "../DayTemplate.hpp"
 
 class Day11 : public DayTemplate {
 public:

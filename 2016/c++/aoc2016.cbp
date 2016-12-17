@@ -32,15 +32,6 @@
 					<Add option="-Wextra" />
 					<Add option="-Wall" />
 					<Add option="-g" />
-					<Add directory="day00" />
-					<Add directory="day01" />
-					<Add directory="day02" />
-					<Add directory="day03" />
-					<Add directory="day04" />
-					<Add directory="day07" />
-					<Add directory="day08" />
-					<Add directory="day10" />
-					<Add directory="day12" />
 				</Compiler>
 			</Target>
 			<Target title="Release">
@@ -50,15 +41,6 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
-					<Add directory="day00" />
-					<Add directory="day01" />
-					<Add directory="day02" />
-					<Add directory="day03" />
-					<Add directory="day04" />
-					<Add directory="day07" />
-					<Add directory="day08" />
-					<Add directory="day10" />
-					<Add directory="day12" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -163,7 +145,21 @@
 		<Unit filename="day14/Day14.hpp" />
 		<Unit filename="day14/part1.cpp" />
 		<Unit filename="day14/part2.cpp" />
+		<Unit filename="day15/Day15.cpp" />
+		<Unit filename="day15/Day15.hpp" />
+		<Unit filename="day15/part1.cpp" />
+		<Unit filename="day15/part2.cpp" />
+		<Unit filename="day16/Day16.cpp" />
+		<Unit filename="day16/Day16.hpp" />
+		<Unit filename="day16/part1.cpp" />
+		<Unit filename="day16/part2.cpp" />
+		<Unit filename="day17/Day17.cpp" />
+		<Unit filename="day17/Day17.hpp" />
+		<Unit filename="day17/part1.cpp" />
+		<Unit filename="day17/part2.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="util/Md5Provider.cpp" />
+		<Unit filename="util/Md5Provider.hpp" />
 		<Extensions>
 			<code_completion />
 			<debugger />
