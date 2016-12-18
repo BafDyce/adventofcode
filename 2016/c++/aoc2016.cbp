@@ -157,6 +157,10 @@
 		<Unit filename="day17/Day17.hpp" />
 		<Unit filename="day17/part1.cpp" />
 		<Unit filename="day17/part2.cpp" />
+		<Unit filename="day18/Day18.cpp" />
+		<Unit filename="day18/Day18.hpp" />
+		<Unit filename="day18/part1.cpp" />
+		<Unit filename="day18/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="util/Md5Provider.cpp" />
 		<Unit filename="util/Md5Provider.hpp" />
