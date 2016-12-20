@@ -1,5 +1,5 @@
-#ifndef DAY10_HPP
-#define DAY10_HPP
+#ifndef DAY20_HPP
+#define DAY20_HPP
 
 #include <iostream>
 #include <vector>
@@ -7,10 +7,10 @@
 
 #include "../DayTemplate.hpp"
 
-class Day10 : public DayTemplate {
+class Day20 : public DayTemplate {
 public:
-    Day10(vector<string> input);
-    virtual ~Day10();
+    Day20(vector<string> input);
+    virtual ~Day20();
 
 protected:
     Result solve_p1();
@@ -21,4 +21,4 @@ private:
 
 };
 
-#endif // DAY10_HPP
+#endif // DAY20_HPP
