@@ -2,6 +2,12 @@
 My personal implementations for
 [Advent of Code (AoC)](https://adventofcode.com/)
 
+# Leaderboard entries (only top 100)
+| Year | Day | Language | Rank part 1 | Rank part 2 | Link |
+| ---- | --- | -------- | ----------- | ----------- | ---- |
+| 2016 | [2](./2016/_tasks/day02.md) | C++ | 81 | 83 | [link](https://adventofcode.com/2016/leaderboard/day/2)
+| 2016 | [20](./2016/_tasks/day20.md) | C++ | - | 29 | [link](https://adventofcode.com/2016/leaderboard/day/20)
+
 # Solved challenges
 Implementations for other languages will hopefully come to some day.
 Lanaguages in tables are ordered by name.
@@ -28,6 +34,7 @@ Lanaguages in tables are ordered by name.
 |[Day 17](./2016/_tasks/day17.md)| [1](./2016/c++/day17/part1.cpp) & [2](./2016/c++/day17/part2.cpp) |
 |[Day 18](./2016/_tasks/day18.md)| [1](./2016/c++/day18/part1.cpp) & [2](./2016/c++/day18/part2.cpp) |
 |[Day 19](./2016/_tasks/day19.md)| [1](./2016/c++/day19/part1.cpp) & [2](./2016/c++/day19/part2.cpp) |
+|[Day 20](./2016/_tasks/day20.md)| [1](./2016/c++/day20/part1.cpp) & [2](./2016/c++/day20/part2.cpp) |
 
 \* solved and implemented together with Chrissi. See collaborated code in
 Chrissis Repo
