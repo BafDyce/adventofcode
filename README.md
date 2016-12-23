@@ -38,6 +38,7 @@ Lanaguages in tables are ordered by name.
 |[Day 20](./2016/_tasks/day20.md)| [1](./2016/c++/day20/part1.cpp) & [2](./2016/c++/day20/part2.cpp) | |
 |[Day 21](./2016/_tasks/day21.md)| [1](./2016/c++/day21/part1.cpp) & [2](./2016/c++/day21/part2.cpp) | |
 |[Day 22](./2016/_tasks/day22.md)| [1](./2016/c++/day22/part1.cpp) | [2](./2016/pen-paper/day22/part2.md) |
+|[Day 23](./2016/_tasks/day23.md)| [1](./2016/c++/day23/part1.cpp) & [1](./2016/c++/day23/part1.cpp) | |
 
 \* solved and implemented together with Chrissi. See collaborated code in
 Chrissis Repo
