@@ -133,8 +133,6 @@
 		<Unit filename="day11/part2.cpp" />
 		<Unit filename="day12/Day12.cpp" />
 		<Unit filename="day12/Day12.hpp" />
-		<Unit filename="day12/Instruction.cpp" />
-		<Unit filename="day12/Instruction.hpp" />
 		<Unit filename="day12/part1.cpp" />
 		<Unit filename="day12/part2.cpp" />
 		<Unit filename="day13/Day13.cpp" />
@@ -177,7 +175,13 @@
 		<Unit filename="day22/Day22.hpp" />
 		<Unit filename="day22/part1.cpp" />
 		<Unit filename="day22/part2.cpp" />
+		<Unit filename="day23/Day23.cpp" />
+		<Unit filename="day23/Day23.hpp" />
+		<Unit filename="day23/part1.cpp" />
+		<Unit filename="day23/part2.cpp" />
 		<Unit filename="main.cpp" />
+		<Unit filename="util/Assembunny.cpp" />
+		<Unit filename="util/Assembunny.hpp" />
 		<Unit filename="util/Md5Provider.cpp" />
 		<Unit filename="util/Md5Provider.hpp" />
 		<Extensions>
