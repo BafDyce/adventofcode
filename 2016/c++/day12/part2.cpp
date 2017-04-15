@@ -6,17 +6,17 @@
 #include <sstream>
 #include <algorithm>
 
-#include "Instruction.hpp"
+#include "../util/Assembunny.hpp"
 
 using namespace std;
 
 Result Day12::solve_p2(){
-    // parsing of input happens in Day12.cpp
-    vector<int> registers = {0, 0, 1, 0, 0};
+    // parsing of input happens in ../util/Assembunny.cpp
+    vector<int> registers = {0, 0, 1, 0};
 
     unsigned next = 0;
     while( next < instructions.size() ){
-        // execute is implemented in Instruction.cpp
+        // execute is implemented in ../util/Assembunny.cpp
         next += instructions[next].execute(registers);
     }
 

@@ -1,16 +1,17 @@
-#ifndef DAY12_HPP
-#define DAY12_HPP
+#ifndef DAY23_HPP
+#define DAY23_HPP
 
+#include <iostream>
 #include <vector>
 #include <string>
 
 #include "../DayTemplate.hpp"
 #include "../util/Assembunny.hpp"
 
-class Day12 : public DayTemplate {
+class Day23 : public DayTemplate {
 public:
-    Day12(vector<string> input);
-    virtual ~Day12();
+    Day23(vector<string> input);
+    virtual ~Day23();
 
 protected:
     Result solve_p1();
@@ -20,4 +21,4 @@ private:
     vector<Instruction> instructions;
 };
 
-#endif // DAY12_HPP
+#endif // DAY23_HPP

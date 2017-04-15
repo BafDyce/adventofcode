@@ -1,31 +1,44 @@
+
 # adventofcode
 My personal implementations for
 [Advent of Code (AoC)](https://adventofcode.com/)
+
+# Leaderboard entries (only top 100)
+| Year | Day | Language | Rank part 1 | Rank part 2 | Link |
+| ---- | --- | -------- | ----------- | ----------- | ---- |
+| 2016 | [2](./2016/_tasks/day02.md) | C++ | 81 | 83 | [link](https://adventofcode.com/2016/leaderboard/day/2)
+| 2016 | [20](./2016/_tasks/day20.md) | C++ | - | 29 | [link](https://adventofcode.com/2016/leaderboard/day/20)
 
 # Solved challenges
 Implementations for other languages will hopefully come to some day.
 Lanaguages in tables are ordered by name.
 
 ## 2016
-| [AoC](https://adventofcode.com/2016) | C++ |
-|---|-----|
-|[Day 1](./2016/_tasks/day01.md)| [1](./2016/c++/day01/part1.cpp) & [2](./2016/c++/day01/part2.cpp) |
-|[Day 2](./2016/_tasks/day02.md)| [1](./2016/c++/day02/part1.cpp) & [2](./2016/c++/day02/part2.cpp) |
-|[Day 3](./2016/_tasks/day03.md)| [1](./2016/c++/day03/part1.cpp) & [2](./2016/c++/day03/part2.cpp) |
-|[Day 4](./2016/_tasks/day04.md)| [1](./2016/c++/day04/part1.cpp) & [2](./2016/c++/day04/part2.cpp) |
-|[Day 5](./2016/_tasks/day05.md)| [1](./2016/c++/day05/part1.cpp) & [2](./2016/c++/day05/part2.cpp) |
-|[Day 6](./2016/_tasks/day06.md)| [1](./2016/c++/day06/part1.cpp) & [2](./2016/c++/day06/part2.cpp) |
-|[Day 7](./2016/_tasks/day07.md)| [1](./2016/c++/day07/part1.cpp) & [2](./2016/c++/day07/part2.cpp) |
-|[Day 8](./2016/_tasks/day08.md)| [1](./2016/c++/day08/part1.cpp) & [2](./2016/c++/day08/part2.cpp) |
-|[Day 9](./2016/_tasks/day09.md)| [1](./2016/c++/day09/part1.cpp) & [2](./2016/c++/day09/part2.cpp) |
-|[Day 10](./2016/_tasks/day10.md)| [1](./2016/c++/day10/part1.cpp) & [2](./2016/c++/day10/part2.cpp) |
-|[Day 11](./2016/_tasks/day11.md)| * |
-|[Day 12](./2016/_tasks/day12.md)| [1](./2016/c++/day12/part1.cpp) & [2](./2016/c++/day12/part2.cpp) |
-|[Day 13](./2016/_tasks/day13.md)| [1](./2016/c++/day13/part1.cpp) & [2](./2016/c++/day13/part2.cpp) |
-|[Day 14](./2016/_tasks/day14.md)| [1](./2016/c++/day14/part1.cpp) & [2](./2016/c++/day14/part2.cpp) |
-|[Day 15](./2016/_tasks/day15.md)| [1](./2016/c++/day15/part1.cpp) & [2](./2016/c++/day15/part2.cpp) |
-|[Day 16](./2016/_tasks/day16.md)| [1](./2016/c++/day16/part1.cpp) & [2](./2016/c++/day16/part2.cpp) |
-|[Day 17](./2016/_tasks/day17.md)| [1](./2016/c++/day17/part1.cpp) & [2](./2016/c++/day17/part2.cpp) |
+| [AoC](https://adventofcode.com/2016) | C++ | Pen & paper |
+|--------------------------------------|-----|-------------|
+|[Day 1](./2016/_tasks/day01.md)| [1](./2016/c++/day01/part1.cpp) & [2](./2016/c++/day01/part2.cpp) | |
+|[Day 2](./2016/_tasks/day02.md)| [1](./2016/c++/day02/part1.cpp) & [2](./2016/c++/day02/part2.cpp) | |
+|[Day 3](./2016/_tasks/day03.md)| [1](./2016/c++/day03/part1.cpp) & [2](./2016/c++/day03/part2.cpp) | |
+|[Day 4](./2016/_tasks/day04.md)| [1](./2016/c++/day04/part1.cpp) & [2](./2016/c++/day04/part2.cpp) | |
+|[Day 5](./2016/_tasks/day05.md)| [1](./2016/c++/day05/part1.cpp) & [2](./2016/c++/day05/part2.cpp) | |
+|[Day 6](./2016/_tasks/day06.md)| [1](./2016/c++/day06/part1.cpp) & [2](./2016/c++/day06/part2.cpp) | |
+|[Day 7](./2016/_tasks/day07.md)| [1](./2016/c++/day07/part1.cpp) & [2](./2016/c++/day07/part2.cpp) | |
+|[Day 8](./2016/_tasks/day08.md)| [1](./2016/c++/day08/part1.cpp) & [2](./2016/c++/day08/part2.cpp) | |
+|[Day 9](./2016/_tasks/day09.md)| [1](./2016/c++/day09/part1.cpp) & [2](./2016/c++/day09/part2.cpp) | |
+|[Day 10](./2016/_tasks/day10.md)| [1](./2016/c++/day10/part1.cpp) & [2](./2016/c++/day10/part2.cpp) | |
+|[Day 11](./2016/_tasks/day11.md)| * | |
+|[Day 12](./2016/_tasks/day12.md)| [1](./2016/c++/day12/part1.cpp) & [2](./2016/c++/day12/part2.cpp) | |
+|[Day 13](./2016/_tasks/day13.md)| [1](./2016/c++/day13/part1.cpp) & [2](./2016/c++/day13/part2.cpp) | |
+|[Day 14](./2016/_tasks/day14.md)| [1](./2016/c++/day14/part1.cpp) & [2](./2016/c++/day14/part2.cpp) | |
+|[Day 15](./2016/_tasks/day15.md)| [1](./2016/c++/day15/part1.cpp) & [2](./2016/c++/day15/part2.cpp) | |
+|[Day 16](./2016/_tasks/day16.md)| [1](./2016/c++/day16/part1.cpp) & [2](./2016/c++/day16/part2.cpp) | |
+|[Day 17](./2016/_tasks/day17.md)| [1](./2016/c++/day17/part1.cpp) & [2](./2016/c++/day17/part2.cpp) | |
+|[Day 18](./2016/_tasks/day18.md)| [1](./2016/c++/day18/part1.cpp) & [2](./2016/c++/day18/part2.cpp) | |
+|[Day 19](./2016/_tasks/day19.md)| [1](./2016/c++/day19/part1.cpp) & [2](./2016/c++/day19/part2.cpp) | |
+|[Day 20](./2016/_tasks/day20.md)| [1](./2016/c++/day20/part1.cpp) & [2](./2016/c++/day20/part2.cpp) | |
+|[Day 21](./2016/_tasks/day21.md)| [1](./2016/c++/day21/part1.cpp) & [2](./2016/c++/day21/part2.cpp) | |
+|[Day 22](./2016/_tasks/day22.md)| [1](./2016/c++/day22/part1.cpp) | [2](./2016/pen-paper/day22/part2.md) |
+|[Day 23](./2016/_tasks/day23.md)| [1](./2016/c++/day23/part1.cpp) & [1](./2016/c++/day23/part1.cpp) | |
 
 \* solved and implemented together with Chrissi. See collaborated code in
 Chrissis Repo
