@@ -13,6 +13,12 @@ My personal implementations for
 Implementations for other languages will hopefully come to some day.
 Lanaguages in tables are ordered by name.
 
+## 2017
+| [AoC](https://adventofcode.com/2017) | Rust |
+|--------------------------------------|------|
+|[Day 1](./2017/_tasks/day01.md)| [1](./2017/rust/day01/src/part1.rs) & [2](./2017/rust/day01/src/part2.rs) |
+|[Day 2](./2017/_tasks/day02.md)| [1](./2017/rust/day01/src/part1.rs) & [2](./2017/rust/day02/src/part2.rs) |
+
 ## 2016
 | [AoC](https://adventofcode.com/2016) | C++ | Pen & paper |
 |--------------------------------------|-----|-------------|
@@ -111,6 +117,9 @@ slightly different and it *may* contain additional files.
 * Where possible (e.g. for object oriented languages), I'll try to keep
 **a single main source file** for the whole year/language combination,
 implementing each day as a class/object with a consistent interface.
+**Note:** Only true for 2016cpp. In 2017rust I am using a separate application
+for each day again. Common code (such as importing) will be placed in an
+AoC-utils library.
 
 # Commit messages
 All commit messages **should** be of the following format (when applicable):
