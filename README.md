@@ -10,14 +10,15 @@ My personal implementations for
 | 2016 | [20](./2016/_tasks/day20.md) | C++ | - | 29 | [link](https://adventofcode.com/2016/leaderboard/day/20)
 
 # Solved challenges
-Implementations for other languages will hopefully come to some day.
+Implementations for other languages will hopefully come too some day.
 Lanaguages in tables are ordered by name.
 
 ## 2017
 | [AoC](https://adventofcode.com/2017) | Rust |
 |--------------------------------------|------|
 |[Day 1](./2017/_tasks/day01.md)| [1](./2017/rust/day01/src/part1.rs) & [2](./2017/rust/day01/src/part2.rs) |
-|[Day 2](./2017/_tasks/day02.md)| [1](./2017/rust/day01/src/part1.rs) & [2](./2017/rust/day02/src/part2.rs) |
+|[Day 2](./2017/_tasks/day02.md)| [1](./2017/rust/day02/src/part1.rs) & [2](./2017/rust/day02/src/part2.rs) |
+|[Day 2](./2017/_tasks/day03.md)| [1](./2017/rust/day03/src/part1.rs) & [2](./2017/rust/day03/src/part2.rs) |
 
 ## 2016
 | [AoC](https://adventofcode.com/2016) | C++ | Pen & paper |
