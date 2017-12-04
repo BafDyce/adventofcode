@@ -3,10 +3,9 @@ mod part1;
 mod part2;
 
 fn main() {
-    let day: i32 = 0;
+    let day: i32 = 4;
 
     let input = aocutils::import(day, Some("puzzle1"));
-    //let input = aocutils::import(day, Some("puzzle1")).remove(0);
 
     let res1 = part1::solve(&input);
     let res2 = part2::solve(&input);

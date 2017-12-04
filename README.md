@@ -18,7 +18,8 @@ Lanaguages in tables are ordered by name.
 |--------------------------------------|------|
 |[Day 1](./2017/_tasks/day01.md)| [1](./2017/rust/day01/src/part1.rs) & [2](./2017/rust/day01/src/part2.rs) |
 |[Day 2](./2017/_tasks/day02.md)| [1](./2017/rust/day02/src/part1.rs) & [2](./2017/rust/day02/src/part2.rs) |
-|[Day 2](./2017/_tasks/day03.md)| [1](./2017/rust/day03/src/part1.rs) & [2](./2017/rust/day03/src/part2.rs) |
+|[Day 3](./2017/_tasks/day03.md)| [1](./2017/rust/day03/src/part1.rs) & [2](./2017/rust/day03/src/part2.rs) |
+|[Day 4](./2017/_tasks/day04.md)| [1](./2017/rust/day04/src/part1.rs) & [2](./2017/rust/day03/src/part4.rs) |
 
 ## 2016
 | [AoC](https://adventofcode.com/2016) | C++ | Pen & paper |
