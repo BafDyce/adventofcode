@@ -11,15 +11,14 @@ My personal implementations for
 
 # Solved challenges
 Implementations for other languages will hopefully come too some day.
-Lanaguages in tables are ordered by name.
 
 ## 2017
-| [AoC](https://adventofcode.com/2017) | Rust |
-|--------------------------------------|------|
-|[Day 1](./2017/_tasks/day01.md)| [1](./2017/rust/day01/src/part1.rs) & [2](./2017/rust/day01/src/part2.rs) |
-|[Day 2](./2017/_tasks/day02.md)| [1](./2017/rust/day02/src/part1.rs) & [2](./2017/rust/day02/src/part2.rs) |
-|[Day 3](./2017/_tasks/day03.md)| [1](./2017/rust/day03/src/part1.rs) & [2](./2017/rust/day03/src/part2.rs) |
-|[Day 4](./2017/_tasks/day04.md)| [1](./2017/rust/day04/src/part1.rs) & [2](./2017/rust/day03/src/part4.rs) |
+| [AoC](https://adventofcode.com/2017) | Rust | [ion](https://github.com/redox-os/ion) |
+|--------------------------------------|------|----------------------------------------|
+|[Day 1](./2017/_tasks/day01.md)| [1](./2017/rust/day01/src/part1.rs) & [2](./2017/rust/day01/src/part2.rs) | [1](./2017/ion/day01/part1.ion) & [2](./2017/ion/day01/part2.ion)
+|[Day 2](./2017/_tasks/day02.md)| [1](./2017/rust/day02/src/part1.rs) & [2](./2017/rust/day02/src/part2.rs) | |
+|[Day 3](./2017/_tasks/day03.md)| [1](./2017/rust/day03/src/part1.rs) & [2](./2017/rust/day03/src/part2.rs) | |
+|[Day 4](./2017/_tasks/day04.md)| [1](./2017/rust/day04/src/part1.rs) & [2](./2017/rust/day03/src/part4.rs) | |
 
 ## 2016
 | [AoC](https://adventofcode.com/2016) | C++ | Pen & paper |

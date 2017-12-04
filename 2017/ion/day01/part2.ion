@@ -1,0 +1,13 @@
+#!/usr/bin/env ion
+
+let input = $(cat "../../_inputs/day01/puzzle1.input")
+let input_length = $len($input)
+
+let offset = $(( input_length / 2 ))
+for ii in 0..$input_length
+  if test $input[$ii] = $input[$(( (ii + offset) % input_length ))]
+    let sum += $input[$ii]
+  end
+end
+
+echo $sum
