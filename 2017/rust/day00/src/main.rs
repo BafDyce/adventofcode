@@ -7,6 +7,7 @@ fn main() {
 
     let input = aocutils::import(day, Some("puzzle1"));
     //let input = aocutils::import(day, Some("puzzle1")).remove(0);
+    // let input: Vec<i32> = aocutils::import(day, Some("puzzle1")).iter().map(|x| x.parse::<i32>().unwrap()).collect();
 
     let res1 = part1::solve(&input);
     let res2 = part2::solve(&input);
