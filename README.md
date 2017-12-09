@@ -21,6 +21,9 @@ Implementations for other languages will hopefully come too some day.
 |[Day 4](./2017/_tasks/day04.md)| [1](./2017/rust/day04/src/part1.rs) & [2](./2017/rust/day04/src/part2.rs) | |
 |[Day 5](./2017/_tasks/day05.md)| [1](./2017/rust/day05/src/part1.rs) & [2](./2017/rust/day05/src/part2.rs) | |
 |[Day 6](./2017/_tasks/day06.md)| [1](./2017/rust/day06/src/part1.rs) & [2](./2017/rust/day06/src/part2.rs) | |
+|[Day 7](./2017/_tasks/day07.md)| [1](./2017/rust/day07/src/part1.rs) & [2](./2017/rust/day07/src/part2.rs) | |
+|[Day 8](./2017/_tasks/day08.md)| [1](./2017/rust/day08/src/part1.rs) & [2](./2017/rust/day08/src/part2.rs) | |
+|[Day 9](./2017/_tasks/day09.md)| [1](./2017/rust/day09/src/part1.rs) & [2](./2017/rust/day09/src/part2.rs) | |
 
 ## 2016
 | [AoC](https://adventofcode.com/2016) | C++ | Pen & paper |
