@@ -5,3 +5,4 @@ authors = ["Fabian Würfl <fabian.wuerfl@gmx.at>"]
 
 [dependencies]
 aocutils = { path = "../_aocutils" }
+regex = "0.2"
