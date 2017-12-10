@@ -24,24 +24,20 @@ pub fn solve(input: &Vec<usize>) -> i32 {
 
         let curlen = current + length;
         let selection_iter = selection.iter();
-        numbers = if curlen >= numbers.len() {
+        numbers = if curlen >= numberlen {
             // selection wrapped
             let not_selected = numbers
                                 .iter()
                                 .cycle()
                                 .skip(curlen)
-                                .take( numbers.len() - length );
+                                .take( numberlen - length );
 
-            let tmp: Vec<i32> = not_selected
-                                .chain(selection_iter)
-                                .map(|x| *x)
-                                .collect();
-            tmp.iter()
-                .cycle()
-                .skip( numbers.len() - (curlen % numbers.len()))
-                .take(numbers.len())
-                .map(|x| *x)
-                .collect()
+            not_selected.chain(selection_iter)
+                        .cycle()
+                        .skip( numberlen - (curlen % numberlen))
+                        .take(numberlen)
+                        .map(|x| *x)
+                        .collect()
         } else {
             // selection did not wrap
             let start = numbers.iter().take(current);
@@ -50,9 +46,9 @@ pub fn solve(input: &Vec<usize>) -> i32 {
         };
 
         //println!("==> numbers after modifictation: {:?}", numbers);
-        assert_eq!(numbers.len(), numberlen);
+        //assert_eq!(numbers.len(), numberlen);
 
-        current += length + skip_size;
+        current += (length + skip_size) % numberlen;
         skip_size += 1;
     }
 
