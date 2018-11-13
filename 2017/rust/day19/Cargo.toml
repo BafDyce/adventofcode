@@ -1,0 +1,8 @@
+[package]
+name = "aoc17-19"
+version = "0.1.0"
+authors = ["Fabian Würfl <fabian.wuerfl@tuta.io>"]
+
+[dependencies]
+aocutils = { path = "../_aocutils" }
+regex = "*"
