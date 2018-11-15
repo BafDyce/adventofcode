@@ -10,8 +10,25 @@ My personal implementations for
 | 2016 | [20](./2016/_tasks/day20.md) | C++ | - | 29 | [link](https://adventofcode.com/2016/leaderboard/day/20)
 
 # Solved challenges
-Implementations for other languages will hopefully come to some day.
-Lanaguages in tables are ordered by name.
+Implementations for other languages will hopefully come too some day.
+
+## 2017
+| [AoC](https://adventofcode.com/2017) | Rust | [ion](https://github.com/redox-os/ion) |
+|--------------------------------------|------|----------------------------------------|
+|[Day 1](./2017/_tasks/day01.md)| [1](./2017/rust/day01/src/part1.rs) & [2](./2017/rust/day01/src/part2.rs) | [1](./2017/ion/day01/part1.ion) & [2](./2017/ion/day01/part2.ion)
+|[Day 2](./2017/_tasks/day02.md)| [1](./2017/rust/day02/src/part1.rs) & [2](./2017/rust/day02/src/part2.rs) | |
+|[Day 3](./2017/_tasks/day03.md)| [1](./2017/rust/day03/src/part1.rs) & [2](./2017/rust/day03/src/part2.rs) | |
+|[Day 4](./2017/_tasks/day04.md)| [1](./2017/rust/day04/src/part1.rs) & [2](./2017/rust/day04/src/part2.rs) | |
+|[Day 5](./2017/_tasks/day05.md)| [1](./2017/rust/day05/src/part1.rs) & [2](./2017/rust/day05/src/part2.rs) | |
+|[Day 6](./2017/_tasks/day06.md)| [1](./2017/rust/day06/src/part1.rs) & [2](./2017/rust/day06/src/part2.rs) | |
+|[Day 7](./2017/_tasks/day07.md)| [1](./2017/rust/day07/src/part1.rs) & [2](./2017/rust/day07/src/part2.rs) | |
+|[Day 8](./2017/_tasks/day08.md)| [1](./2017/rust/day08/src/part1.rs) & [2](./2017/rust/day08/src/part2.rs) | |
+|[Day 9](./2017/_tasks/day09.md)| [1](./2017/rust/day09/src/part1.rs) & [2](./2017/rust/day09/src/part2.rs) | |
+|[Day 10](./2017/_tasks/day10.md)| [1](./2017/rust/day10/src/part1.rs) & [2](./2017/rust/day10/src/part2.rs) | |
+|[Day 12](./2017/_tasks/day12.md)| [1](./2017/rust/day12/src/part1.rs) & [2](./2017/rust/day12/src/part2.rs) | |
+|[Day 13](./2017/_tasks/day13.md)| [1](./2017/rust/day13/src/part1.rs) & [2](./2017/rust/day13/src/part2.rs) | |
+|[Day 14](./2017/_tasks/day14.md)| [1](./2017/rust/day14/src/part1.rs) & [2](./2017/rust/day14/src/part2.rs) | |
+|[Day 15](./2017/_tasks/day15.md)| [1](./2017/rust/day15/src/part1.rs) & [2](./2017/rust/day15/src/part2.rs) | |
 
 ## 2016
 | [AoC](https://adventofcode.com/2016) | C++ | Pen & paper |
@@ -111,6 +128,9 @@ slightly different and it *may* contain additional files.
 * Where possible (e.g. for object oriented languages), I'll try to keep
 **a single main source file** for the whole year/language combination,
 implementing each day as a class/object with a consistent interface.
+**Note:** Only true for 2016cpp. In 2017rust I am using a separate application
+for each day again. Common code (such as importing) will be placed in an
+AoC-utils library.
 
 # Commit messages
 All commit messages **should** be of the following format (when applicable):

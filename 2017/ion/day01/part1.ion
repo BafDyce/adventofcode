@@ -1,0 +1,16 @@
+#!/usr/bin/env ion
+
+let input = $(cat "../../_inputs/day01/puzzle1.input")
+
+for char in @chars($input)
+  if test $char = $lastchar
+    let sum += $char
+  end
+  let lastchar = $char
+end
+
+if test $input[0] = $input[-1]
+  let sum += $input[0]
+end
+
+echo $sum
