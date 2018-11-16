@@ -179,6 +179,10 @@
 		<Unit filename="day23/Day23.hpp" />
 		<Unit filename="day23/part1.cpp" />
 		<Unit filename="day23/part2.cpp" />
+        <Unit filename="day25/Day25.cpp" />
+		<Unit filename="day25/Day25.hpp" />
+		<Unit filename="day25/part1.cpp" />
+		<Unit filename="day25/part2.cpp" />
 		<Unit filename="main.cpp" />
 		<Unit filename="util/Assembunny.cpp" />
 		<Unit filename="util/Assembunny.hpp" />

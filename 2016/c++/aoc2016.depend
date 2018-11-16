@@ -39,6 +39,7 @@
 	"day21/Day21.hpp"
 	"day22/Day22.hpp"
 	"day23/Day23.hpp"
+    "day25/Day25.hpp"
 
 1482437149 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day00/Day00.cpp
 	"Day00.hpp"
@@ -639,8 +640,8 @@
 	"../util/Md5Provider.hpp"
 	"../day12/Instruction.hpp"
 
-1482437333 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day23/part2.cpp
-	"Day23.hpp"
+1482437333 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day25/part2.cpp
+	"Day25.hpp"
 	<vector>
 	<iostream>
 	<sstream>
@@ -649,3 +650,37 @@
 	<queue>
 	"../util/Md5Provider.hpp"
 
+1482470235 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day25/Day25.cpp
+	"Day25.hpp"
+	<regex>
+	<vector>
+	<sstream>
+	"../day12/Instruction.hpp"
+
+1482469429 /home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day25/Day25.hpp
+	<iostream>
+	<vector>
+	<string>
+	"../DayTemplate.hpp"
+	"../day12/Instruction.hpp"
+
+1482471149 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day25/part1.cpp
+	"Day25.hpp"
+	<vector>
+	<iostream>
+	<sstream>
+	<algorithm>
+	<limits>
+	<queue>
+	"../util/Md5Provider.hpp"
+	"../day12/Instruction.hpp"
+
+1482437333 source:/home/fabian/Documents/programming/gitprojects/adventofcode/2016/c++/day25/part2.cpp
+	"Day25.hpp"
+	<vector>
+	<iostream>
+	<sstream>
+	<algorithm>
+	<limits>
+	<queue>
+	"../util/Md5Provider.hpp"
