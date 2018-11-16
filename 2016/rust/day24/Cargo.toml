@@ -1,0 +1,8 @@
+[package]
+name = "aoc16-24"
+version = "0.1.0"
+authors = ["Fabian Würfl <fabian.wuerfl@gmx.at>"]
+
+[dependencies]
+aocutils = { path = "../_aocutils" }
+petgraph = "0.4.13"
