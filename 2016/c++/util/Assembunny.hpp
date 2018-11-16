@@ -11,7 +11,8 @@ enum InstrType {
     INC,
     DEC,
     JNZ,
-    TGL
+    TGL,
+    OUT,
 };
 
 struct Instruction {
@@ -23,8 +24,8 @@ struct Instruction {
     bool target_is_reg;
 
     void print(void);
-    unsigned execute(vector<int> &registers);
-    unsigned execute(vector<int> &registers, vector<Instruction> &instructions);
+    unsigned execute(vector<int> &registers, int *out = NULL);
+    unsigned execute(vector<int> &registers, vector<Instruction> &instructions, int *out = NULL);
 };
 
 vector<Instruction> parse_assembunny(vector<string> assembunny);

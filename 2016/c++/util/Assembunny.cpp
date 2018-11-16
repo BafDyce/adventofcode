@@ -10,7 +10,7 @@ vector<Instruction> parse_assembunny(vector<string> assembunny){
     vector<Instruction> instructions;
     unsigned id_counter = 0;
 
-    regex regSingle(R"((dec|inc|tgl) ([a-d\d\-]+))");
+    regex regSingle(R"((dec|inc|tgl|out) ([a-d\d\-]+))");
     regex regDouble(R"((cpy|jnz|) ([a-d\d\-]+) ([a-d\d\-]+))");
     for(string line: assembunny){
         smatch m;
@@ -22,6 +22,8 @@ vector<Instruction> parse_assembunny(vector<string> assembunny){
                 type = DEC;
             } else if( m[1] == "tgl" ){
                 type = TGL;
+            } else if( m[1] == "out"){
+                type = OUT;
             } else {
                 cerr << "invalid single instruction: " << m[0] << endl;
                 continue;
@@ -89,6 +91,7 @@ void Instruction::print(void){
     case DEC: typestring = "DEC"; break;
     case JNZ: typestring = "JNZ"; break;
     case TGL: typestring = "TGL"; break;
+    case OUT: typestring = "OUT"; break;
     default: cerr << "SHOULD NEVER HAPPEN (Instruction::print)" << endl;
     }
 
@@ -97,7 +100,7 @@ void Instruction::print(void){
         << " to " << target << " (" << target_is_reg << ")" << endl;
 }
 
-unsigned Instruction::execute(vector<int> &registers){
+unsigned Instruction::execute(vector<int> &registers, int *out){
     switch(type){
     case CPY:
         if( !target_is_reg ){
@@ -134,6 +137,18 @@ unsigned Instruction::execute(vector<int> &registers){
         break;
     case TGL:
         break;
+    case OUT:
+        if ( out ) {
+            if( source_is_reg ){
+                *out = registers[source];
+            } else {
+                *out = source;
+            }
+        } else {
+            cerr << "NO OUTVALUE SPECIFIED!!" << endl;
+        }
+
+        break;
     default: cerr << "SHOULD NEVER HAPPEN (Instruction::execute)" << endl;
     }
 
@@ -141,11 +156,10 @@ unsigned Instruction::execute(vector<int> &registers){
 }
 
 unsigned
-Instruction::execute(vector<int> &registers, vector<Instruction> &instructions){
+Instruction::execute(vector<int> &registers, vector<Instruction> &instructions, int *out){
     switch(type){
-    case CPY: case INC: case DEC: case JNZ:
-        return this->execute(registers);
-        break;
+    case CPY: case INC: case DEC: case JNZ: case OUT:
+        return this->execute(registers, out);
     case TGL: {
         unsigned idx = this->id;
         if( source_is_reg ){
