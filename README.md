@@ -12,6 +12,10 @@ My personal implementations for
 # Solved challenges
 Implementations for other languages will hopefully come too some day.
 
+## 2018
+| [AoC](https://adventofcode.com/2018) | Rust |
+|--------------------------------------|------|
+
 ## 2017
 | [AoC](https://adventofcode.com/2017) | Rust | [ion](https://github.com/redox-os/ion) |
 |--------------------------------------|------|----------------------------------------|
