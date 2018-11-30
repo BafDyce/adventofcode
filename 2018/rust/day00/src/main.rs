@@ -1,6 +1,8 @@
 extern crate aoc_utils;
 #[macro_use] extern crate lazy_static;
 extern crate regex;
+extern crate md5;
+extern crate sha1;
 
 mod part1;
 mod part2;
@@ -19,7 +21,7 @@ template TODO:
 - [ ] stuff for building a graph, and then:
     - [ ] dijkstra
     - [ ] TSP
-- [ ] crypto stuff (md5, sha1)
+- [x] crypto stuff (md5, sha1)
 - [ ] base stuff for "assembly"
 - [x] convert input into [[char; xx]; xx]
     --> in snippets
