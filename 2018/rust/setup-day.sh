@@ -42,7 +42,22 @@ test -d "${projectdir}" && {
     cp -r day00 $projectdir
 
     # configure files
-    cd $projectdir
+    pushd $projectdir
     sed -i "s/aoc18-00/aoc18-${day_leading_0}/" Cargo.toml
     sed -i "s/const DAY: u32 = 0;/const DAY: u32 = ${day_normal};/" src/main.rs
+    popd
+}
+
+# Update README.md
+line_2018=$(rg --line-number '## 2018' ../../README.md | cut -d: -f1)
+line_2017=$(rg --line-number '## 2017' ../../README.md | cut -d: -f1)
+
+tail -n +${line_2018} ../../README.md | head -n $(($line_2017 - $line_2018)) | rg "\[Day $day_normal\]" && {
+    echo Nothing to do
+} || {
+    line_to_insert="|[Day $day_normal](./2018/_tasks/day${day_leading_0}.md)| [1](./2018/rust/day${day_leading_0}/src/part1.rs) & [2](./2018/rust/day${day_leading_0}/src/part2.rs) |"
+    line_number_to_insert=$(($line_2018 + $day_normal + 2))
+    # echo $line_to_insert
+    # echo line $line_number_to_insert
+    sed -i "${line_number_to_insert}i ${line_to_insert}" ../../README.md
 }
