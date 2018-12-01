@@ -15,6 +15,7 @@ Implementations for other languages will hopefully come too some day.
 ## 2018
 | [AoC](https://adventofcode.com/2018) | Rust |
 |--------------------------------------|------|
+|[Day 1](./2018/_tasks/day01.md)| [main.rs](./2018/rust/day01/src/main.rs), [1](./2018/rust/day01/src/part1.rs) & [2](./2018/rust/day01/src/part2.rs) |
 
 ## 2017
 | [AoC](https://adventofcode.com/2017) | Rust | [ion](https://github.com/redox-os/ion) |
