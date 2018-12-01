@@ -5,6 +5,7 @@ use super::part1::OutputType;
 pub fn solve(input: &InputType) -> OutputType {
     let mut history = Vec::new();
     let mut acc = 0;
+
     for freq in input.iter().cycle() {
         acc += freq;
         if history.contains(&acc) {

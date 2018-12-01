@@ -1,4 +1,8 @@
 ## \--- Day 1: Chronal Calibration ---
+Link: https://adventofcode.com/2018/day/1
+
+Reddit solution thread (SPOILER ALERT!!):
+https://old.reddit.com/r/adventofcode/comments/a20646/2018_day_1_solutions/
 
 "We've detected some temporal anomalies," one of Santa's Elves at the
 <span title="It&#39;s about as big on the inside as you expected.">Temporal
