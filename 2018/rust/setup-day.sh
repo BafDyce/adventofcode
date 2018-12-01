@@ -42,10 +42,10 @@ test -d "${projectdir}" && {
     cp -r day00 $projectdir
 
     # configure files
-    pushd $projectdir
+    pushd $projectdir &> /dev/null
     sed -i "s/aoc18-00/aoc18-${day_leading_0}/" Cargo.toml
     sed -i "s/const DAY: u32 = 0;/const DAY: u32 = ${day_normal};/" src/main.rs
-    popd
+    popd &> /dev/null
 }
 
 # Update README.md
