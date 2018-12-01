@@ -55,7 +55,7 @@ line_2017=$(rg --line-number '## 2017' ../../README.md | cut -d: -f1)
 tail -n +${line_2018} ../../README.md | head -n $(($line_2017 - $line_2018)) | rg "\[Day $day_normal\]" && {
     echo Nothing to do
 } || {
-    line_to_insert="|[Day $day_normal](./2018/_tasks/day${day_leading_0}.md)| [1](./2018/rust/day${day_leading_0}/src/part1.rs) & [2](./2018/rust/day${day_leading_0}/src/part2.rs) |"
+    line_to_insert="|[Day $day_normal](./2018/_tasks/day${day_leading_0}.md)| [main.rs](./2018/rust/day${day_leading_0}/src/main.rs), [1](./2018/rust/day${day_leading_0}/src/part1.rs) & [2](./2018/rust/day${day_leading_0}/src/part2.rs) |"
     line_number_to_insert=$(($line_2018 + $day_normal + 2))
     # echo $line_to_insert
     # echo line $line_number_to_insert

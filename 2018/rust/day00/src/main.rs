@@ -12,7 +12,8 @@ use regex::Regex;
 use std::env;
 
 const DAY: u32 = 0;
-type InputType = Vec<usize>;
+type InputTypeSingle = usize;
+type InputType = Vec<InputTypeSingle>;
 
 /*
 template TODO:
@@ -52,6 +53,11 @@ fn main() {
     // PARSE input
     let data: InputType = input.into_iter().map(|line| {
         // Parsing logic
+        // single numeric types
+        line.parse::<InputTypeSingle>().unwrap()
+        ; // <-- REMOVE THIS IF NECESSARY!!
+        
+        // regex parsing stuff
         lazy_static! {
             // (?x)
             // (?P<name>xxx)
