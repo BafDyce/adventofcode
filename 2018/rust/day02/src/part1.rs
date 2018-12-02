@@ -30,3 +30,18 @@ pub fn solve(input: &InputType) -> OutputType {
 
     twos * threes
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn solve_example(name: &str) -> OutputType {
+        let input = parse_input(name, false);
+        solve(&input)
+    }
+
+    #[test]
+    fn examples() {
+        assert_eq!(solve_example("example1"), 12);
+    }
+}
