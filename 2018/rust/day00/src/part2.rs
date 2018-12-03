@@ -1,6 +1,7 @@
 use super::*;
 
 use regex::Regex;
+use std::collections::HashMap;
 
 type OutputType = super::part1::OutputType;
 //type OutputType = i64; // <-- IF part 2 needs a different output
@@ -20,6 +21,6 @@ mod tests {
 
     #[test]
     fn examples() {
-        assert_eq!(solve_example("example1"), 17);
+        assert_eq!(solve_example("example1"), 0);
     }
 }

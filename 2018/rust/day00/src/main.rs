@@ -9,7 +9,7 @@ mod part2;
 
 use aoc_utils::prelude::*;
 use regex::Regex;
-use std::env;
+use std::{collections::HashMap, env};
 
 const DAY: u32 = 0;
 type InputTypeSingle = usize;
