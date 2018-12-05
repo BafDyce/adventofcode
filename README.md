@@ -12,6 +12,15 @@ My personal implementations for
 # Solved challenges
 Implementations for other languages will hopefully come too some day.
 
+## 2018
+| [AoC](https://adventofcode.com/2018) | Rust |
+|--------------------------------------|------|
+|[Day 1](./2018/_tasks/day01.md)| [main.rs](./2018/rust/day01/src/main.rs), [1](./2018/rust/day01/src/part1.rs) & [2](./2018/rust/day01/src/part2.rs) |
+|[Day 2](./2018/_tasks/day02.md)| [main.rs](./2018/rust/day02/src/main.rs), [1](./2018/rust/day02/src/part1.rs) & [2](./2018/rust/day02/src/part2.rs) |
+|[Day 3](./2018/_tasks/day03.md)| [main.rs](./2018/rust/day03/src/main.rs), [1](./2018/rust/day03/src/part1.rs) & [2](./2018/rust/day03/src/part2.rs) |
+|[Day 4](./2018/_tasks/day04.md)| [main.rs](./2018/rust/day04/src/main.rs), [1](./2018/rust/day04/src/part1.rs) & [2](./2018/rust/day04/src/part2.rs) |
+|[Day 5](./2018/_tasks/day05.md)| [main.rs](./2018/rust/day05/src/main.rs), [1](./2018/rust/day05/src/part1.rs) & [2](./2018/rust/day05/src/part2.rs) |
+
 ## 2017
 | [AoC](https://adventofcode.com/2017) | Rust | [ion](https://github.com/redox-os/ion) |
 |--------------------------------------|------|----------------------------------------|
