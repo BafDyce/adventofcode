@@ -2,32 +2,25 @@ use super::*;
 
 type OutputType = super::part1::OutputType;
 
-pub fn solve(input: &InputType) -> OutputType {
-    let data = input.to_owned();
-
-    let mut best_length = 100000;
+pub fn solve(input: InputType) -> OutputType {
+    let mut smallest = 100000;
 
     for cc in "abcdefghijklmnopqrstuvwxyz".chars() {
-        let mut work: String = data.chars().filter_map(|xx| {
-            if xx == cc || xx == cc.to_uppercase().next().unwrap() {
+        let mut work: InputType = input.iter().filter_map(|xx| {
+            if *xx == cc || *xx == cc.to_ascii_uppercase() {
                 None
             } else {
-                Some(xx)
+                Some(*xx)
             }
         })
         .map(|xx| xx)
-        .collect::<Vec<char>>()
-        .into_iter()
         .collect();
 
-        let size = part1::solve(&work);
-        if size < best_length {
-            best_length = size;
-            println!("{} -> {}", cc, best_length);
-        }
+        let (size, _) = part1::solve(&work);
+        smallest = std::cmp::min(smallest, size);
     }
 
-    best_length
+    smallest
 }
 
 #[cfg(test)]
@@ -36,7 +29,8 @@ mod tests {
 
     fn solve_example(name: &str) -> OutputType {
         let input = parse_input(name, false);
-        solve(&input)
+        let (_, input) = part1::solve(&input);
+        solve(input)
     }
 
     #[test]
