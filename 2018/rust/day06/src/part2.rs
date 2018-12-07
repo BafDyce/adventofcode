@@ -1,15 +1,31 @@
 use super::*;
 
-use regex::Regex;
-use std::collections::HashMap;
-
+use super::part1::State;
 type OutputType = super::part1::OutputType;
-//type OutputType = i64; // <-- IF part 2 needs a different output
 
-pub fn solve(input: &InputType) -> OutputType {
-    //input.iter().fold(0, |acc, xx| acc + xx)
+pub fn solve(input: &InputType, config: &PuzzleConfig) -> OutputType {
+    let threshold = config.get("threshold").unwrap_or(&"10000".to_owned()).parse::<i64>().unwrap();
 
-    0
+    let mut grid: InfiniteGrid<State> = InfiniteGrid::new();
+    let starts = input.clone();
+    let mut count = 0;
+
+    for (idx, start) in input.into_iter().enumerate() {
+        grid.set_value(start, State::Nearest(idx, 0));
+    }
+
+    let [ _, loc_max, loc_min, _ ] = grid.get_boundaries();
+
+    for yy in loc_min.yy() ..= loc_max.yy() {
+        for xx in loc_min.xx() ..= loc_max.xx() {
+            let loc = Location2D::new(xx, yy);
+            if starts.iter().map(|start| loc.distance(start)).sum::<i64>() < threshold {
+                count += 1;
+            }
+        }
+    }
+
+    count
 }
 
 #[cfg(test)]
@@ -17,8 +33,8 @@ mod tests {
     use super::*;
 
     fn solve_example(name: &str) -> OutputType {
-        let input = parse_input(name, false);
-        solve(&input)
+        let (input, config) = parse_input(name, false);
+        solve(&input, &config)
     }
 
     #[test]
