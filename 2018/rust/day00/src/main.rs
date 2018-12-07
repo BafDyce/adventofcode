@@ -9,11 +9,29 @@ mod part2;
 
 use aoc_utils::prelude::*;
 use regex::Regex;
-use std::{collections::HashMap, env};
+use std::{collections::{HashMap, VecDeque}, env};
 
 const DAY: u32 = 0;
 type InputTypeSingle = usize;
 type InputType = Vec<InputTypeSingle>;
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct Data {
+    dtype: DataType
+}
+
+impl Data {
+    pub fn new() -> Self {
+        Data {
+            dtype: DataType::Aaaaaaaaaa
+        }
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub enum DataType {
+    Aaaaaaaaaa
+}
 
 /*
 template TODO:
@@ -71,11 +89,14 @@ fn parse_input(input_name: &str, verbose: bool) -> InputType {
         lazy_static! {
             // (?x)
             // (?P<name>xxx)
-            static ref RE: Regex = Regex::new(r"").unwrap();
+            static ref RE: Regex = Regex::new(
+                r""
+            ).unwrap();
         }
 
         let caps = RE.captures(&line).unwrap();
         // let thingy = &caps["thingy"];
+        // let xx = caps["xx"].chars().next().unwrap();
         caps.len()
     })
     .collect();
