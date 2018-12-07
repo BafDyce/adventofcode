@@ -3,7 +3,7 @@ use std::collections::HashMap;
 
 type OutputType = isize;
 
-pub fn solve(deps: &HashMap<char, Vec<char>>, visited: &HashMap<char, bool>) -> OutputType {
+pub fn solve(deps: &HashMap<char, Vec<char>>, visited: &HashMap<char, bool>, config: &PuzzleConfig) -> OutputType {
     let mut resolved: HashMap<char, Option<isize>> = HashMap::new();
     for kk in visited.keys() {
         resolved.insert(*kk, None);
@@ -14,9 +14,12 @@ pub fn solve(deps: &HashMap<char, Vec<char>>, visited: &HashMap<char, bool>) -> 
     let mut keys = deps.keys().collect::<Vec<_>>();
     keys.sort();
 
-    // These two values must be adapted to the actual puzzle configuration
-    let mut workers = [0, 0, 0, 0, 0];
-    let time_penalty = 60;
+    let workers_num = config.get("workers").unwrap_or(&"5".to_owned()).parse::<usize>().unwrap();
+    let mut workers = Vec::with_capacity(workers_num);
+    for __ in 0 .. workers_num {
+        workers.push(0);
+    }
+    let time_penalty = config.get("time_penalty").unwrap_or(&"60".to_owned()).parse::<isize>().unwrap();
 
     let mut time = 0;
     while resolved.values().any(|vv| !is_resolved(time, *vv)) {
@@ -66,13 +69,12 @@ mod tests {
     use super::*;
 
     fn solve_example(name: &str) -> OutputType {
-        let input = parse_input(name, false);
-        solve(&input.0, &input.1)
+        let (input, config) = parse_input(name, false);
+        solve(&input.0, &input.1, &config)
     }
 
     #[test]
     fn examples() {
-        // actually 15, bute 253 is the result for the example input and the actual worker config
-        assert_eq!(solve_example("example1"), 253);
+        assert_eq!(solve_example("example1"), 15);
     }
 }

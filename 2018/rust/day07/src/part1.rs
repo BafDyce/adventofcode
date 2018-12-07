@@ -36,7 +36,7 @@ mod tests {
     use super::*;
 
     fn solve_example(name: &str) -> OutputType {
-        let input = parse_input(name, false);
+        let (input, _) = parse_input(name, false);
         solve(&input.0, &input.1)
     }
 
