@@ -1,0 +1,1 @@
+START QUEUE: [(0, Location2D { xx: 1, yy: 1 }), (1, Location2D { xx: 1, yy: 6 }), (2, Location2D { xx: 8, yy: 3 }), (3, Location2D { xx: 3, yy: 4 }), (4, Location2D { xx: 5, yy: 5 }), (5, Location2D { xx: 8, yy: 9 })]

@@ -20,6 +20,9 @@ Implementations for other languages will hopefully come too some day.
 |[Day 3](./2018/_tasks/day03.md)| [main.rs](./2018/rust/day03/src/main.rs), [1](./2018/rust/day03/src/part1.rs) & [2](./2018/rust/day03/src/part2.rs) |
 |[Day 4](./2018/_tasks/day04.md)| [main.rs](./2018/rust/day04/src/main.rs), [1](./2018/rust/day04/src/part1.rs) & [2](./2018/rust/day04/src/part2.rs) |
 |[Day 5](./2018/_tasks/day05.md)| [main.rs](./2018/rust/day05/src/main.rs), [1](./2018/rust/day05/src/part1.rs) & [2](./2018/rust/day05/src/part2.rs) |
+|[Day 6](./2018/_tasks/day06.md)| [main.rs](./2018/rust/day06/src/main.rs), [1](./2018/rust/day06/src/part1.rs) & [2](./2018/rust/day06/src/part2.rs) |
+|[Day 7](./2018/_tasks/day07.md)| [main.rs](./2018/rust/day07/src/main.rs), [1](./2018/rust/day07/src/part1.rs) & [2](./2018/rust/day07/src/part2.rs) |
+|[Day 8](./2018/_tasks/day08.md)| [main.rs](./2018/rust/day08/src/main.rs), [1](./2018/rust/day08/src/part1.rs) & [2](./2018/rust/day08/src/part2.rs) |
 
 ## 2017
 | [AoC](https://adventofcode.com/2017) | Rust | [ion](https://github.com/redox-os/ion) |

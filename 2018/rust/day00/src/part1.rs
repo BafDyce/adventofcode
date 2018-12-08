@@ -7,8 +7,9 @@ use std::collections::HashMap;
 
 pub type OutputType = usize;
 
-pub fn solve(input: &InputType) -> OutputType {
-    input.iter().fold(1, |acc, xx| acc * xx)
+pub fn solve(input: &InputType, config: &PuzzleConfig) -> OutputType {
+    let xxx = config.get("xxx").unwrap_or(&"10000".to_owned()).parse::<isize>().unwrap();
+    OutputType::default()
 }
 
 #[cfg(test)]
@@ -16,12 +17,12 @@ mod tests {
     use super::*;
 
     fn solve_example(name: &str) -> OutputType {
-        let input = parse_input(name, false);
-        solve(&input)
+        let (input, config) = parse_input(name, false);
+        solve(&input, &config)
     }
 
     #[test]
     fn examples() {
-        assert_eq!(solve_example("example1"), 1);
+        assert_eq!(solve_example("example1"), OutputType::default());
     }
 }

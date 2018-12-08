@@ -5,9 +5,10 @@ mod part2;
 
 use aoc_utils::prelude::*;
 use std::env;
+use std::collections::VecDeque;
 
 const DAY: u32 = 5;
-type InputType = String;
+type InputType = VecDeque<char>;
 
 fn main() {
     // READ input
@@ -28,8 +29,8 @@ fn main() {
     let input = parse_input(input_name, verbose);
 
     // SOLVE puzzles
-    let res1 = part1::solve(&input);
-    let res2 = part2::solve(&input);
+    let (res1, tmp) = part1::solve(&input);
+    let res2 = part2::solve(tmp);
 
     println!("results: {} and {}", res1, res2);
 }
@@ -42,7 +43,7 @@ fn parse_input(input_name: &str, verbose: bool) -> InputType {
     }
 
     // PARSE input
-    let data: InputType = input[0].to_owned();
+    let data: InputType = input[0].to_owned().chars().collect();
 
     if verbose {
         println!("input parsed: {:?}", data);

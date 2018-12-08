@@ -11,40 +11,9 @@ use aoc_utils::prelude::*;
 use regex::Regex;
 use std::{collections::{HashMap, VecDeque}, env};
 
-const DAY: u32 = 0;
-type InputTypeSingle = usize;
+const DAY: u32 = 6;
+type InputTypeSingle = Location2D;
 type InputType = Vec<InputTypeSingle>;
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub struct Data {
-    dtype: DataType
-}
-
-impl Data {
-    pub fn new() -> Self {
-        Data {
-            dtype: DataType::Aaaaaaaaaa
-        }
-    }
-}
-
-#[derive(Debug, Clone, Copy, PartialEq)]
-pub enum DataType {
-    Aaaaaaaaaa
-}
-
-/*
-template TODO:
-- [x] Regular expression template stuff
-- [x] take input name from command line parameter
-- [ ] stuff for building a graph, and then:
-    - [ ] dijkstra
-    - [ ] TSP
-- [x] crypto stuff (md5, sha1)
-- [ ] base stuff for "assembly"
-- [x] convert input into [[char; xx]; xx]
-    --> in snippets
-*/
 
 fn main() {
     // READ input
@@ -65,7 +34,7 @@ fn main() {
     let (input, puzzle_config) = parse_input(input_name, verbose);
 
     // SOLVE puzzles
-    let res1 = part1::solve(&input, &puzzle_config);
+    let res1 = part1::solve(&input);
     let res2 = part2::solve(&input, &puzzle_config);
 
     println!("results: {} and {}", res1, res2);
@@ -81,23 +50,19 @@ fn parse_input(input_name: &str, verbose: bool) -> (InputType, PuzzleConfig) {
     // PARSE input
     let data: InputType = input.into_iter().map(|line| {
         // Parsing logic
-        // single numeric types
-        line.parse::<InputTypeSingle>().unwrap_or(0)
-        ; // <-- REMOVE THIS IF NECESSARY!!
 
         // regex parsing stuff
         lazy_static! {
             // (?x)
             // (?P<name>xxx)
-            static ref RE: Regex = Regex::new(
-                r""
-            ).unwrap();
+            static ref RE: Regex = Regex::new(r"(?P<xx>\d+), (?P<yy>\d+)").unwrap();
         }
 
         let caps = RE.captures(&line).unwrap();
-        // let thingy = &caps["thingy"];
-        // let xx = caps["xx"].chars().next().unwrap();
-        caps.len()
+        Location2D::new(
+            caps.name("xx").unwrap().as_str().parse().unwrap(),
+            caps.name("yy").unwrap().as_str().parse().unwrap(),
+        )
     })
     .collect();
 

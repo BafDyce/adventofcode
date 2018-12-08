@@ -2,32 +2,33 @@ use super::*;
 
 pub type OutputType = usize;
 
-pub fn dedup(data: &mut String) -> bool {
-    let mut res: Option<String> = None;
-    for (aa, bb) in data.chars().zip(data.chars().skip(1)) {
-        if aa != bb && aa.to_lowercase().next().unwrap() == bb.to_lowercase().next().unwrap()  {
-            res =  Some(format!("{}{}", aa, bb));
-            break;
+pub fn dedup(data: &mut InputType) -> bool {
+    let mut res: InputType = InputType::new();
+
+    for cc in data.iter() {
+        if res.is_empty() {
+            res.push_back(*cc);
+            continue;
+        }
+
+        let prev = *res.back().unwrap();
+        if *cc != prev && cc.to_ascii_lowercase() == prev.to_ascii_lowercase() {
+            res.pop_back();
+        } else {
+            res.push_back(*cc);
         }
     }
 
-    if let Some(aabb) = res {
-        if let Some(idx) = data.find(&aabb) {
-            data.remove(idx);
-            data.remove(idx);
-        }
-
-        true
-    } else {
-        false
-    }
+    let retval = !(data.len() == res.len());
+    *data = res;
+    retval
 }
 
-pub fn solve(input: &InputType) -> OutputType {
+pub fn solve(input: &InputType) -> (OutputType, InputType) {
     let mut data = input.to_owned();
     while dedup(&mut data) {}
 
-    data.len()
+    (data.len(), data)
 }
 
 #[cfg(test)]
@@ -36,7 +37,7 @@ mod tests {
 
     fn solve_example(name: &str) -> OutputType {
         let input = parse_input(name, false);
-        solve(&input)
+        solve(&input).0
     }
 
     #[test]
