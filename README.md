@@ -3,6 +3,12 @@
 My personal implementations for
 [Advent of Code (AoC)](https://adventofcode.com/)
 
+
+> **2018 WIP**: After finishing each days puzzle, I push it onto the
+> [2018](https://gitlab.com/BafDyce/adventofcode/tree/2018) branch. Every few
+> days I will merge it into master. So, if you don't see the latest solutions,
+> be sure to check out the right branch!
+
 # Leaderboard entries (only top 100)
 | Year | Day | Language | Rank part 1 | Rank part 2 | Link |
 | ---- | --- | -------- | ----------- | ----------- | ---- |
