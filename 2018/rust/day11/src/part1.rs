@@ -3,14 +3,11 @@ use super::*;
 pub type OutputType = (usize, usize);
 
 // While solving, I just had this in the solve function and copied it over to part 2
-pub fn create_powergrid(serial: InputType) -> [[isize; 300]; 300] {
+fn create_powergrid(serial: InputType) -> [[isize; 300]; 300] {
     let mut grid = [[0isize; 300]; 300];
 
     for ii in 0 .. grid.len() {
         for jj in 0 .. grid[ii].len() {
-            //let id: isize = ii as isize + 11;
-            //let power = (id * (jj as isize +1) + serial) * id;
-            //let res = (power % 1000) / 100 - 5;
             grid[ii][jj] = compute_power_level(ii as isize + 1, jj as isize + 1, serial);
         }
     }
