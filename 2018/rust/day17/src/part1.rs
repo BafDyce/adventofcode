@@ -9,134 +9,75 @@ use std::cell::RefCell;
 
 pub type OutputType = usize;
 
-fn set_water(old: &Element) -> Element {
-    if let Element::Sand = old {
-        Element::WaterFlowing
+// too high: 31790
+// too low: 31763
+
+// 31788
+// manually substract the top | chars xD
+
+fn get_min_max_yy(grid: &InputType) -> (isize, isize) {
+    let [ _, loc_max, loc_min, _ ] = grid.get_boundaries();
+    (loc_min.yy(), loc_max.yy())
+}
+
+fn fill(loc: &Location2D, grid: &mut InputType, over_water: bool) -> (/*full?*/bool, /*#filled*/usize) {
+    let (min, max) = get_min_max_yy(grid);
+    if loc.yy() < min || loc.yy() > max {
+        return (false, 0);
+    }
+
+    {
+        let element = grid.get_value_ref(&loc);
+        match element {
+            Element::Sand => *element = Element::WaterFlowing,
+            Element::Clay | Element::WaterFlowing => return (true, 0),
+            _ => {}
+        }
+    }
+    //println!("{:?} | {}", loc, over_water);
+    //fancy_print(&grid);
+    //enter_to_continue();
+
+    let below = Location2D::new(loc.xx(), loc.yy() + 1);
+    let left = Location2D::new(loc.xx() - 1, loc.yy());
+    let right = Location2D::new(loc.xx() + 1, loc.yy());
+
+    {
+        let ll = grid.get_value(&left).unwrap_or(&Element::Sand);
+        let bb = grid.get_value(&below).unwrap_or(&Element::Sand);
+        let rr = grid.get_value(&right).unwrap_or(&Element::Sand);
+        match (ll, bb, rr) {
+            (Element::Sand, Element::WaterFlowing, Element::Sand) => return (false, 1),
+            _ => {}
+        }
+    }
+    let (full, filled) = fill(&below, grid, over_water);
+
+    if full {
+        let over_water = over_water || filled == 0;
+        // expand to left
+
+        let result_left = fill(&left, grid, over_water);
+
+        // expand to right
+
+        let result_right = fill(&right, grid, over_water);
+
+        (result_left.0 && result_right.0, filled + result_left.1 + result_right.1 + 1)
     } else {
-        *old
+        (full, filled + 1)
     }
 }
 
-pub fn solve(input: &InputType, config: &PuzzleConfig) -> OutputType {
+pub fn solve(input: &InputType, config: &PuzzleConfig) -> (OutputType, InputType) {
     let mut grid = input.clone();
 
     let mut start = Location2D::new(500, 1);
-    let mut queue = VecDeque::new();
-    queue.push_front(start);
+    let (_, result) = fill(&start, &mut grid, false);
 
-    while !queue.is_empty() {
-        let next = queue.pop_front().unwrap();
-
-        {
-            let element = grid.get_value_ref(&next);
-            match element {
-                Element::Sand => *element = Element::WaterFlowing,
-                Element::WaterFlowing => *element = Element::WaterStill,
-                _ => {}
-            }
-        }
-
-        //grid.set_value(&next, Element::WaterFlowing);
-
-        {
-            let down = Location2D::new(next.xx(), next.yy() + 1);
-            let move_down = match grid.get_value(&down) {
-                None | Some(Element::Sand) => true,
-                _ => false
-            };
-
-            if move_down {
-                queue.push_back(down);
-                continue;
-            }
-        }
-
-        // we cannot move down, so we might be able to move left/right
-        let left = Location2D::new(next.xx() - 1, next.yy());
-        let right = Location2D::new(next.xx() + 1, next.yy());
-        let move_left = match grid.get_value(&left) {
-            None | Some(Element::Sand) => true,
-            _ => false
-        };
-
-        if move_left {
-            queue.push_back(left);
-        }
-
-        let move_right = match grid.get_value(&right) {
-            None | Some(Element::Sand) => true,
-            _ => false
-        };
-
-        if move_right {
-            queue.push_back(right);
-        }
-
-        if !move_right && !move_left {
-            // we reached a dead end -> do magic
-        }
-    }
-
-
+    println!("Grid at the end");
     fancy_print(&grid);
-
-    /*if false {
-        let grid_container = RefCell::new(Mutex::new(&mut grid as &mut Grid<Element>));
-
-        let mut water: InfiniteGridWalker<Element> = InfiniteGridWalker::new_with_particle(Particle2D::new(500, 1, Direction2D::Right));
-        water.assign_grid(&grid_container);
-
-        water.operate(set_water);
-        water.step_forward();
-        water.operate(set_water);
-        water.step_forward();
-        water.operate(set_water);
-        water.step_forward();
-        water.operate(set_water);
-        water.step_forward();
-        water.operate(set_water);
-        water.step_forward();
-        water.operate(set_water);
-        water.step_forward();
-        water.operate(set_water);
-        water.step_forward();
-        water.operate(set_water);
-    }
-
-
-    let mut pos = Location2D::new(500, 1);
-    {
-        println!("pos: {:?}", pos);
-        // flow down
-        'flow_down: loop {
-            let value_ref = grid.get_value_ref(&pos);
-            match value_ref {
-                Element::Sand => *value_ref = Element::WaterFlowing,
-                Element::Clay => break 'flow_down,
-                _ => {}
-            }
-
-            *(pos.yy_mut()) += 1;
-        }
-
-        *(pos.yy_mut()) -= 1;
-        let pos_left =
-        'flow_down: loop {
-            let value_ref = grid.get_value_ref(&pos);
-            match value_ref {
-                Element::Sand => *value_ref = Element::WaterFlowing,
-                Element::Clay => break 'flow_down,
-                _ => {}
-            }
-
-            *(pos.yy_mut()) += 1;
-        }
-
-        fancy_print(&grid);
-        //enter_to_continue();
-    }*/
-
-    OutputType::default()
+    (result, grid)
 }
 
 #[cfg(test)]
@@ -145,11 +86,11 @@ mod tests {
 
     fn solve_example(name: &str) -> OutputType {
         let (input, config) = parse_input(name, false);
-        solve(&input, &config)
+        solve(&input, &config).0
     }
 
     #[test]
     fn examples() {
-        assert_eq!(solve_example("example1"), OutputType::default());
+        assert_eq!(solve_example("example1"), 57);
     }
 }

@@ -51,8 +51,8 @@ fn main() {
     let (input, puzzle_config) = parse_input(input_name, verbose);
 
     // SOLVE puzzles
-    let res1 = part1::solve(&input, &puzzle_config);
-    let res2 = part2::solve(&input, &puzzle_config);
+    let (res1, tmp) = part1::solve(&input, &puzzle_config);
+    let res2 = part2::solve(tmp, &puzzle_config);
 
     println!("results: {} and {}", res1, res2);
 }
@@ -137,7 +137,7 @@ pub fn fancy_print(grid: &InfiniteGrid<Element>) -> bool {
 
         //if loc_max.xx() - loc_min.yy() < 250 || loc_max.xx() - loc_min.xx() < 250 {
             for yy in loc_min.yy() ..= loc_max.yy() {
-                print!("[{:3}]", yy);
+                print!("[{:4}]", yy);
                 for xx in loc_min.xx() ..= loc_max.xx() {
                     match grid.get_value(&Location2D::new(xx, yy)) {
                         None => print!(" "),
