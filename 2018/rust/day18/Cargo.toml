@@ -1,0 +1,8 @@
+[package]
+name = "aoc18-18"
+version = "0.1.0"
+authors = ["Fabian Würfl <bafdyce@tuta.io>"]
+
+[dependencies]
+aoc_utils = { path = "../../../../aoc-utils/" }
+ndarray = "0.12.1"

@@ -37,6 +37,8 @@ Implementations for other languages will hopefully come too some day.
 |[Day 14](./2018/_tasks/day14.md)| [main.rs](./2018/rust/day14/src/main.rs), [1](./2018/rust/day14/src/part1.rs) & [2](./2018/rust/day14/src/part2.rs) |
 |[Day 15](./2018/_tasks/day15.md)| [main.rs](./2018/rust/day15/src/main.rs), [1](./2018/rust/day15/src/part1.rs) & [2](./2018/rust/day15/src/part2.rs) |
 |[Day 16](./2018/_tasks/day16.md)| [main.rs](./2018/rust/day16/src/main.rs), [1](./2018/rust/day16/src/part1.rs) & [2](./2018/rust/day16/src/part2.rs) |
+|[Day 17](./2018/_tasks/day17.md)| [main.rs](./2018/rust/day17/src/main.rs), [1](./2018/rust/day17/src/part1.rs) & [2](./2018/rust/day17/src/part2.rs) |
+|[Day 18](./2018/_tasks/day18.md)| [main.rs](./2018/rust/day18/src/main.rs), [1](./2018/rust/day18/src/part1.rs) & [2](./2018/rust/day18/src/part2.rs) |
 
 ## 2017
 | [AoC](https://adventofcode.com/2017) | Rust | [ion](https://github.com/redox-os/ion) |
