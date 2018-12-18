@@ -26,7 +26,7 @@ pub fn solve(input: &InputType, _config: &PuzzleConfig) -> OutputType {
     let mut sum_total = 0;
     let mut diff_to_add = 0;
     let mut last_sum = 0;
-    for counter in 1 .. 50000000001 as usize {
+    for counter in 1 ..= 50000000000 as usize {
         let mut new_state = Vec::with_capacity(state.len()+4);
 
         let pots: Vec<_> =

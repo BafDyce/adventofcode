@@ -66,3 +66,30 @@ print_grid(&grid_container);
 println!("walker 1: {:?}\nwalker 2: {:?}", walker, walker2);
 
 // ================================================================================================
+use str::FromStr;
+
+enum ParseError {
+    Invalid,
+}
+
+impl FromStr for Instruction {
+    type Err = ParseError;
+
+    fn from_str(ss: &str) -> Result<Self, Self::Err> {
+        lazy_static! {
+            static ref RE: Regex = Regex::new(r"(\d+)\s+(\d+)\s+(\d+)\s+(\d+)").unwrap();
+        }
+
+        match RE.captures(ss) {
+            Some(caps) => {
+                Ok(Instruction {
+                    opcode: Opcode::Unknown(caps[1].parse()?),
+                    aa: caps[2].parse()?,
+                    bb: caps[3].parse()?,
+                    cc: caps[4].parse()?,
+                })
+            }
+            None => Err(ParseError::InvalidInstructionFormat)
+        }
+    }
+}
