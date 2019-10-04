@@ -45,6 +45,7 @@ Implementations for other languages will hopefully come too some day.
 |[Day 21](./2018/_tasks/day21.md)| [main.rs](./2018/rust/day21/src/main.rs), [1](./2018/rust/day21/src/part1.rs) & [2](./2018/rust/day21/src/part2.rs) |
 |[Day 22](./2018/_tasks/day22.md)| [main.rs](./2018/rust/day22/src/main.rs), [1](./2018/rust/day22/src/part1.rs) & [2](./2018/rust/day22/src/part2.rs) |
 |[Day 23](./2018/_tasks/day23.md)| [main.rs](./2018/rust/day23/src/main.rs), [1](./2018/rust/day23/src/part1.rs) & [2](./2018/rust/day23/src/part2.rs) |
+|[Day 24](./2018/_tasks/day24.md)| [main.rs](./2018/rust/day24/src/main.rs), [1](./2018/rust/day24/src/part1.rs) & [2](./2018/rust/day24/src/part2.rs) |
 
 |[Day 25](./2018/_tasks/day25.md)| [main.rs](./2018/rust/day25/src/main.rs), [1](./2018/rust/day25/src/part1.rs) |
 

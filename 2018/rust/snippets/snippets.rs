@@ -66,7 +66,7 @@ print_grid(&grid_container);
 println!("walker 1: {:?}\nwalker 2: {:?}", walker, walker2);
 
 // ================================================================================================
-use str::FromStr;
+use std::str::FromStr;
 
 enum ParseError {
     Invalid,

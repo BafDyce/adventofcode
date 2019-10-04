@@ -31,7 +31,11 @@ tail "+$lineStart" < tmp/aoc-desc.md > tmp/aoc-desc-tmp.md
 
 # remove footer
 trailerStart=$(grep -n -- "Your puzzle answer was" tmp/aoc-desc-tmp.md | cut -d: -f1 | tail +2)
-head -n "$trailerStart" < tmp/aoc-desc-tmp.md > tmp/aoc-desc-tmp2.md
+if [ "$trailerStart" != "" ]; then
+    head -n "$trailerStart" < tmp/aoc-desc-tmp.md > tmp/aoc-desc-tmp2.md
+else
+    mv tmp/aoc-desc-tmp.md tmp/aoc-desc-tmp2.md
+fi
 
 # remove solutions
 sed -i '/Your puzzle answer was/d' tmp/aoc-desc-tmp2.md
