@@ -120,16 +120,11 @@ pub fn solve(input: &InputType, config: &PuzzleConfig) -> OutputType {
                     .filter(|&dist| dist < INFINITY)
                     .collect();
 
-
-                if distances.len() == 2 {
-                    return distances.iter().min().unwrap().to_owned();
-                } else if distances.len() == 1 {
-                    solution_candidate = distances[0].to_owned();
-                    println!("Found potential solution: {}. Continuing search though.", solution_candidate);
-                    let entry = nodes.entry( (xx, yy) ).or_insert( Node::new());
-                    entry.visited = true;
-                    continue;
-                }
+                solution_candidate = distances[0].to_owned();
+                println!("Found potential solution: {}. Continuing search though.", solution_candidate);
+                let entry = nodes.entry( (xx, yy) ).or_insert( Node::new());
+                entry.visited = true;
+                continue;
 
             } else if xx >= cave.target.0 + 120 || yy >= cave.target.1 + 120 {
                 // don't go too far away
