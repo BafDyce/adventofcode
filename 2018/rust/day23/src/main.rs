@@ -50,6 +50,15 @@ impl NanoBot {
     fn zz(&self) -> isize {
         self.zz
     }
+
+    fn reduce(&self, reduce_by: isize) -> Self {
+        NanoBot {
+            xx: self.xx / reduce_by,
+            yy: self.yy / reduce_by,
+            zz: self.zz / reduce_by,
+            range: self.range / reduce_by,
+        }
+    }
 }
 
 #[derive(Debug)]
