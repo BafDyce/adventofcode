@@ -1,0 +1,8 @@
+[package]
+name = "aoc-2016-02"
+version = "0.1.0"
+authors = ["Fabian Würfl <bafdyce@tuta.io>"]
+edition = "2018"
+
+[dependencies]
+aocutils = { path = "../_aocutils" }
