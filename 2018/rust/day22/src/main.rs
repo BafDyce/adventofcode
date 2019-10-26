@@ -1,19 +1,24 @@
 extern crate aoc_utils;
 #[macro_use] extern crate lazy_static;
 extern crate regex;
+extern crate md5;
+extern crate sha1;
 
 mod part1;
 mod part2;
 
-mod chronassembly;
-
-use chronassembly::*;
-
 use aoc_utils::prelude::*;
+use regex::Regex;
 use std::{collections::{HashMap, VecDeque}, env};
 
-const DAY: u32 = 19;
-type InputType = InputData;
+const DAY: u32 = 22;
+type InputType = Data;
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Data {
+    pub depth: usize,
+    pub target: Location2D,
+}
 
 fn main() {
     // READ input
@@ -47,8 +52,22 @@ fn parse_input(input_name: &str, verbose: bool) -> (InputType, PuzzleConfig) {
         println!("raw input: {:?}", input);
     }
 
-    // PARSE input
-    let data: InputType = InputType::from_input(input);
+
+    let regex_depth = Regex::new(
+        r"depth: (\d+)"
+    ).unwrap();
+
+    let regex_target = Regex::new(
+        r"target: (\d+),(\d+)"
+    ).unwrap();
+
+    let caps_depth = regex_depth.captures(&input[0]).unwrap();
+    let caps_target = regex_target.captures(&input[1]).unwrap();
+
+    let data = Data {
+        depth: caps_depth[1].parse().unwrap(),
+        target: Location2D::new(caps_target[1].parse().unwrap(), caps_target[2].parse().unwrap()),
+    };
 
     if verbose {
         println!("input parsed: {:?}", data);

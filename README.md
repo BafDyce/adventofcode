@@ -12,8 +12,9 @@ My personal implementations for
 # Leaderboard entries (only top 100)
 | Year | Day | Language | Rank part 1 | Rank part 2 | Link |
 | ---- | --- | -------- | ----------- | ----------- | ---- |
-| 2016 | [2](./2016/_tasks/day02.md) | C++ | 81 | 83 | [link](https://adventofcode.com/2016/leaderboard/day/2)
-| 2016 | [20](./2016/_tasks/day20.md) | C++ | - | 29 | [link](https://adventofcode.com/2016/leaderboard/day/20)
+| 2016 | [2](./2016/_tasks/day02.md) | C++ | 81 | 83 | [link](https://adventofcode.com/2016/leaderboard/day/2) |
+| 2016 | [20](./2016/_tasks/day20.md) | C++ | - | 29 | [link](https://adventofcode.com/2016/leaderboard/day/20) |
+| 2018 | [21](./2018/_tasks/day21.md) | Rust | 86 | - | [link](https://adventofcode.com/2018/leaderboard/day/21) |
 
 # Solved challenges
 Implementations for other languages will hopefully come too some day.
@@ -41,6 +42,12 @@ Implementations for other languages will hopefully come too some day.
 |[Day 18](./2018/_tasks/day18.md)| [main.rs](./2018/rust/day18/src/main.rs), [1](./2018/rust/day18/src/part1.rs) & [2](./2018/rust/day18/src/part2.rs) |
 |[Day 19](./2018/_tasks/day19.md)| [main.rs](./2018/rust/day19/src/main.rs), [1](./2018/rust/day19/src/part1.rs) & [2](./2018/rust/day19/src/part2.rs) |
 |[Day 20](./2018/_tasks/day20.md)| [main.rs](./2018/rust/day20/src/main.rs), [1](./2018/rust/day20/src/part1.rs) & [2](./2018/rust/day20/src/part2.rs) |
+|[Day 21](./2018/_tasks/day21.md)| [main.rs](./2018/rust/day21/src/main.rs), [1](./2018/rust/day21/src/part1.rs) & [2](./2018/rust/day21/src/part2.rs) |
+|[Day 22](./2018/_tasks/day22.md)| [main.rs](./2018/rust/day22/src/main.rs), [1](./2018/rust/day22/src/part1.rs) & [2](./2018/rust/day22/src/part2.rs) |
+|[Day 23](./2018/_tasks/day23.md)| [main.rs](./2018/rust/day23/src/main.rs), [1](./2018/rust/day23/src/part1.rs) & [2](./2018/rust/day23/src/part2.rs) |
+|[Day 24](./2018/_tasks/day24.md)| [main.rs](./2018/rust/day24/src/main.rs), [1](./2018/rust/day24/src/part1.rs) & [2](./2018/rust/day24/src/part2.rs) |
+
+|[Day 25](./2018/_tasks/day25.md)| [main.rs](./2018/rust/day25/src/main.rs), [1](./2018/rust/day25/src/part1.rs) |
 
 ## 2017
 | [AoC](https://adventofcode.com/2017) | Rust | [ion](https://github.com/redox-os/ion) |

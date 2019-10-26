@@ -1,4 +1,5 @@
 extern crate aoc_utils;
+
 #[macro_use] extern crate lazy_static;
 extern crate regex;
 
@@ -10,9 +11,9 @@ mod chronassembly;
 use chronassembly::*;
 
 use aoc_utils::prelude::*;
-use std::{collections::{HashMap, VecDeque}, env};
+use std::env;
 
-const DAY: u32 = 19;
+const DAY: u32 = 21;
 type InputType = InputData;
 
 fn main() {
