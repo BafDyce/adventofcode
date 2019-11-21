@@ -1,0 +1,10 @@
+[package]
+name = "aoc16-03"
+version = "0.1.0"
+authors = ["Fabian Würfl <bafdyce@tuta.io>"]
+edition = "2018"
+
+[dependencies]
+aoc_utils = { path = "../../../../aoc-utils/" }
+lazy_static = "1.4"
+regex = "1.3"

@@ -1,0 +1,1 @@
+cargo new --bin --name aoc17-00 day00
