@@ -108,7 +108,7 @@ where
             .long("input")
             .help("name of the config file")
             .takes_value(true)
-            .default_value("puzzle1")
+            .default_value("real1")
         )
         .arg(Arg::with_name("skip_p1")
             .long("skip--first-part")

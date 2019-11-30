@@ -1,0 +1,47 @@
+#!/usr/bin/env ion
+
+fn abort_with_conversion_error arg
+    echo "<day> must be a number! $arg is not a number!"
+    false || exit
+end
+
+# MAIN starts here
+
+if test $len(@args) -lt 2
+    echo "Usage: @args[0] <day>"
+    false || exit
+end
+
+let maybe_day = @args[1]
+let day:int = $maybe_day || abort_with_conversion_error $maybe_day 
+
+# BUG, see https://gitlab.redox-os.org/redox-os/ion/issues/931
+#if test $day -ge 1 && test $day -le 9
+#    echo "1 - 9"
+#end
+
+let zeroday = 0
+if test $day -ge 1
+    if test $day -le 9
+        #echo "1 - 9"
+        let zeroday = "0$day"
+    else
+        let zeroday = $day
+    end
+end
+
+#echo "day: $day"
+#echo "zeroday: $zeroday"
+#exit
+
+mkdir -p ../{_inputs,_tasks}/day$zeroday
+touch ../_inputs/day$zeroday/{example,real}1.input
+
+rm -rf day00/target/
+cp -r day00 "day$zeroday"
+
+pushd day$zeroday ^> /dev/null
+sed -i "s|aoc-2019-00|aoc-2019-$zeroday|" Cargo.toml
+sed -i "s|const DAY: i32 = 0;|const DAY: i32 = $day;|" src/main.rs
+
+vscodium src/main.rs ../../_inputs/day$zeroday/{example,real}1.input
