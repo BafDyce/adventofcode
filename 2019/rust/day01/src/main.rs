@@ -1,6 +1,8 @@
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use std::{
     collections::HashMap,
+    convert::TryFrom,
+    iter::successors,
     io,
 };
 
@@ -8,7 +10,7 @@ const DAY: i32 = 1;
 type InputTypeSingle = i32;
 type InputType = Vec<InputTypeSingle>;
 type OutputType1 = i32;
-type OutputType2 = OutputType1;
+type OutputType2 = u32;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
 //       -------Part 1--------   -------Part 2--------
@@ -16,6 +18,8 @@ type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 //   1   00:01:52   205      0   00:19:51  1241      0
 
 // runtime in release mode with real input:
+// real    0.002673526s
+// original version:
 // real    0.003070799s
 
 fn main() -> Result<(), io::Error> {
@@ -57,6 +61,12 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 
 fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
     po.data.as_ref().unwrap().into_iter().map(|mass| {
+        // Thanks to /u/bsullio
+        successors(u32::try_from(*mass).ok(), |mass| (mass / 3).checked_sub(2))
+            .skip(1) // don't include the initial mass
+            .sum::<u32>()
+
+        /* // original code:
         let mut fuel_total = 0;
 
         let mut fuel = mass / 3 - 2;
@@ -66,6 +76,7 @@ fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
         }
 
         fuel_total
+        */
     }).sum()
 }
 
