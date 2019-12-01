@@ -13,7 +13,7 @@ if test $len(@args) -lt 2
 end
 
 let maybe_day = @args[1]
-let day:int = $maybe_day || abort_with_conversion_error $maybe_day 
+let day:int = $maybe_day || abort_with_conversion_error $maybe_day
 
 # BUG, see https://gitlab.redox-os.org/redox-os/ion/issues/931
 #if test $day -ge 1 && test $day -le 9
@@ -34,7 +34,7 @@ end
 #echo "zeroday: $zeroday"
 #exit
 
-mkdir -p ../{_inputs,_tasks}/day$zeroday
+mkdir -p ../_inputs/day$zeroday
 touch ../_inputs/day$zeroday/{example,real}1.input
 
 rm -rf day00/target/
