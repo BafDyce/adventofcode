@@ -68,3 +68,46 @@ fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
         fuel_total
     }).sum()
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
+
+    fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
+        let params = [
+            "appname",
+            "--input",
+            inputname,
+        ];
+        import_magic_with_params(DAY, parse_input, &params).unwrap()
+    }
+
+    fn test_case_helper(inputname: &str, sol1: OutputType1, sol2: OutputType2) {
+        let po = import_helper(inputname);
+        let res1 = part1(&po);
+        assert_eq!(sol1, res1, "part1");
+        let res2 = part2(&po, Some(res1));
+        assert_eq!(sol2, res2, "part2");
+    }
+
+    #[test]
+    fn example_12() {
+        test_case_helper("example_12", 2, 2)
+    }
+
+    #[test]
+    fn example_14() {
+        test_case_helper("example_14", 2, 2)
+    }
+
+    #[test]
+    fn example_1969() {
+        test_case_helper("example_1969", 654, 966)
+    }
+
+    #[test]
+    fn example_100756() {
+        test_case_helper("example_100756", 33583, 50346)
+    }
+}

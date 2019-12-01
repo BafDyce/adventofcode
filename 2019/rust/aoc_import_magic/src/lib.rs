@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate serde_derive;
 
-use clap::{App, Arg};
+use clap::{App, Arg, ArgMatches};
 use serde_json::Value;
 use std::{
     collections::HashMap,
@@ -84,25 +84,8 @@ where
     }
 }
 
-fn read_config_file(path: &str) -> Result<HashMap<String, Value>, io::Error> {
-    let file = OpenOptions::new().read(true).write(false).create(false).open(path)?;
-    let mut contents = String::new();
-    io::BufReader::new(file).read_to_string(&mut contents)?;
-
-    Ok(serde_json::from_str::<HashMap<String, Value>>(&contents).unwrap())
-}
-
-fn read_input_file(path: &str) -> Result<Vec<String>, io::Error> {
-    let file = OpenOptions::new().read(true).write(false).create(false).open(path)?;
-    io::BufReader::new(file).lines().collect()
-}
-
-pub fn import_magic<T, F>(day: i32, parse_input_function: F) -> Result<PuzzleOptions<T>, io::Error>
-where
-    T: Debug + Clone + PartialEq,
-    F: Fn(Vec<String>, &HashMap<String, String>, bool) -> T,
-{
-    let args = App::new(format!("aoc-2019-{:02}", day))
+fn args<'a, 'b>(day: i32) -> App<'a, 'b> {
+    App::new(format!("aoc-2019-{:02}", day))
         .author("Fabian Würfl <bafdyce@tuta.io>")
         .arg(Arg::with_name("input")
             .long("input")
@@ -127,8 +110,46 @@ where
             .multiple(true)
             .value_delimiter("=")
         )
-        .get_matches();
+}
 
+fn read_config_file(path: &str) -> Result<HashMap<String, Value>, io::Error> {
+    let file = OpenOptions::new().read(true).write(false).create(false).open(path)?;
+    let mut contents = String::new();
+    io::BufReader::new(file).read_to_string(&mut contents)?;
+
+    Ok(serde_json::from_str::<HashMap<String, Value>>(&contents).unwrap())
+}
+
+fn read_input_file(path: &str) -> Result<Vec<String>, io::Error> {
+    let file = OpenOptions::new().read(true).write(false).create(false).open(path)?;
+    io::BufReader::new(file).lines().collect()
+}
+
+pub fn import_magic<T, F>(day: i32, parse_input_function: F) -> Result<PuzzleOptions<T>, io::Error>
+where
+    T: Debug + Clone + PartialEq,
+    F: Fn(Vec<String>, &HashMap<String, String>, bool) -> T,
+{
+    let args = args(day).get_matches();
+    import_from_arg_matches(day, parse_input_function, args)
+}
+
+pub fn import_magic_with_params<T, F>(day: i32, parse_input_function: F, params: &[&str])
+-> Result<PuzzleOptions<T>, io::Error>
+where
+    T: Debug + Clone + PartialEq,
+    F: Fn(Vec<String>, &HashMap<String, String>, bool) -> T,
+{
+    let args = args(day).get_matches_from(params);
+    import_from_arg_matches(day, parse_input_function, args)
+}
+
+fn import_from_arg_matches<T, F>(day: i32, parse_input_function: F, args: ArgMatches)
+-> Result<PuzzleOptions<T>, io::Error>
+where
+    T: Debug + Clone + PartialEq,
+    F: Fn(Vec<String>, &HashMap<String, String>, bool) -> T,
+{
     PuzzleOptions {
         day,
         input_name: args.value_of("input").unwrap().to_owned(),

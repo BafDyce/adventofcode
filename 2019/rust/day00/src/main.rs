@@ -90,9 +90,37 @@ fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bo
 }
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    OutputType1::default()
+    po.data.as_ref().unwrap().into_iter().sum()
 }
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
-    OutputType2::default()
+    po.data.as_ref().unwrap().into_iter().sum()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
+
+    fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
+        let params = [
+            "appname",
+            "--input",
+            inputname,
+        ];
+        import_magic_with_params(DAY, parse_input, &params).unwrap()
+    }
+
+    fn test_case_helper(inputname: &str, sol1: OutputType1, sol2: OutputType2) {
+        let po = import_helper(inputname);
+        let res1 = part1(&po);
+        assert_eq!(sol1, res1, "part1");
+        let res2 = part2(&po, Some(res1));
+        assert_eq!(sol2, res2, "part2");
+    }
+
+    #[test]
+    fn example_1() {
+        test_case_helper("example1", 8, 8)
+    }
 }
