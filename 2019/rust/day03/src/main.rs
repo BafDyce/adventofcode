@@ -83,28 +83,36 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
                     for _ in 1 ..= *len {
                         xx += 1;
                         let entry = grid.entry((xx, yy)).or_insert(Vec::new());
-                        entry.push(ln);
+                        if !entry.contains(&ln) {
+                            entry.push(ln);
+                        }
                     }
                 },
                 Dir::Right(len) => {
                     for _ in 1 ..= *len {
                         yy += 1;
                         let entry = grid.entry((xx, yy)).or_insert(Vec::new());
-                        entry.push(ln);
+                        if !entry.contains(&ln) {
+                            entry.push(ln);
+                        }
                     }
                 }
                 Dir::Down(len) => {
                     for _ in 1 ..= *len {
                         xx -= 1;
                         let entry = grid.entry((xx, yy)).or_insert(Vec::new());
-                        entry.push(ln);
+                        if !entry.contains(&ln) {
+                            entry.push(ln);
+                        }
                     }
                 }
                 Dir::Left(len) => {
                     for _ in 1 ..= *len {
                         yy -= 1;
                         let entry = grid.entry((xx, yy)).or_insert(Vec::new());
-                        entry.push(ln);
+                        if !entry.contains(&ln) {
+                            entry.push(ln);
+                        }
                     }
                 }
             }
