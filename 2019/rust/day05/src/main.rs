@@ -16,127 +16,93 @@ type OutputType1 = i32;
 type OutputType2 = OutputType1;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
-fn run_intcode_program(program: &Vec<i32>, start_input: i32) -> OutputType1 {
+fn run_intcode_program(program: &Vec<i32>, input: i32) -> OutputType1 {
     let mut memory = program.to_owned();
-    let input = start_input;
     let mut output = 0;
 
-    // TODO: create macro/lambda to avoid copy & pasting of `match mode{}..` structure
-    let mut next_opcode_idx = 0;
+    let mut ip = 0;
     loop {
         let modes = [
-            memory[next_opcode_idx] / 10_000,
-            (memory[next_opcode_idx] % 10_000) / 1_000,
-            (memory[next_opcode_idx] % 1_000) / 100,
+            memory[ip] / 10_000,
+            (memory[ip] % 10_000) / 1_000,
+            (memory[ip] % 1_000) / 100,
         ];
-        next_opcode_idx += match memory[next_opcode_idx] % 10 {
+
+        // Tbh, I created these three closures when cleaning up the code in the evening.
+        // In my original solution I had copy & pasted these `match modes[ip] {}` blocks all over
+        // the place (and fortunately changed all offsets correctly on first try :D)
+        let get_mode_idx = |param_idx| match param_idx {
+            1 => 2,
+            2 => 1,
+            3 => 0,
+            _ => panic!("Invalid mode idx"),
+        };
+
+        let get_value_of_parameter = |param_idx| {
+            let mode_idx = get_mode_idx(param_idx);
+
+            match modes[mode_idx] {
+                0 => {
+                    let addr = memory[ip + param_idx] as usize;
+                    memory[addr]
+                }
+                1 => memory[ip + param_idx],
+                other => panic!("get_value_of_parameter: Invalid mode ({})", other),
+            }
+        };
+
+        let get_addr_from_param = |param_idx| {
+            let mode_idx = get_mode_idx(param_idx);
+
+            match modes[0] {
+                0 => {
+                    memory[ip + param_idx] as usize
+                }
+                other => panic!("get_addr_from_param: Invalid mode ({})", other),
+            }
+        };
+
+        ip += match memory[ip] % 100 {
             1 => {
                 // add
-                let nr_1 = match modes[2] {
-                    0 => {
-                        let src_1 = memory[next_opcode_idx + 1] as usize;
-                        memory[src_1]
-                    }
-                    1 => memory[next_opcode_idx + 1],
-                    other => panic!("Invalid mode ({})", other),
-                };
+                let param_1 = get_value_of_parameter(1);
+                let param_2 = get_value_of_parameter(2);
 
-                let nr_2 = match modes[1] {
-                    0 => {
-                        let src_2 = memory[next_opcode_idx + 2] as usize;
-                        memory[src_2]
-                    }
-                    1 => memory[next_opcode_idx + 2],
-                    other => panic!("Invalid mode ({})", other),
-                };
-
-                match modes[0] {
-                    0 => {
-                        let dst = memory[next_opcode_idx + 3] as usize;
-                        memory[dst] = nr_1 + nr_2;
-                    }
-                    other => panic!("Invalid mode ({})", other),
-                }
+                let dst = get_addr_from_param(3);
+                memory[dst] = param_1 + param_2;
 
                 4
             }
             2 => {
                 // multiply
-                let nr_1 = match modes[2] {
-                    0 => {
-                        let src_1 = memory[next_opcode_idx + 1] as usize;
-                        memory[src_1]
-                    }
-                    1 => memory[next_opcode_idx + 1],
-                    other => panic!("Invalid mode ({})", other),
-                };
+                let param_1 = get_value_of_parameter(1);
+                let param_2 = get_value_of_parameter(2);
 
-                let nr_2 = match modes[1] {
-                    0 => {
-                        let src_2 = memory[next_opcode_idx + 2] as usize;
-                        memory[src_2]
-                    }
-                    1 => memory[next_opcode_idx + 2],
-                    other => panic!("Invalid mode ({})", other),
-                };
-
-                match modes[0] {
-                    0 => {
-                        let dst = memory[next_opcode_idx + 3] as usize;
-                        memory[dst] = nr_1 * nr_2;
-                    }
-                    other => panic!("Invalid mode ({})", other),
-                }
+                let dst = get_addr_from_param(3);
+                memory[dst] = param_1 * param_2;
 
                 4
             }
             3 => {
                 // store input
-                match modes[2] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 1] as usize;
-                        memory[addr] = input;
-                    }
-                    other => panic!("Invalid mode ({})", other),
-                }
+                let addr = get_addr_from_param(1);
+                memory[addr] = input;
 
                 2
             }
             4 => {
                 // get output
-                output = match modes[2] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 1] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 1],
-                    other => panic!("Invalid mode ({} / {})", other, memory[next_opcode_idx]),
-                };
+                output = get_value_of_parameter(1);
 
                 2
             }
             5 => {
                 // jump if true
-                let param_1 = match modes[2] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 1] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 1],
-                    other => panic!("Invalid mode ({})", other),
-                };
-
-                let param_2 = match modes[1] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 2] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 2],
-                    other => panic!("Invalid mode ({})", other),
-                };
+                let param_1 = get_value_of_parameter(1);
+                let param_2 = get_value_of_parameter(2);
 
                 if param_1 != 0 {
-                    next_opcode_idx = param_2 as usize;
+                    ip = param_2 as usize;
                     0
                 } else {
                     3
@@ -144,26 +110,11 @@ fn run_intcode_program(program: &Vec<i32>, start_input: i32) -> OutputType1 {
             }
             6 => {
                 // jump if false
-                let param_1 = match modes[2] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 1] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 1],
-                    other => panic!("Invalid mode ({})", other),
-                };
-
-                let param_2 = match modes[1] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 2] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 2],
-                    other => panic!("Invalid mode ({})", other),
-                };
+                let param_1 = get_value_of_parameter(1);
+                let param_2 = get_value_of_parameter(2);
 
                 if param_1 == 0 {
-                    next_opcode_idx = param_2 as usize;
+                    ip = param_2 as usize;
                     0
                 } else {
                     3
@@ -171,69 +122,31 @@ fn run_intcode_program(program: &Vec<i32>, start_input: i32) -> OutputType1 {
             }
             7 => {
                 // less than
-                let param_1 = match modes[2] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 1] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 1],
-                    other => panic!("Invalid mode ({})", other),
-                };
+                let param_1 = get_value_of_parameter(1);
+                let param_2 = get_value_of_parameter(2);
 
-                let param_2 = match modes[1] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 2] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 2],
-                    other => panic!("Invalid mode ({})", other),
-                };
-
-                let param_3 = match modes[0] {
-                    0 => memory[next_opcode_idx + 3] as usize,
-                    other => panic!("Invalid mode ({})", other),
-                };
-
-                memory[param_3] = if param_1 < param_2 { 1 } else { 0 };
+                let addr = get_addr_from_param(3);
+                memory[addr] = if param_1 < param_2 { 1 } else { 0 };
 
                 4
             }
             8 => {
                 // less than
-                let param_1 = match modes[2] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 1] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 1],
-                    other => panic!("Invalid mode ({})", other),
-                };
+                let param_1 = get_value_of_parameter(1);
+                let param_2 = get_value_of_parameter(2);
 
-                let param_2 = match modes[1] {
-                    0 => {
-                        let addr = memory[next_opcode_idx + 2] as usize;
-                        memory[addr]
-                    }
-                    1 => memory[next_opcode_idx + 2],
-                    other => panic!("Invalid mode ({})", other),
-                };
-
-                let param_3 = match modes[0] {
-                    0 => memory[next_opcode_idx + 3] as usize,
-                    other => panic!("Invalid mode ({})", other),
-                };
-
-                memory[param_3] = if param_1 == param_2 { 1 } else { 0 };
+                let addr = get_addr_from_param(3);
+                memory[addr] = if param_1 == param_2 { 1 } else { 0 };
 
                 4
             }
-            9 if memory[next_opcode_idx] == 99 => {
+            99 => {
                 break output;
             }
             other => {
                 panic!(
                     "Invalid opcode {} @ {} ({})",
-                    other, next_opcode_idx, memory[next_opcode_idx]
+                    other, ip, memory[ip]
                 );
             }
         }
