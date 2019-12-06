@@ -4,8 +4,8 @@ My personal implementations for
 [Advent of Code (AoC)](https://adventofcode.com/)
 
 
-> **2018 WIP**: After finishing each days puzzle, I push it onto the
-> [2018](https://gitlab.com/BafDyce/adventofcode/tree/2018) branch. Every few
+> **2019 WIP**: After finishing each days puzzle, I push it onto the
+> [2019](https://gitlab.com/BafDyce/adventofcode/tree/2019) branch. Every few
 > days I will merge it into master. So, if you don't see the latest solutions,
 > be sure to check out the right branch!
 
@@ -18,6 +18,17 @@ My personal implementations for
 
 # Solved challenges
 Implementations for other languages will hopefully come too some day.
+
+## 2019
+
+| [AoC](https://adventofcode.com/2019) | Rust |
+|--------------------------------------|------|
+|[Day 1 - "The Tyranny of the Rocket Equation"](https://adventofcode.com/2019/day/1)| [main.rs](./2019/rust/day01/src/main.rs) |
+|[Day 2 - "1202 Program Alarm" ](https://adventofcode.com/2019/day/2)| [main.rs](./2019/rust/day02/src/main.rs) |
+|[Day 3 - "Crossed Wires"](https://adventofcode.com/2019/day/3)| [main.rs](./2019/rust/day03/src/main.rs) |
+|[Day 4 - "Secure Container"](https://adventofcode.com/2019/day/4)| [main.rs](./2019/rust/day04/src/main.rs) |
+|[Day 5 - "Sunny with a Chance of Asteroids"](https://adventofcode.com/2019/day/5)| [main.rs](./2019/rust/day05/src/main.rs) |
+|[Day 6 - "Universal Orbit Map"](https://adventofcode.com/2019/day/6)| [main.rs](./2019/rust/day06/src/main.rs) |
 
 ## 2018
 | [AoC](https://adventofcode.com/2018) | Rust |
@@ -46,7 +57,6 @@ Implementations for other languages will hopefully come too some day.
 |[Day 22](./2018/_tasks/day22.md)| [main.rs](./2018/rust/day22/src/main.rs), [1](./2018/rust/day22/src/part1.rs) & [2](./2018/rust/day22/src/part2.rs) |
 |[Day 23](./2018/_tasks/day23.md)| [main.rs](./2018/rust/day23/src/main.rs), [1](./2018/rust/day23/src/part1.rs) & [2](./2018/rust/day23/src/part2.rs) |
 |[Day 24](./2018/_tasks/day24.md)| [main.rs](./2018/rust/day24/src/main.rs), [1](./2018/rust/day24/src/part1.rs) & [2](./2018/rust/day24/src/part2.rs) |
-
 |[Day 25](./2018/_tasks/day25.md)| [main.rs](./2018/rust/day25/src/main.rs), [1](./2018/rust/day25/src/part1.rs) |
 
 ## 2017
