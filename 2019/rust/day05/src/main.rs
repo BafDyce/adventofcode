@@ -3,8 +3,15 @@
 Day       Time  Rank  Score       Time  Rank  Score
   5   00:24:38   384      0   00:36:18   390      0
 
-(tests added after the fact)
+BENCHMARK RESULTS
+test bench::bench_parsing ... bench:       8,933 ns/iter (+/- 1,378)
+test bench::bench_part1   ... bench:         345 ns/iter (+/- 39)
+test bench::bench_part2   ... bench:         582 ns/iter (+/- 39)
 */
+
+// allow bench feature when using unstable flag
+// use: $ cargo +nightly bench --features unstable
+#![cfg_attr(feature = "unstable", feature(test))]
 
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use std::{collections::HashMap, io};
@@ -54,7 +61,7 @@ fn run_intcode_program(program: &Vec<i32>, input: i32) -> OutputType1 {
         let get_addr_from_param = |param_idx| {
             let mode_idx = get_mode_idx(param_idx);
 
-            match modes[0] {
+            match modes[mode_idx] {
                 0 => {
                     memory[ip + param_idx] as usize
                 }
@@ -196,17 +203,9 @@ mod tests {
     use super::*;
     use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
 
-    fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
+    pub(in super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
         let params = ["appname", "--input", inputname];
         import_magic_with_params(DAY, parse_input, &params).unwrap()
-    }
-
-    fn test_case_helper(inputname: &str, sol1: OutputType1, sol2: OutputType2) {
-        let po = import_helper(inputname);
-        let res1 = part1(&po);
-        assert_eq!(sol1, res1, "part1");
-        let res2 = part2(&po, Some(res1));
-        assert_eq!(sol2, res2, "part2");
     }
 
     #[test]
@@ -272,5 +271,39 @@ mod tests {
         assert_eq!(run_intcode_program(&program, 7), 999, "7");
         assert_eq!(run_intcode_program(&program, 8), 1000, "8");
         assert_eq!(run_intcode_program(&program, 9), 1001, "9");
+    }
+}
+
+#[cfg(all(feature = "unstable", test))]
+mod bench {
+    extern crate test;
+
+    use super::*;
+    use std::{
+        fs::File,
+        io::{BufRead, BufReader},
+    };
+    use test::Bencher;
+
+    fn helper_read_file(fname: &str) -> Vec<String> {
+        BufReader::new(File::open(fname).unwrap()).lines().map(|line| line.unwrap()).collect()
+    }
+
+    #[bench]
+    fn bench_parsing(bb: &mut Bencher) {
+        let input = helper_read_file(&format!("../../_inputs/day{:02}/real1.input", DAY));
+        bb.iter(|| parse_input(input.to_owned(), &HashMap::new(), false));
+    }
+
+    #[bench]
+    fn bench_part1(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| part1(&puzzle_options));
+    }
+
+    #[bench]
+    fn bench_part2(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| part2(&puzzle_options, None));
     }
 }
