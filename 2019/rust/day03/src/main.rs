@@ -2,7 +2,16 @@
       -------Part 1--------   -------Part 2--------
 Day       Time  Rank  Score       Time  Rank  Score
   3   00:29:06   928      0   00:37:23   754      0
+
+BENCHMARK RESULTS
+test bench::bench_parsing ... bench:      11,633 ns/iter (+/- 2,172)
+test bench::bench_part1   ... bench:  68,410,522 ns/iter (+/- 4,879,087)
+test bench::bench_part2   ... bench: 137,706,726 ns/iter (+/- 5,762,842)
 */
+
+// allow bench feature when using unstable flag
+// use: $ cargo +nightly bench --features unstable
+#![cfg_attr(feature = "unstable", feature(test))]
 
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use std::{
@@ -194,7 +203,7 @@ mod tests {
     use super::*;
     use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
 
-    fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
+    pub(in super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
         let params = [
             "appname",
             "--input",
@@ -224,5 +233,39 @@ mod tests {
     #[test]
     fn example_3() {
         test_case_helper("example3", 135, 410)
+    }
+}
+
+#[cfg(all(feature = "unstable", test))]
+mod bench {
+    extern crate test;
+
+    use super::*;
+    use std::{
+        fs::File,
+        io::{BufRead, BufReader},
+    };
+    use test::Bencher;
+
+    fn helper_read_file(fname: &str) -> Vec<String> {
+        BufReader::new(File::open(fname).unwrap()).lines().map(|line| line.unwrap()).collect()
+    }
+
+    #[bench]
+    fn bench_parsing(bb: &mut Bencher) {
+        let input = helper_read_file(&format!("../../_inputs/day{:02}/real1.input", DAY));
+        bb.iter(|| parse_input(input.to_owned(), &HashMap::new(), false));
+    }
+
+    #[bench]
+    fn bench_part1(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| part1(&puzzle_options));
+    }
+
+    #[bench]
+    fn bench_part2(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| part2(&puzzle_options, None));
     }
 }

@@ -2,7 +2,17 @@
       -------Part 1--------   -------Part 2--------
 Day       Time  Rank  Score       Time  Rank  Score
   4   00:14:08  1964      0   00:38:56  2425      0
+
+BENCHMARK RESULTS
+test bench::bench_parsing ... bench:         116 ns/iter (+/- 10)
+test bench::bench_part1   ... bench:   2,384,565 ns/iter (+/- 192,334)
+test bench::bench_part2   ... bench:   8,036,241 ns/iter (+/- 705,061)
 */
+
+// allow bench feature when using unstable flag
+// use: $ cargo +nightly bench --features unstable
+#![cfg_attr(feature = "unstable", feature(test))]
+
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use std::{
     collections::HashMap,
@@ -122,6 +132,16 @@ fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
+
+    pub(in super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
+        let params = [
+            "appname",
+            "--input",
+            inputname,
+        ];
+        import_magic_with_params(DAY, parse_input, &params).unwrap()
+    }
 
     #[test]
     fn example_1() {
@@ -151,5 +171,39 @@ mod tests {
     #[test]
     fn example_6() {
         assert!( is_correct_pw_2(&111122) )
+    }
+}
+
+#[cfg(all(feature = "unstable", test))]
+mod bench {
+    extern crate test;
+
+    use super::*;
+    use std::{
+        fs::File,
+        io::{BufRead, BufReader},
+    };
+    use test::Bencher;
+
+    fn helper_read_file(fname: &str) -> Vec<String> {
+        BufReader::new(File::open(fname).unwrap()).lines().map(|line| line.unwrap()).collect()
+    }
+
+    #[bench]
+    fn bench_parsing(bb: &mut Bencher) {
+        let input = helper_read_file(&format!("../../_inputs/day{:02}/real1.input", DAY));
+        bb.iter(|| parse_input(input.to_owned(), &HashMap::new(), false));
+    }
+
+    #[bench]
+    fn bench_part1(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| part1(&puzzle_options));
+    }
+
+    #[bench]
+    fn bench_part2(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| part2(&puzzle_options, None));
     }
 }
