@@ -3,10 +3,13 @@
 Day       Time  Rank  Score       Time  Rank  Score
   7   00:14:16   301      0   01:08:37   622      0
 
+ (Restructured to use custom structs and same run_intcode function during cleanup after I solved
+ both parts)
+
 BENCHMARK RESULTS
-test bench::bench_parsing ... bench:       5,999 ns/iter (+/- 879)
-test bench::bench_part1   ... bench:      68,528 ns/iter (+/- 8,076)
-test bench::bench_part2   ... bench:     310,161 ns/iter (+/- 121,791)
+test bench::bench_parsing ... bench:       6,056 ns/iter (+/- 776)
+test bench::bench_part1   ... bench:     106,606 ns/iter (+/- 4,215)
+test bench::bench_part2   ... bench:     302,674 ns/iter (+/- 25,617)
 */
 
 // allow bench feature when using unstable flag
@@ -30,8 +33,57 @@ type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
 #[derive(Debug)]
 struct Controller {
+    id: ControllerId,
     ip: usize,
     memory: Vec<i32>,
+}
+
+#[derive(Clone, Copy, Debug)]
+struct ControllerId {
+    id: usize,
+}
+
+#[derive(Debug)]
+struct IOManager {
+    ios: [VecDeque<i32>; 5]
+}
+
+impl IOManager {
+    fn new(permutations: &Vec<i32>) -> IOManager {
+        let mut iom = IOManager {
+            ios: [
+                VecDeque::new(),
+                VecDeque::new(),
+                VecDeque::new(),
+                VecDeque::new(),
+                VecDeque::new(),
+            ],
+        };
+
+        iom.ios[0].push_back(permutations[0]);
+        iom.ios[0].push_back(0);
+        iom.ios[1].push_back(permutations[1]);
+        iom.ios[2].push_back(permutations[2]);
+        iom.ios[3].push_back(permutations[3]);
+        iom.ios[4].push_back(permutations[4]);
+
+        iom
+    }
+
+    fn load_next_input(&mut self, cid: ControllerId) -> Option<i32> {
+        let idx_input = cid.id;
+        self.ios[idx_input].pop_front()
+    }
+
+    fn save_output(&mut self, cid: ControllerId, out: i32) {
+        let idx_output = match cid.id {
+            id @ 0..=3 => id + 1,
+            4 => 0,
+            other => panic!("Invalid Controller id ({})", other),
+        };
+
+        self.ios[idx_output].push_back(out)
+    }
 }
 
 fn main() -> Result<(), io::Error> {
@@ -70,12 +122,41 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 
     let mut highest = 0;
     while let Some(permutations) = permutations.next_permutation() {
+        let mut controllers = [
+            Controller {
+                id: ControllerId { id: 0 },
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+            Controller {
+                id: ControllerId { id: 1 },
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+            Controller {
+                id: ControllerId { id: 2},
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+            Controller {
+                id: ControllerId { id: 3 },
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+            Controller {
+                id: ControllerId { id: 4 },
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+        ];
 
-        let aa = run_intcode_program(po.data.as_ref().unwrap(), vec![ permutations[0], 0]);
-        let bb = run_intcode_program(po.data.as_ref().unwrap(), vec![ permutations[1] ,aa]);
-        let cc = run_intcode_program(po.data.as_ref().unwrap(), vec![ permutations[2], bb]);
-        let dd = run_intcode_program(po.data.as_ref().unwrap(), vec![ permutations[3], cc]);
-        let ee = run_intcode_program(po.data.as_ref().unwrap(), vec![ permutations[4], dd]);
+        let mut io_manager = IOManager::new(permutations);
+
+        let _aa = run_intcode_program(&mut controllers[0], &mut io_manager);
+        let _bb = run_intcode_program(&mut controllers[1], &mut io_manager);
+        let _cc = run_intcode_program(&mut controllers[2], &mut io_manager);
+        let _dd = run_intcode_program(&mut controllers[3], &mut io_manager);
+        let ee = run_intcode_program(&mut controllers[4], &mut io_manager).unwrap();
 
         highest = i32::max(highest, ee);
     }
@@ -90,51 +171,41 @@ fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
     while let Some(permutations) = permutations.next_permutation() {
         let mut controllers = [
             Controller {
+                id: ControllerId { id: 0 },
                 ip: 0,
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
             Controller {
+                id: ControllerId { id: 1 },
                 ip: 0,
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
             Controller {
+                id: ControllerId { id: 2},
                 ip: 0,
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
             Controller {
+                id: ControllerId { id: 3 },
                 ip: 0,
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
             Controller {
+                id: ControllerId { id: 4 },
                 ip: 0,
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
         ];
 
-        let mut io = [
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-            VecDeque::new(),
-        ];
-
-        io[0].push_back(permutations[0]);
-        io[0].push_back(0);
-        io[1].push_back(permutations[1]);
-        io[2].push_back(permutations[2]);
-        io[3].push_back(permutations[3]);
-        io[4].push_back(permutations[4]);
+        let mut io_manager = IOManager::new(permutations);
 
         loop {
-            let _aa = run_intcode_program2(&mut controllers[0], &mut io, 0, 1);
-            let _bb = run_intcode_program2(&mut controllers[1], &mut io, 1, 2);
-            let _cc = run_intcode_program2(&mut controllers[2], &mut io, 2, 3);
-            let _dd = run_intcode_program2(&mut controllers[3], &mut io, 3, 4);
-            if let Some(ee) = run_intcode_program2(&mut controllers[4], &mut io, 4, 0) {
-                //print!("new val: {}", ee);
+            let _aa = run_intcode_program(&mut controllers[0], &mut io_manager);
+            let _bb = run_intcode_program(&mut controllers[1], &mut io_manager);
+            let _cc = run_intcode_program(&mut controllers[2], &mut io_manager);
+            let _dd = run_intcode_program(&mut controllers[3], &mut io_manager);
+            if let Some(ee) = run_intcode_program(&mut controllers[4], &mut io_manager) {
                 highest = i32::max(highest, ee);
-                //println!(" ==> highest == {}", highest);
                 break;
             }
         }
@@ -143,10 +214,11 @@ fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
     highest
 }
 
-fn run_intcode_program2(controller: &mut Controller, ios: &mut [VecDeque<i32>; 5], input_idx: usize, output_idx: usize) -> Option<OutputType1> {
+fn run_intcode_program(controller: &mut Controller, io_manager: &mut IOManager) -> Option<OutputType1> {
     let mut output = 0;
     let memory = &mut controller.memory;
     let ip = &mut controller.ip;
+    let cid = controller.id;
 
     loop {
         let modes = [
@@ -214,7 +286,7 @@ fn run_intcode_program2(controller: &mut Controller, ios: &mut [VecDeque<i32>; 5
             3 => {
                 // store input
                 let addr = get_addr_from_param(1);
-                match ios[input_idx].pop_front() {
+                match io_manager.load_next_input(cid) {
                     Some(input) => memory[addr] = input,
                     None => break None,
                 }
@@ -222,9 +294,9 @@ fn run_intcode_program2(controller: &mut Controller, ios: &mut [VecDeque<i32>; 5
                 2
             }
             4 => {
-                // get output
+                // send output
                 output = get_value_of_parameter(1);
-                ios[output_idx].push_back(output);
+                io_manager.save_output(cid, output);
 
                 2
             }
@@ -279,141 +351,6 @@ fn run_intcode_program2(controller: &mut Controller, ios: &mut [VecDeque<i32>; 5
                 panic!(
                     "Invalid opcode {} @ {} ({})",
                     other, ip, memory[*ip]
-                );
-            }
-        }
-    }
-}
-
-fn run_intcode_program(program: &Vec<i32>, inputs: Vec<i32>) -> OutputType1 {
-    let mut memory = program.to_owned();
-    let mut output = 0;
-    let mut inputs = inputs.into_iter();
-
-    let mut ip = 0;
-    loop {
-        let modes = [
-            memory[ip] / 10_000,
-            (memory[ip] % 10_000) / 1_000,
-            (memory[ip] % 1_000) / 100,
-        ];
-
-        let get_mode_idx = |param_idx| match param_idx {
-            1 => 2,
-            2 => 1,
-            3 => 0,
-            _ => panic!("Invalid mode idx"),
-        };
-
-        let get_value_of_parameter = |param_idx| {
-            let mode_idx = get_mode_idx(param_idx);
-
-            match modes[mode_idx] {
-                0 => {
-                    let addr = memory[ip + param_idx] as usize;
-                    memory[addr]
-                }
-                1 => memory[ip + param_idx],
-                other => panic!("get_value_of_parameter: Invalid mode ({})", other),
-            }
-        };
-
-        let get_addr_from_param = |param_idx| {
-            let mode_idx = get_mode_idx(param_idx);
-
-            match modes[mode_idx] {
-                0 => {
-                    memory[ip + param_idx] as usize
-                }
-                other => panic!("get_addr_from_param: Invalid mode ({})", other),
-            }
-        };
-
-        ip += match memory[ip] % 100 {
-            1 => {
-                // add
-                let param_1 = get_value_of_parameter(1);
-                let param_2 = get_value_of_parameter(2);
-
-                let dst = get_addr_from_param(3);
-                memory[dst] = param_1 + param_2;
-
-                4
-            }
-            2 => {
-                // multiply
-                let param_1 = get_value_of_parameter(1);
-                let param_2 = get_value_of_parameter(2);
-
-                let dst = get_addr_from_param(3);
-                memory[dst] = param_1 * param_2;
-
-                4
-            }
-            3 => {
-                // store input
-                let addr = get_addr_from_param(1);
-                memory[addr] = inputs.next().unwrap();
-
-                2
-            }
-            4 => {
-                // get output
-                output = get_value_of_parameter(1);
-
-                2
-            }
-            5 => {
-                // jump if true
-                let param_1 = get_value_of_parameter(1);
-                let param_2 = get_value_of_parameter(2);
-
-                if param_1 != 0 {
-                    ip = param_2 as usize;
-                    0
-                } else {
-                    3
-                }
-            }
-            6 => {
-                // jump if false
-                let param_1 = get_value_of_parameter(1);
-                let param_2 = get_value_of_parameter(2);
-
-                if param_1 == 0 {
-                    ip = param_2 as usize;
-                    0
-                } else {
-                    3
-                }
-            }
-            7 => {
-                // less than
-                let param_1 = get_value_of_parameter(1);
-                let param_2 = get_value_of_parameter(2);
-
-                let addr = get_addr_from_param(3);
-                memory[addr] = if param_1 < param_2 { 1 } else { 0 };
-
-                4
-            }
-            8 => {
-                // less than
-                let param_1 = get_value_of_parameter(1);
-                let param_2 = get_value_of_parameter(2);
-
-                let addr = get_addr_from_param(3);
-                memory[addr] = if param_1 == param_2 { 1 } else { 0 };
-
-                4
-            }
-            99 => {
-                break output;
-            }
-            other => {
-                panic!(
-                    "Invalid opcode {} @ {} ({})",
-                    other, ip, memory[ip]
                 );
             }
         }
