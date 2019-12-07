@@ -76,12 +76,7 @@ impl IOManager {
     }
 
     fn save_output(&mut self, cid: ControllerId, out: i32) {
-        let idx_output = match cid.id {
-            id @ 0..=3 => id + 1,
-            4 => 0,
-            other => panic!("Invalid Controller id ({})", other),
-        };
-
+        let idx_output = (cid.id + 1) % 5;
         self.ios[idx_output].push_back(out)
     }
 }
@@ -230,9 +225,6 @@ fn run_intcode_program(
             (memory[*ip] % 1_000) / 100,
         ];
 
-        // Tbh, I created these three closures when cleaning up the code in the evening.
-        // In my original solution I had copy & pasted these `match modes[ip] {}` blocks all over
-        // the place (and fortunately changed all offsets correctly on first try :D)
         let get_mode_idx = |param_idx| match param_idx {
             1 => 2,
             2 => 1,
