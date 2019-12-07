@@ -1,25 +1,25 @@
 /*
+      -------Part 1--------   -------Part 2--------
+Day       Time  Rank  Score       Time  Rank  Score
+  7   00:14:16   301      0   01:08:37   622      0
 
 BENCHMARK RESULTS
-
+test bench::bench_parsing ... bench:       5,999 ns/iter (+/- 879)
+test bench::bench_part1   ... bench:      68,528 ns/iter (+/- 8,076)
+test bench::bench_part2   ... bench:     310,161 ns/iter (+/- 121,791)
 */
 
 // allow bench feature when using unstable flag
 // use: $ cargo +nightly bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
 
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate serde_derive;
-
 use aoc_import_magic::{import_magic, PuzzleOptions};
-use regex::Regex;
+use permutohedron::Heap;
 use std::{
     collections::{HashMap, VecDeque},
+    convert::TryInto,
     io,
 };
-use std::convert::TryInto;
 
 const DAY: i32 = 7;
 type InputTypeSingle = i32;
@@ -27,6 +27,12 @@ type InputType = Vec<InputTypeSingle>;
 type OutputType1 = i32;
 type OutputType2 = OutputType1;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
+
+#[derive(Debug)]
+struct Controller {
+    ip: usize,
+    memory: Vec<i32>,
+}
 
 fn main() -> Result<(), io::Error> {
     println!("AoC 2019 | Day {}", DAY);
@@ -51,7 +57,7 @@ fn main() -> Result<(), io::Error> {
     Ok(())
 }
 
-fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
+fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: bool) -> InputType {
     input[0]
         .split(",")
         .map(|xx| xx.parse::<InputTypeSingle>().unwrap())
@@ -59,17 +65,11 @@ fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bo
 }
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    use permutohedron::{
-        Heap,
-        heap_recursive,
-    };
-
     let mut phases = vec![0, 1, 2, 3, 4];
     let mut permutations = Heap::new(&mut phases);
 
     let mut highest = 0;
     while let Some(permutations) = permutations.next_permutation() {
-        //println!("{:?}", permutations);
 
         let aa = run_intcode_program(po.data.as_ref().unwrap(), vec![ permutations[0], 0]);
         let bb = run_intcode_program(po.data.as_ref().unwrap(), vec![ permutations[1] ,aa]);
@@ -84,28 +84,32 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 }
 
 fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
-    run_feedback_loop(po.data.as_ref().unwrap())
-}
-
-fn run_feedback_loop(program: &Vec<i32>) -> OutputType2 {
-    use permutohedron::{
-        Heap,
-        heap_recursive,
-    };
-
     let mut phases = vec![5, 6, 7, 8, 9];
     let mut permutations = Heap::new(&mut phases);
     let mut highest = 0;
     while let Some(permutations) = permutations.next_permutation() {
         let mut controllers = [
-            program.to_owned(),
-            program.to_owned(),
-            program.to_owned(),
-            program.to_owned(),
-            program.to_owned(),
+            Controller {
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+            Controller {
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+            Controller {
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+            Controller {
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
+            Controller {
+                ip: 0,
+                memory: po.data.as_ref().unwrap().to_owned(),
+            },
         ];
-
-        let mut ips = [0; 5];
 
         let mut io = [
             VecDeque::new(),
@@ -115,8 +119,6 @@ fn run_feedback_loop(program: &Vec<i32>) -> OutputType2 {
             VecDeque::new(),
         ];
 
-
-        // let permutations = vec![9,8,7,6,5];
         io[0].push_back(permutations[0]);
         io[0].push_back(0);
         io[1].push_back(permutations[1]);
@@ -124,28 +126,28 @@ fn run_feedback_loop(program: &Vec<i32>) -> OutputType2 {
         io[3].push_back(permutations[3]);
         io[4].push_back(permutations[4]);
 
-            loop {
-                let aa = run_intcode_program2(&mut controllers[0], &mut ips[0], &mut io, 0, 1);
-                let bb = run_intcode_program2(&mut controllers[1], &mut ips[1], &mut io, 1, 2);
-                let cc = run_intcode_program2(&mut controllers[2], &mut ips[2], &mut io, 2, 3);
-                let dd = run_intcode_program2(&mut controllers[3], &mut ips[3], &mut io, 3, 4);
-                if let Some(ee) = run_intcode_program2(&mut controllers[4], &mut ips[4], &mut io, 4, 0) {
-                    //print!("new val: {}", ee);
-                    highest = i32::max(highest, ee);
-                    //println!(" ==> highest == {}", highest);
-                    break;
-                }
+        loop {
+            let _aa = run_intcode_program2(&mut controllers[0], &mut io, 0, 1);
+            let _bb = run_intcode_program2(&mut controllers[1], &mut io, 1, 2);
+            let _cc = run_intcode_program2(&mut controllers[2], &mut io, 2, 3);
+            let _dd = run_intcode_program2(&mut controllers[3], &mut io, 3, 4);
+            if let Some(ee) = run_intcode_program2(&mut controllers[4], &mut io, 4, 0) {
+                //print!("new val: {}", ee);
+                highest = i32::max(highest, ee);
+                //println!(" ==> highest == {}", highest);
+                break;
             }
-
-
+        }
     }
 
     highest
 }
 
-// inputs: &mut VecDeque<i32>, outputs: &mut VecDeque<i32>
-fn run_intcode_program2(memory: &mut Vec<i32>, ip: &mut usize, ios: &mut [VecDeque<i32>; 5], input_idx: usize, output_idx: usize) -> Option<OutputType1> {
+fn run_intcode_program2(controller: &mut Controller, ios: &mut [VecDeque<i32>; 5], input_idx: usize, output_idx: usize) -> Option<OutputType1> {
     let mut output = 0;
+    let memory = &mut controller.memory;
+    let ip = &mut controller.ip;
+
     loop {
         let modes = [
             memory[*ip] / 10_000,
@@ -296,9 +298,6 @@ fn run_intcode_program(program: &Vec<i32>, inputs: Vec<i32>) -> OutputType1 {
             (memory[ip] % 1_000) / 100,
         ];
 
-        // Tbh, I created these three closures when cleaning up the code in the evening.
-        // In my original solution I had copy & pasted these `match modes[ip] {}` blocks all over
-        // the place (and fortunately changed all offsets correctly on first try :D)
         let get_mode_idx = |param_idx| match param_idx {
             1 => 2,
             2 => 1,
@@ -322,7 +321,7 @@ fn run_intcode_program(program: &Vec<i32>, inputs: Vec<i32>) -> OutputType1 {
         let get_addr_from_param = |param_idx| {
             let mode_idx = get_mode_idx(param_idx);
 
-            match modes[0] {
+            match modes[mode_idx] {
                 0 => {
                     memory[ip + param_idx] as usize
                 }
@@ -426,34 +425,70 @@ mod tests {
     use super::*;
     use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
 
+    #[allow(dead_code)]
     pub(in super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
         let params = ["appname", "--input", inputname];
         import_magic_with_params(DAY, parse_input, &params).unwrap()
     }
 
-    fn test_case_helper(inputname: &str, sol1: OutputType1, sol2: OutputType2) {
-        let po = import_helper(inputname);
-        let res1 = part1(&po);
-        assert_eq!(sol1, res1, "part1");
-        let res2 = part2(&po, Some(res1));
-        assert_eq!(sol2, res2, "part2");
+    #[test]
+    fn example_1() {
+        let puzzle_options = PuzzleOptions {
+            day: DAY,
+            data: Some(vec![3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0]),
+            ..Default::default()
+        };
+
+        assert_eq!(part1(&puzzle_options), 43210);
+    }
+
+    #[test]
+    fn example_2() {
+        let puzzle_options = PuzzleOptions {
+            day: DAY,
+            data: Some(vec![3,23,3,24,1002,24,10,24,1002,23,-1,23,
+101,5,23,23,1,24,23,23,4,23,99,0,0]),
+            ..Default::default()
+        };
+
+        assert_eq!(part1(&puzzle_options), 54321);
+    }
+
+    #[test]
+    fn example_3() {
+        let puzzle_options = PuzzleOptions {
+            day: DAY,
+            data: Some(vec![3,31,3,32,1002,32,10,32,1001,31,-2,31,1007,31,0,33,
+1002,33,7,33,1,33,31,31,1,32,31,31,4,31,99,0,0,0]),
+            ..Default::default()
+        };
+
+        assert_eq!(part1(&puzzle_options), 65210);
     }
 
     #[test]
     fn example_4() {
-        let program = vec![3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
-27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5];
+        let puzzle_options = PuzzleOptions {
+            day: DAY,
+            data: Some(vec![3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
+27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5]),
+            ..Default::default()
+        };
 
-        assert_eq!(run_feedback_loop(&program), 139629729, "7");
+        assert_eq!(part2(&puzzle_options, None), 139629729);
     }
 
     #[test]
     fn example_5() {
-        let program = vec![3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,
+        let puzzle_options = PuzzleOptions {
+            day: DAY,
+            data: Some(vec![3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,
 -5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,
-53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10];
+53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10]),
+            ..Default::default()
+        };
 
-        assert_eq!(run_feedback_loop(&program), 18216, "7");
+        assert_eq!(part2(&puzzle_options, None), 18216);
     }
 }
 
