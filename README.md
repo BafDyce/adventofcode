@@ -29,6 +29,7 @@ Implementations for other languages will hopefully come too some day.
 |[Day 4 - "Secure Container"](https://adventofcode.com/2019/day/4)| [main.rs](./2019/rust/day04/src/main.rs) |
 |[Day 5 - "Sunny with a Chance of Asteroids"](https://adventofcode.com/2019/day/5)| [main.rs](./2019/rust/day05/src/main.rs) |
 |[Day 6 - "Universal Orbit Map"](https://adventofcode.com/2019/day/6)| [main.rs](./2019/rust/day06/src/main.rs) |
+|[Day 7 - "Amplification Circuit"](https://adventofcode.com/2019/day/7)| [main.rs](./2019/rust/day07/src/main.rs) |
 
 ## 2018
 | [AoC](https://adventofcode.com/2018) | Rust |
