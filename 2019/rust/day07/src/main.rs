@@ -45,7 +45,7 @@ struct ControllerId {
 
 #[derive(Debug)]
 struct IOManager {
-    ios: [VecDeque<i32>; 5]
+    ios: [VecDeque<i32>; 5],
 }
 
 impl IOManager {
@@ -134,7 +134,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
             Controller {
-                id: ControllerId { id: 2},
+                id: ControllerId { id: 2 },
                 ip: 0,
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
@@ -181,7 +181,7 @@ fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
             Controller {
-                id: ControllerId { id: 2},
+                id: ControllerId { id: 2 },
                 ip: 0,
                 memory: po.data.as_ref().unwrap().to_owned(),
             },
@@ -214,7 +214,10 @@ fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
     highest
 }
 
-fn run_intcode_program(controller: &mut Controller, io_manager: &mut IOManager) -> Option<OutputType1> {
+fn run_intcode_program(
+    controller: &mut Controller,
+    io_manager: &mut IOManager,
+) -> Option<OutputType1> {
     let mut output = 0;
     let memory = &mut controller.memory;
     let ip = &mut controller.ip;
@@ -254,9 +257,7 @@ fn run_intcode_program(controller: &mut Controller, io_manager: &mut IOManager) 
             let mode_idx = get_mode_idx(param_idx);
 
             match modes[mode_idx] {
-                0 => {
-                    memory[*ip + param_idx] as usize
-                }
+                0 => memory[*ip + param_idx] as usize,
                 other => panic!("get_addr_from_param: Invalid mode ({})", other),
             }
         };
@@ -348,10 +349,7 @@ fn run_intcode_program(controller: &mut Controller, io_manager: &mut IOManager) 
                 break Some(output);
             }
             other => {
-                panic!(
-                    "Invalid opcode {} @ {} ({})",
-                    other, ip, memory[*ip]
-                );
+                panic!("Invalid opcode {} @ {} ({})", other, ip, memory[*ip]);
             }
         }
     }
@@ -363,7 +361,7 @@ mod tests {
     use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
 
     #[allow(dead_code)]
-    pub(in super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
+    pub(super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
         let params = ["appname", "--input", inputname];
         import_magic_with_params(DAY, parse_input, &params).unwrap()
     }
@@ -372,7 +370,9 @@ mod tests {
     fn example_1() {
         let puzzle_options = PuzzleOptions {
             day: DAY,
-            data: Some(vec![3,15,3,16,1002,16,10,16,1,16,15,15,4,15,99,0,0]),
+            data: Some(vec![
+                3, 15, 3, 16, 1002, 16, 10, 16, 1, 16, 15, 15, 4, 15, 99, 0, 0,
+            ]),
             ..Default::default()
         };
 
@@ -383,8 +383,10 @@ mod tests {
     fn example_2() {
         let puzzle_options = PuzzleOptions {
             day: DAY,
-            data: Some(vec![3,23,3,24,1002,24,10,24,1002,23,-1,23,
-101,5,23,23,1,24,23,23,4,23,99,0,0]),
+            data: Some(vec![
+                3, 23, 3, 24, 1002, 24, 10, 24, 1002, 23, -1, 23, 101, 5, 23, 23, 1, 24, 23, 23, 4,
+                23, 99, 0, 0,
+            ]),
             ..Default::default()
         };
 
@@ -395,8 +397,10 @@ mod tests {
     fn example_3() {
         let puzzle_options = PuzzleOptions {
             day: DAY,
-            data: Some(vec![3,31,3,32,1002,32,10,32,1001,31,-2,31,1007,31,0,33,
-1002,33,7,33,1,33,31,31,1,32,31,31,4,31,99,0,0,0]),
+            data: Some(vec![
+                3, 31, 3, 32, 1002, 32, 10, 32, 1001, 31, -2, 31, 1007, 31, 0, 33, 1002, 33, 7, 33,
+                1, 33, 31, 31, 1, 32, 31, 31, 4, 31, 99, 0, 0, 0,
+            ]),
             ..Default::default()
         };
 
@@ -407,8 +411,10 @@ mod tests {
     fn example_4() {
         let puzzle_options = PuzzleOptions {
             day: DAY,
-            data: Some(vec![3,26,1001,26,-4,26,3,27,1002,27,2,27,1,27,26,
-27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5]),
+            data: Some(vec![
+                3, 26, 1001, 26, -4, 26, 3, 27, 1002, 27, 2, 27, 1, 27, 26, 27, 4, 27, 1001, 28,
+                -1, 28, 1005, 28, 6, 99, 0, 0, 5,
+            ]),
             ..Default::default()
         };
 
@@ -419,9 +425,11 @@ mod tests {
     fn example_5() {
         let puzzle_options = PuzzleOptions {
             day: DAY,
-            data: Some(vec![3,52,1001,52,-5,52,3,53,1,52,56,54,1007,54,5,55,1005,55,26,1001,54,
--5,54,1105,1,12,1,53,54,53,1008,54,0,55,1001,55,1,55,2,53,55,53,4,
-53,1001,56,-1,56,1005,56,6,99,0,0,0,0,10]),
+            data: Some(vec![
+                3, 52, 1001, 52, -5, 52, 3, 53, 1, 52, 56, 54, 1007, 54, 5, 55, 1005, 55, 26, 1001,
+                54, -5, 54, 1105, 1, 12, 1, 53, 54, 53, 1008, 54, 0, 55, 1001, 55, 1, 55, 2, 53,
+                55, 53, 4, 53, 1001, 56, -1, 56, 1005, 56, 6, 99, 0, 0, 0, 0, 10,
+            ]),
             ..Default::default()
         };
 
@@ -441,7 +449,10 @@ mod bench {
     use test::Bencher;
 
     fn helper_read_file(fname: &str) -> Vec<String> {
-        BufReader::new(File::open(fname).unwrap()).lines().map(|line| line.unwrap()).collect()
+        BufReader::new(File::open(fname).unwrap())
+            .lines()
+            .map(|line| line.unwrap())
+            .collect()
     }
 
     #[bench]
@@ -453,12 +464,12 @@ mod bench {
     #[bench]
     fn bench_part1(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
-        bb.iter(|| part1(&puzzle_options));
+        bb.iter(|| test::black_box(part1(&puzzle_options)));
     }
 
     #[bench]
     fn bench_part2(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
-        bb.iter(|| part2(&puzzle_options, None));
+        bb.iter(|| test::black_box(part2(&puzzle_options, None)));
     }
 }
