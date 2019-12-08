@@ -28,23 +28,17 @@ type OutputType2 = OutputType1;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
 #[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
-struct Data {
-
-}
+struct Data {}
 
 impl Data {
     pub fn new() -> Self {
-        Data {
-
-        }
+        Data {}
     }
 }
 
 impl From<()> for Data {
     fn from(from: ()) -> Data {
-        Data {
-
-        }
+        Data {}
     }
 }
 
@@ -79,8 +73,7 @@ fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bo
             // Parsing logic
             // single numeric types
 
-            line.parse::<InputTypeSingle>().unwrap_or_default()
-            ; // <-- REMOVE THIS IF NECESSARY!!
+            line.parse::<InputTypeSingle>().unwrap_or_default(); // <-- REMOVE THIS IF NECESSARY!!
 
             // regex parsing stuff
             lazy_static! {
@@ -112,7 +105,7 @@ mod tests {
     use super::*;
     use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
 
-    pub(in super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
+    pub(super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
         let params = ["appname", "--input", inputname];
         import_magic_with_params(DAY, parse_input, &params).unwrap()
     }
@@ -136,6 +129,7 @@ mod bench {
     extern crate test;
 
     use super::*;
+    use aoc_import_magic::test_helper_import_config;
     use std::{
         fs::File,
         io::{BufRead, BufReader},
@@ -143,24 +137,29 @@ mod bench {
     use test::Bencher;
 
     fn helper_read_file(fname: &str) -> Vec<String> {
-        BufReader::new(File::open(fname).unwrap()).lines().map(|line| line.unwrap()).collect()
+        BufReader::new(File::open(fname).unwrap())
+            .lines()
+            .map(|line| line.unwrap())
+            .collect()
     }
 
     #[bench]
     fn bench_parsing(bb: &mut Bencher) {
         let input = helper_read_file(&format!("../../_inputs/day{:02}/real1.input", DAY));
-        bb.iter(|| parse_input(input.to_owned(), &HashMap::new(), false));
+        let config = test_helper_import_config(DAY, "real1");
+
+        bb.iter(|| test::black_box(parse_input(input.to_owned(), &config, false)));
     }
 
     #[bench]
     fn bench_part1(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
-        bb.iter(|| part1(&puzzle_options));
+        bb.iter(|| test::black_box(part1(&puzzle_options)));
     }
 
     #[bench]
     fn bench_part2(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
-        bb.iter(|| part2(&puzzle_options, None));
+        bb.iter(|| test::black_box(part2(&puzzle_options, None)));
     }
 }
