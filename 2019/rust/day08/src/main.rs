@@ -1,7 +1,12 @@
 /*
+      -------Part 1--------   -------Part 2--------
+Day       Time  Rank  Score       Time  Rank  Score
+  8   00:26:34  1822      0   00:42:17  1529      0
 
 BENCHMARK RESULTS
-
+test bench::bench_parsing ... bench:   1,882,156 ns/iter (+/- 247,931)
+test bench::bench_part1   ... bench:       8,260 ns/iter (+/- 595)
+test bench::bench_part2   ... bench:      15,258 ns/iter (+/- 2,284)
 */
 
 // allow bench feature when using unstable flag
@@ -9,34 +14,33 @@ BENCHMARK RESULTS
 #![cfg_attr(feature = "unstable", feature(test))]
 
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
 extern crate serde_derive;
 
 use aoc_import_magic::{import_magic, PuzzleOptions};
-use regex::Regex;
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::HashMap,
     fmt,
     io,
 };
 
 const DAY: i32 = 8;
-type InputTypeSingle = usize;
+const PART_2_MSG: &str = "Interpret the image above :)";
 type InputType = Image;
 type OutputType1 = usize;
-type OutputType2 = usize;
+type OutputType2 = &'static str;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
+
+type Pixel = u32;
 
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 struct Image {
     width: usize,
     height: usize,
-    data: Vec<Vec<Vec<usize>>>,
+    data: Vec<Vec<Vec<Pixel>>>,
 }
 
 impl Image {
-    pub fn new(width: usize, height: usize, raw_data: Vec<usize>) -> Self {
+    pub fn new(width: usize, height: usize, raw_data: Vec<Pixel>) -> Self {
         Image {
             width,
             height,
@@ -80,13 +84,13 @@ impl Image {
     }
 
     fn multiply_stuff(&self, idx: usize) -> usize {
-        let ones: usize = self.data[idx].iter().map(|row| row.iter().filter(|xx| **xx == 1).count()).sum();
-        let twos: usize = self.data[idx].iter().map(|row| row.iter().filter(|xx| **xx == 2).count()).sum();
+        let ones: usize = self.data[idx].iter().map(|row| row.iter().filter(|&&xx| xx == 1).count()).sum();
+        let twos: usize = self.data[idx].iter().map(|row| row.iter().filter(|&&xx| xx == 2).count()).sum();
 
         ones * twos
     }
 
-    fn get_top_pixel(&self, row: usize, col: usize) -> usize {
+    fn get_top_pixel(&self, row: usize, col: usize) -> Pixel {
         match self.data.iter().find(|layer| layer[row][col] != 2) {
             Some(layer) => layer[row][col],
             None => 0,
@@ -105,7 +109,7 @@ impl fmt::Display for Image {
                 };
                 write!(ff, "{}", pixel)?;
             }
-            write!(ff, "\n");
+            write!(ff, "\n")?;
         }
 
         Ok(())
@@ -135,19 +139,10 @@ fn main() -> Result<(), io::Error> {
     Ok(())
 }
 
-fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
+fn parse_input(input: Vec<String>, config: &HashMap<String, String>, _verbose: bool) -> InputType {
     // PARSE input
     let data = input[0].chars().map(|cc| match cc {
-        '0' => 0,
-        '1' => 1,
-        '2' => 2,
-        '3' => 3,
-        '4' => 4,
-        '5' => 5,
-        '6' => 6,
-        '7' => 7,
-        '8' => 8,
-        '9' => 9,
+        digit if digit.is_ascii_digit() => digit.to_digit(10).unwrap(),
         other => panic!("error pixel {}", other),
     }).collect();
 
@@ -164,9 +159,9 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     img.multiply_stuff(idx)
 }
 
-fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
+fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
     println!("{}", po.data.as_ref().unwrap());
-    0
+    PART_2_MSG
 }
 
 #[cfg(test)]
@@ -189,7 +184,7 @@ mod tests {
 
     #[test]
     fn example_1() {
-        test_case_helper("example1", 8, 8)
+        test_case_helper("example1", 1, PART_2_MSG)
     }
 }
 
@@ -197,9 +192,10 @@ mod tests {
 mod bench {
     extern crate test;
 
+    use aoc_import_magic::test_helper_import_config;
     use super::*;
     use std::{
-        fs::File,
+        fs::{File, read_to_string},
         io::{BufRead, BufReader},
     };
     use test::Bencher;
@@ -211,7 +207,9 @@ mod bench {
     #[bench]
     fn bench_parsing(bb: &mut Bencher) {
         let input = helper_read_file(&format!("../../_inputs/day{:02}/real1.input", DAY));
-        bb.iter(|| parse_input(input.to_owned(), &HashMap::new(), false));
+        let config = test_helper_import_config(DAY, "real1");
+
+        bb.iter(|| test::black_box(parse_input(input.to_owned(), &config, false)));
     }
 
     #[bench]

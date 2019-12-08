@@ -11,7 +11,7 @@ use std::{
 };
 
 // general stuff, should not be necessary to touch this
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 pub struct PuzzleOptions<T>
 where
     T: Clone + Debug + PartialEq,
@@ -167,4 +167,34 @@ where
         },
     }
     .with_input_parsed(parse_input_function)
+}
+
+pub fn test_helper_import_config(day: i32, input_name: &str) -> HashMap<String, String> {
+    let mut config: HashMap<String, String> = HashMap::new();
+
+    match read_config_file(&format!(
+        "../../_inputs/day{:02}/{}.config",
+        day, input_name
+    )) {
+        Ok(raw_config) => {
+            for (kk, vv) in raw_config.into_iter() {
+                config.insert(kk, {
+                    match vv {
+                        Value::String(vv) => vv.to_owned(),
+                        Value::Bool(vv) => format!("{}", vv),
+                        Value::Number(vv) => format!("{}", vv),
+                        other => panic!(format!("Value type not supported ({:?})", other)),
+                    }
+                });
+            }
+        }
+        Err(ee) => {
+            println!(
+                "[WARN] Failed to load config file. Will continue either way: {}",
+                ee
+            );
+        }
+    }
+
+    config
 }
