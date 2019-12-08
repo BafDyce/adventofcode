@@ -37,9 +37,7 @@ fn run_intcode_program(program: &Vec<i32>, input: i32) -> OutputType1 {
             let mode_idx = get_mode_idx(param_idx);
 
             match modes[0] {
-                0 => {
-                    memory[ip + param_idx] as usize
-                }
+                0 => memory[ip + param_idx] as usize,
                 other => panic!("get_addr_from_param: Invalid mode ({})", other),
             }
         };
@@ -126,10 +124,7 @@ fn run_intcode_program(program: &Vec<i32>, input: i32) -> OutputType1 {
                 break output;
             }
             other => {
-                panic!(
-                    "Invalid opcode {} @ {} ({})",
-                    other, ip, memory[ip]
-                );
+                panic!("Invalid opcode {} @ {} ({})", other, ip, memory[ip]);
             }
         }
     }
