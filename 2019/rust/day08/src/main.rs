@@ -4,9 +4,9 @@ Day       Time  Rank  Score       Time  Rank  Score
   8   00:26:34  1822      0   00:42:17  1529      0
 
 BENCHMARK RESULTS
-test bench::bench_parsing ... bench:   1,882,156 ns/iter (+/- 247,931)
-test bench::bench_part1   ... bench:       8,260 ns/iter (+/- 595)
-test bench::bench_part2   ... bench:      15,258 ns/iter (+/- 2,284)
+test bench::bench_parsing ... bench:     192,960 ns/iter (+/- 25,411)
+test bench::bench_part1   ... bench:       6,335 ns/iter (+/- 608)
+test bench::bench_part2   ... bench:      14,519 ns/iter (+/- 2,155)
 */
 
 // allow bench feature when using unstable flag
@@ -36,7 +36,7 @@ type Pixel = u32;
 struct Image {
     width: usize,
     height: usize,
-    data: Vec<Vec<Vec<Pixel>>>,
+    layers: Vec<Vec<Vec<Pixel>>>,
 }
 
 impl Image {
@@ -44,7 +44,7 @@ impl Image {
         Image {
             width,
             height,
-            data: {
+            layers: {
                 let mut data  = Vec::new();
                 let mut remaining = raw_data.to_owned();
 
@@ -72,7 +72,7 @@ impl Image {
         let mut min = std::usize::MAX;
         let mut retval = std::usize::MAX;
 
-        for (idx, layer) in self.data.iter().enumerate() {
+        for (idx, layer) in self.layers.iter().enumerate() {
             let cnt = layer.iter().map(|row| row.iter().filter(|pixel| **pixel == 0).count()).sum();
             if cnt < min {
                 min = cnt;
@@ -84,14 +84,14 @@ impl Image {
     }
 
     fn multiply_stuff(&self, idx: usize) -> usize {
-        let ones: usize = self.data[idx].iter().map(|row| row.iter().filter(|&&xx| xx == 1).count()).sum();
-        let twos: usize = self.data[idx].iter().map(|row| row.iter().filter(|&&xx| xx == 2).count()).sum();
+        let ones: usize = self.layers[idx].iter().map(|row| row.iter().filter(|&&xx| xx == 1).count()).sum();
+        let twos: usize = self.layers[idx].iter().map(|row| row.iter().filter(|&&xx| xx == 2).count()).sum();
 
         ones * twos
     }
 
     fn get_top_pixel(&self, row: usize, col: usize) -> Pixel {
-        match self.data.iter().find(|layer| layer[row][col] != 2) {
+        match self.layers.iter().find(|layer| layer[row][col] != 2) {
             Some(layer) => layer[row][col],
             None => 0,
         }
@@ -195,7 +195,7 @@ mod bench {
     use aoc_import_magic::test_helper_import_config;
     use super::*;
     use std::{
-        fs::{File, read_to_string},
+        fs::File,
         io::{BufRead, BufReader},
     };
     use test::Bencher;
