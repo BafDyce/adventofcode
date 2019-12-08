@@ -17,11 +17,7 @@ test bench::bench_part2   ... bench:      14,519 ns/iter (+/- 2,155)
 extern crate serde_derive;
 
 use aoc_import_magic::{import_magic, PuzzleOptions};
-use std::{
-    collections::HashMap,
-    fmt,
-    io,
-};
+use std::{collections::HashMap, fmt, io};
 
 const DAY: i32 = 8;
 const PART_2_MSG: &str = "Interpret the image above :)";
@@ -45,10 +41,10 @@ impl Image {
             width,
             height,
             layers: {
-                let mut data  = Vec::new();
+                let mut data = Vec::new();
                 let mut remaining = raw_data.to_owned();
 
-                while ! remaining.is_empty() {
+                while !remaining.is_empty() {
                     let rest = remaining.split_off(height * width);
 
                     let mut layer_remaining = remaining;
@@ -64,7 +60,7 @@ impl Image {
                 }
 
                 data
-            }
+            },
         }
     }
 
@@ -73,7 +69,10 @@ impl Image {
         let mut retval = std::usize::MAX;
 
         for (idx, layer) in self.layers.iter().enumerate() {
-            let cnt = layer.iter().map(|row| row.iter().filter(|pixel| **pixel == 0).count()).sum();
+            let cnt = layer
+                .iter()
+                .map(|row| row.iter().filter(|pixel| **pixel == 0).count())
+                .sum();
             if cnt < min {
                 min = cnt;
                 retval = idx;
@@ -84,8 +83,14 @@ impl Image {
     }
 
     fn multiply_stuff(&self, idx: usize) -> usize {
-        let ones: usize = self.layers[idx].iter().map(|row| row.iter().filter(|&&xx| xx == 1).count()).sum();
-        let twos: usize = self.layers[idx].iter().map(|row| row.iter().filter(|&&xx| xx == 2).count()).sum();
+        let ones: usize = self.layers[idx]
+            .iter()
+            .map(|row| row.iter().filter(|&&xx| xx == 1).count())
+            .sum();
+        let twos: usize = self.layers[idx]
+            .iter()
+            .map(|row| row.iter().filter(|&&xx| xx == 2).count())
+            .sum();
 
         ones * twos
     }
@@ -100,8 +105,8 @@ impl Image {
 
 impl fmt::Display for Image {
     fn fmt(&self, ff: &mut fmt::Formatter<'_>) -> fmt::Result {
-        for xx in 0 .. self.height {
-            for yy in 0 .. self.width {
+        for xx in 0..self.height {
+            for yy in 0..self.width {
                 let pixel = match self.get_top_pixel(xx, yy) {
                     0 => '.',
                     1 => '#',
@@ -141,10 +146,13 @@ fn main() -> Result<(), io::Error> {
 
 fn parse_input(input: Vec<String>, config: &HashMap<String, String>, _verbose: bool) -> InputType {
     // PARSE input
-    let data = input[0].chars().map(|cc| match cc {
-        digit if digit.is_ascii_digit() => digit.to_digit(10).unwrap(),
-        other => panic!("error pixel {}", other),
-    }).collect();
+    let data = input[0]
+        .chars()
+        .map(|cc| match cc {
+            digit if digit.is_ascii_digit() => digit.to_digit(10).unwrap(),
+            other => panic!("error pixel {}", other),
+        })
+        .collect();
 
     let width = config.get("width").unwrap().parse().unwrap();
     let height = config.get("height").unwrap().parse().unwrap();
@@ -169,7 +177,7 @@ mod tests {
     use super::*;
     use aoc_import_magic::{import_magic_with_params, PuzzleOptions};
 
-    pub(in super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
+    pub(super) fn import_helper(inputname: &str) -> PuzzleOptions<InputType> {
         let params = ["appname", "--input", inputname];
         import_magic_with_params(DAY, parse_input, &params).unwrap()
     }
@@ -192,8 +200,8 @@ mod tests {
 mod bench {
     extern crate test;
 
-    use aoc_import_magic::test_helper_import_config;
     use super::*;
+    use aoc_import_magic::test_helper_import_config;
     use std::{
         fs::File,
         io::{BufRead, BufReader},
@@ -201,7 +209,10 @@ mod bench {
     use test::Bencher;
 
     fn helper_read_file(fname: &str) -> Vec<String> {
-        BufReader::new(File::open(fname).unwrap()).lines().map(|line| line.unwrap()).collect()
+        BufReader::new(File::open(fname).unwrap())
+            .lines()
+            .map(|line| line.unwrap())
+            .collect()
     }
 
     #[bench]
