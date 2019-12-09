@@ -12,235 +12,20 @@ test bench::bench_part2   ... bench:  59,368,435 ns/iter (+/- 3,808,183)
 // use: $ cargo +nightly bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
 
+mod intcode;
+use intcode::*;
+
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use std::{collections::HashMap, io};
 
-type IntcodeInteger = i128;
 
 const DAY: i32 = 9;
-type InputTypeSingle = IntcodeInteger;
+type InputTypeSingle = IntcodeNumber;
 type InputType = Vec<InputTypeSingle>;
-type OutputType1 = IntcodeInteger;
+type OutputType1 = IntcodeNumber;
 type OutputType2 = OutputType1;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
-fn load_from_addr(
-    memory: &Vec<IntcodeInteger>,
-    more_memory: &mut HashMap<usize, IntcodeInteger>,
-    addr: usize,
-) -> IntcodeInteger {
-    if addr < memory.len() {
-        memory[addr]
-    } else {
-        let entry = more_memory.entry(addr).or_insert(0);
-        *entry
-    }
-}
-
-fn write_into_addr(
-    memory: &mut Vec<IntcodeInteger>,
-    more_memory: &mut HashMap<usize, IntcodeInteger>,
-    addr: usize,
-    value: IntcodeInteger,
-) {
-    if addr < memory.len() {
-        memory[addr] = value;
-    } else {
-        let entry = more_memory.entry(addr).or_insert(0);
-        *entry = value;
-    }
-}
-
-fn get_value_of_parameter(
-    memory: &Vec<IntcodeInteger>,
-    more_memory: &mut HashMap<usize, IntcodeInteger>,
-    ip: usize,
-    relative_base: &mut IntcodeInteger,
-    param_idx: usize,
-) -> IntcodeInteger {
-    let modes = [
-        memory[ip] / 10_000,
-        (memory[ip] % 10_000) / 1_000,
-        (memory[ip] % 1_000) / 100,
-    ];
-
-    let get_mode_idx = |param_idx| match param_idx {
-        1 => 2,
-        2 => 1,
-        3 => 0,
-        _ => panic!("Invalid mode idx"),
-    };
-
-    let mode_idx = get_mode_idx(param_idx);
-    match modes[mode_idx] {
-        0 => {
-            let addr = load_from_addr(&memory, more_memory, ip + param_idx) as usize;
-            load_from_addr(&memory, more_memory, addr)
-        }
-        1 => load_from_addr(&memory, more_memory, ip + param_idx),
-        2 => {
-            let addr = load_from_addr(&memory, more_memory, ip + param_idx) + *relative_base;
-            load_from_addr(&memory, more_memory, addr as usize)
-        }
-        other => panic!("get_value_of_parameter: Invalid mode ({})", other),
-    }
-}
-
-fn get_addr_from_param(
-    memory: &Vec<IntcodeInteger>,
-    more_memory: &mut HashMap<usize, IntcodeInteger>,
-    ip: usize,
-    relative_base: IntcodeInteger,
-    param_idx: usize,
-) -> usize {
-    let modes = [
-        memory[ip] / 10_000,
-        (memory[ip] % 10_000) / 1_000,
-        (memory[ip] % 1_000) / 100,
-    ];
-
-    let get_mode_idx = |param_idx| match param_idx {
-        1 => 2,
-        2 => 1,
-        3 => 0,
-        _ => panic!("Invalid mode idx"),
-    };
-
-    let mode_idx = get_mode_idx(param_idx);
-    match modes[mode_idx] {
-        0 => load_from_addr(&memory, more_memory, ip + param_idx) as usize,
-        2 => (load_from_addr(&memory, more_memory, ip + param_idx) + relative_base) as usize,
-        other => panic!("get_addr_from_param: Invalid mode ({})", other),
-    }
-}
-
-fn run_intcode_program(program: &Vec<IntcodeInteger>, input: IntcodeInteger) -> OutputType1 {
-    let mut memory = program.to_owned();
-    let mut more_memory = HashMap::<usize, IntcodeInteger>::new();
-    let mut output = 0;
-    let mut relative_base: IntcodeInteger = 0;
-
-    let mut ip = 0;
-    loop {
-        ip += match memory[ip] % 100 {
-            1 => {
-                // add
-                let param_1 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 1);
-                let param_2 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 2);
-
-                let dst = get_addr_from_param(&memory, &mut more_memory, ip, relative_base, 3);
-                write_into_addr(&mut memory, &mut more_memory, dst, param_1 + param_2);
-
-                4
-            }
-            2 => {
-                // multiply
-                let param_1 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 1);
-                let param_2 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 2);
-
-                let dst = get_addr_from_param(&memory, &mut more_memory, ip, relative_base, 3);
-                write_into_addr(&mut memory, &mut more_memory, dst, param_1 * param_2);
-
-                4
-            }
-            3 => {
-                // store input
-                let addr = get_addr_from_param(&memory, &mut more_memory, ip, relative_base, 1);
-                write_into_addr(&mut memory, &mut more_memory, addr, input);
-
-                2
-            }
-            4 => {
-                // get output
-                output =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 1);
-                println!("out: {}", output);
-
-                2
-            }
-            5 => {
-                // jump if true
-                let param_1 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 1);
-                let param_2 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 2);
-
-                if param_1 != 0 {
-                    ip = param_2 as usize;
-                    0
-                } else {
-                    3
-                }
-            }
-            6 => {
-                // jump if false
-                let param_1 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 1);
-                let param_2 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 2);
-
-                if param_1 == 0 {
-                    ip = param_2 as usize;
-                    0
-                } else {
-                    3
-                }
-            }
-            7 => {
-                // less than
-                let param_1 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 1);
-                let param_2 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 2);
-
-                let addr = get_addr_from_param(&memory, &mut more_memory, ip, relative_base, 3);
-                write_into_addr(
-                    &mut memory,
-                    &mut more_memory,
-                    addr,
-                    if param_1 < param_2 { 1 } else { 0 },
-                );
-
-                4
-            }
-            8 => {
-                // equal
-                let param_1 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 1);
-                let param_2 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 2);
-
-                let addr = get_addr_from_param(&memory, &mut more_memory, ip, relative_base, 3);
-                write_into_addr(
-                    &mut memory,
-                    &mut more_memory,
-                    addr,
-                    if param_1 == param_2 { 1 } else { 0 },
-                );
-
-                4
-            }
-            9 => {
-                // relative_base change
-                let param_1 =
-                    get_value_of_parameter(&memory, &mut more_memory, ip, &mut relative_base, 1);
-                relative_base += param_1;
-
-                2
-            }
-            99 => {
-                break output;
-            }
-            other => {
-                panic!("Invalid opcode {} @ {} ({})", other, ip, memory[ip]);
-            }
-        }
-    }
-}
 
 fn main() -> Result<(), io::Error> {
     println!("AoC 2019 | Day {}", DAY);
@@ -273,11 +58,13 @@ fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: 
 }
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    run_intcode_program(po.data.as_ref().unwrap(), 1)
+    let mut cpu = IntcodeProcessor::new(po.data.as_ref().unwrap());
+    cpu.run(1)
 }
 
 fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
-    run_intcode_program(po.data.as_ref().unwrap(), 2)
+    let mut cpu = IntcodeProcessor::new(po.data.as_ref().unwrap());
+    cpu.run(2)
 }
 
 #[cfg(test)]
