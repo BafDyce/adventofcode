@@ -11,6 +11,8 @@ BENCHMARK RESULTS
 mod intcode;
 use intcode::*;
 
+use nalgebra::{ComplexField, RealField};
+
 #[macro_use]
 extern crate lazy_static;
 #[macro_use]
@@ -41,8 +43,8 @@ impl Position {
 const DAY: i32 = 10;
 type InputTypeSingle = Position;
 type InputType = Vec<Vec<InputTypeSingle>>;
-type OutputType1 = usize;
-type OutputType2 = OutputType1;
+type OutputType1 = (usize, (usize, usize));
+type OutputType2 = (usize, usize);
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
 
@@ -69,12 +71,13 @@ fn main() -> Result<(), io::Error> {
         None
     } else {
         let res1 = part1(&puzzle);
-        println!("Part 1 result: {}", res1);
+        println!("Part 1 result: {:?}", res1);
         Some(res1)
     };
 
     let res2 = part2(&puzzle, res1);
-    println!("Part 2 result: {}", res2);
+    println!("Part 2 result: {:?}", res2);
+    println!("{}", 100 * res2.0 + res2.1);
 
     Ok(())
 }
@@ -93,10 +96,14 @@ fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bo
 }
 
 fn count_asteroids_in_direct_sight(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> usize {
+    get_hitable_asteroids(space, xx, yy).len()
+}
+
+fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> HashMap<(usize, usize), f64> {
     let max_x = space.len();
     let max_y = space[0].len();
 
-    let mut detected = HashSet::new();
+    let mut detected = HashMap::<(usize, usize), f64>::new();
 
     let mut count = 0;
     for step_x in (0 .. max_x).rev() {
@@ -110,7 +117,7 @@ fn count_asteroids_in_direct_sight(space: &Vec<Vec<Position>>, xx: usize, yy: us
 
             while check_x < max_x && check_y < max_y {
                 if space[check_x][check_y] == Position::Asteroid {
-                    detected.insert((check_x, check_y));
+                    detected.insert((check_x, check_y), calc_winkel((check_x, check_y)));
                     check_x += step_x;
                     check_y += step_y;
                     while check_x < max_x && check_y < max_y {
@@ -133,7 +140,7 @@ fn count_asteroids_in_direct_sight(space: &Vec<Vec<Position>>, xx: usize, yy: us
 
                 while check_x >= 0 && check_y < max_y {
                     if space[check_x][check_y] == Position::Asteroid {
-                        detected.insert((check_x, check_y));
+                        detected.insert((check_x, check_y), calc_winkel((check_x, check_y)));
                         if step_x > check_x {
                             break;
                         }
@@ -167,7 +174,7 @@ fn count_asteroids_in_direct_sight(space: &Vec<Vec<Position>>, xx: usize, yy: us
 
                 while check_x >= 0 && check_y >= 0 {
                     if space[check_x][check_y] == Position::Asteroid {
-                        detected.insert((check_x, check_y));
+                        detected.insert((check_x, check_y), calc_winkel((check_x, check_y)));
                         if step_x > check_x || step_y > check_y {
                             break;
                         }
@@ -203,7 +210,7 @@ fn count_asteroids_in_direct_sight(space: &Vec<Vec<Position>>, xx: usize, yy: us
 
                 while check_x < max_x && check_y >= 0 {
                     if space[check_x][check_y] == Position::Asteroid {
-                        detected.insert((check_x, check_y));
+                        detected.insert((check_x, check_y), calc_winkel((check_x, check_y)));
                         if step_y > check_y {
                             break;
                         }
@@ -231,7 +238,7 @@ fn count_asteroids_in_direct_sight(space: &Vec<Vec<Position>>, xx: usize, yy: us
         }
     }
 
-    detected.len()
+    detected
 }
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
@@ -253,17 +260,91 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
         }
     }
 
-    println!("{:?}", pos);
-    max_count
+    (max_count, pos)
+}
+
+#[derive(Debug)]
+struct Laser {
+    xx: usize,
+    yy: usize,
+    rotation: f64,
 }
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
-    //dbg!(po.data.as_ref().unwrap());
-    for ii in (3..7).rev() {
-        println!("{}", ii);
+    let mut space = po.data.as_ref().unwrap().to_owned();
+
+    let xx = (res1.unwrap().1).0;
+    let yy = (res1.unwrap().1).1;
+
+    let mut laser = Laser {
+        xx: xx,
+        yy: yy,
+        rotation: 0f64,
+    };
+
+    let mut count = 0;
+    loop {
+        match shoot_next(&mut space, &mut laser) {
+            Some(pos) => {
+                count += 1;
+                if count == 200 {
+                    return pos;
+                }
+            }
+            _ => panic!("oO count = {}", count),
+        }
+    }
+/*
+    let bb = (3f64, 2f64);
+
+    let winkel = calc_winkel((3, 2));
+    println!("{}", winkel);
+*/
+    (0, 0)
+}
+
+fn shoot_next(space: &mut Vec<Vec<Position>>, laser: &mut Laser) -> Option<(usize, usize)> {
+    let asteroids = get_hitable_asteroids(space, laser.xx, laser.yy);
+
+    let mut candidates: Vec<((usize, usize), f64)> = asteroids.into_iter().filter(|&(kk, vv)| vv > laser.rotation).collect();
+    //candidates.sort_by_key(|(kk, vv)| vv);
+    candidates.sort_by(| (_, aa), (_, bb)| aa.partial_cmp(bb).unwrap());
+
+    if candidates.is_empty() {
+        let mut candidates: Vec<((usize, usize), f64)> = get_hitable_asteroids(space, laser.xx, laser.yy).into_iter().filter(|&(kk, vv)| !vv.is_nan()).collect();
+        //candidates.sort_by_key(|(kk, vv)| vv);
+        //dbg!(&candidates);
+        candidates.sort_by(| (_, aa), (_, bb)| aa.partial_cmp(bb).unwrap());
+
+        let pos = candidates[0].0;
+        space[pos.0][pos.1] = Position::Empty;
+
+        laser.rotation = dbg!(candidates[0].1);
+        return Some(pos);
     }
 
-    0
+    let (pos, rotation) = candidates[0];
+    println!("{:?}", (pos, rotation));
+
+    space[pos.0][pos.1] = Position::Empty;
+    laser.rotation = dbg!(rotation);
+
+    Some(pos)
+}
+
+fn calc_winkel(pos: (usize, usize)) -> f64 {
+    let pos = (pos.0 as f64, pos.1 as f64);
+
+    let tmp: f64 = ComplexField::from_real( (pos.0 * pos.0 + pos.1 * pos.1) as f64 );
+    let radius = tmp.sqrt();
+
+    let tmp: f64 = (pos.0 * pos.0 - pos.1 * pos.1 + radius * radius) / (2f64 * pos.0 * radius);
+    let winkel = tmp.acos();
+
+    //let pi: f64 = RealField::pi();
+    //let grad: f64 = (360f64 / (2f64 * pi) ) * winkel;
+
+    winkel
 }
 
 #[cfg(test)]
