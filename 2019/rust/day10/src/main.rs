@@ -116,7 +116,7 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
 
             while check_x < max_x && check_y < max_y {
                 if space[check_x][check_y] == Position::Asteroid {
-                    detected.insert((check_x, check_y), calc_winkel((check_x, check_y)));
+                    detected.insert((check_x, check_y), calc_winkel((check_x as isize - xx as isize, check_y as isize - yy as isize)));
                     check_x += step_x;
                     check_y += step_y;
                     while check_x < max_x && check_y < max_y {
@@ -139,7 +139,7 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
 
                 while check_x >= 0 && check_y < max_y {
                     if space[check_x][check_y] == Position::Asteroid {
-                        detected.insert((check_x, check_y), calc_winkel((check_x, check_y)));
+                        detected.insert((check_x, check_y), calc_winkel((check_x as isize - xx as isize, check_y as isize - yy as isize)));
                         if step_x > check_x {
                             break;
                         }
@@ -173,7 +173,7 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
 
                 while check_x >= 0 && check_y >= 0 {
                     if space[check_x][check_y] == Position::Asteroid {
-                        detected.insert((check_x, check_y), calc_winkel((check_x, check_y)));
+                        detected.insert((check_x, check_y), calc_winkel((check_x as isize - xx as isize, check_y as isize - yy as isize)));
                         if step_x > check_x || step_y > check_y {
                             break;
                         }
@@ -209,7 +209,7 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
 
                 while check_x < max_x && check_y >= 0 {
                     if space[check_x][check_y] == Position::Asteroid {
-                        detected.insert((check_x, check_y), calc_winkel((check_x, check_y)));
+                        detected.insert((check_x, check_y), calc_winkel((check_x as isize - xx as isize, check_y as isize - yy as isize)));
                         if step_y > check_y {
                             break;
                         }
@@ -305,11 +305,13 @@ fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
 fn shoot_next(space: &mut Vec<Vec<Position>>, laser: &mut Laser) -> Option<(usize, usize)> {
     let asteroids = get_hitable_asteroids(space, laser.xx, laser.yy);
     println!("number of asteroids: {}", asteroids.len());
-    dbg!(&asteroids);
+    //dbg!(&asteroids);
 
-    let mut candidates: Vec<((usize, usize), f64)> = asteroids.into_iter().filter(|&(kk, vv)| vv >= laser.rotation).collect();
+    let mut candidates: Vec<((usize, usize), f64)> = asteroids.into_iter()/*.filter(|&(kk, vv)| vv >= laser.rotation)*/.collect();
     //candidates.sort_by_key(|(kk, vv)| vv);
+    println!("number of asteroids: {}", candidates.len());
     candidates.sort_by(| (_, aa), (_, bb)| aa.partial_cmp(bb).unwrap());
+    println!("{}", candidates.len());
     return Some(candidates[199].0);
 
     if candidates.is_empty() {
@@ -334,8 +336,8 @@ fn shoot_next(space: &mut Vec<Vec<Position>>, laser: &mut Laser) -> Option<(usiz
     Some(pos)
 }
 
-fn calc_winkel(pos: (usize, usize)) -> f64 {
-    let pos = (pos.0 as f64, pos.1 as f64);
+fn calc_winkel((xx, yy): (isize, isize)) -> f64 {
+    /*let pos = (pos.0 as f64, pos.1 as f64);
 
     let tmp: f64 = ComplexField::from_real( (pos.0 * pos.0 + pos.1 * pos.1) as f64 );
     let radius = tmp.sqrt();
@@ -346,7 +348,22 @@ fn calc_winkel(pos: (usize, usize)) -> f64 {
     //let pi: f64 = RealField::pi();
     //let grad: f64 = (360f64 / (2f64 * pi) ) * winkel;
 
-    winkel
+    winkel*/
+    let pi: f64 = RealField::pi();
+    let tmp: f64 = ComplexField::from_real( yy as f64 / xx as f64 );
+    let tmp = tmp.atan();
+    let grad: f64 = (360f64 / (2f64 * pi)) * tmp;
+
+    let grad = match (xx.is_positive(), yy.is_positive()) {
+        (true, true) => grad + 90f64,
+        (true, false) => grad + 360f64,
+        (false, true) => grad + 360f64,
+        (false, false) => grad + 270f64,
+    };
+
+    println!("{}/{} -> {}", xx, yy, grad);
+
+    grad
 }
 
 #[cfg(test)]
