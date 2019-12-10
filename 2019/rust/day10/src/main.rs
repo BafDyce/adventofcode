@@ -8,8 +8,7 @@ BENCHMARK RESULTS
 // use: $ cargo +nightly bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
 
-mod intcode;
-use intcode::*;
+
 
 use nalgebra::{ComplexField, RealField};
 
@@ -305,10 +304,13 @@ fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
 
 fn shoot_next(space: &mut Vec<Vec<Position>>, laser: &mut Laser) -> Option<(usize, usize)> {
     let asteroids = get_hitable_asteroids(space, laser.xx, laser.yy);
+    println!("number of asteroids: {}", asteroids.len());
+    dbg!(&asteroids);
 
-    let mut candidates: Vec<((usize, usize), f64)> = asteroids.into_iter().filter(|&(kk, vv)| vv > laser.rotation).collect();
+    let mut candidates: Vec<((usize, usize), f64)> = asteroids.into_iter().filter(|&(kk, vv)| vv >= laser.rotation).collect();
     //candidates.sort_by_key(|(kk, vv)| vv);
     candidates.sort_by(| (_, aa), (_, bb)| aa.partial_cmp(bb).unwrap());
+    return Some(candidates[199].0);
 
     if candidates.is_empty() {
         let mut candidates: Vec<((usize, usize), f64)> = get_hitable_asteroids(space, laser.xx, laser.yy).into_iter().filter(|&(kk, vv)| !vv.is_nan()).collect();
