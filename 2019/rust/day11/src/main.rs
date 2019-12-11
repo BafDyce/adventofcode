@@ -117,8 +117,7 @@ fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bo
         .collect()
 }
 
-fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    let program = po.data.as_ref().unwrap();
+fn run_robot(program: &Vec<IntcodeNumber>, start_color: i128) -> HashMap<(i128, i128), i128> {
     let mut panel: HashMap<(i128, i128), i128> = HashMap::new();
 
     let mut robot_cpu = IntcodeProcessor::new(program);
@@ -128,16 +127,14 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
         dir: Dir::Up,
     };
 
+    panel.insert( robot.pos(), start_color);
     let mut outputs = VecDeque::new();
 
     loop {
-        //let current_color = panel.get(&robot.pos()).unwrap();
-        //let current_color = *panel.entry(robot.pos()).or_insert(0);
         let current_color = match panel.get(&robot.pos()) {
             Some(color) => *color,
             None => 0,
         };
-        assert!(outputs.len() == 0);
         if let Some(_finished) = robot_cpu.run(current_color, &mut outputs) {
             break;
         };
@@ -150,42 +147,17 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
         robot.step();
     }
 
-    panel.len()
+    panel
+}
+
+fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
+    let program = po.data.as_ref().unwrap();
+    run_robot(program, 0).len()
 }
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
     let program = po.data.as_ref().unwrap();
-    let mut panel: HashMap<(i128, i128), i128> = HashMap::new();
-
-    let mut robot_cpu = IntcodeProcessor::new(program);
-    let mut robot = Robot {
-        xx: 0,
-        yy: 0,
-        dir: Dir::Up,
-    };
-
-    panel.insert(robot.pos(), 1);
-    let mut outputs = VecDeque::new();
-
-    loop {
-        //let current_color = panel.get(&robot.pos()).unwrap();
-        //let current_color = *panel.entry(robot.pos()).or_insert(0);
-        let current_color = match panel.get(&robot.pos()) {
-            Some(color) => *color,
-            None => 0,
-        };
-        assert!(outputs.len() == 0);
-        if let Some(_finished) = robot_cpu.run(current_color, &mut outputs) {
-            break;
-        };
-
-        let color = outputs.pop_front().unwrap();
-        let dir = outputs.pop_front().unwrap();
-
-        panel.insert( robot.pos(), color );
-        robot.turn(dir);
-        robot.step();
-    }
+    let panel = run_robot(program, 1);
 
     let mut xx_min = std::i128::MAX;
     let mut xx_max = std::i128::MIN;
@@ -211,7 +183,7 @@ fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
         println!("");
     }
 
-    panel.len()
+    0
 }
 
 #[cfg(test)]
