@@ -16,7 +16,7 @@ extern crate serde_derive;
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use regex::Regex;
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::{HashMap, HashSet, VecDeque},
     io,
 };
 
@@ -27,7 +27,7 @@ type OutputType1 = isize;
 type OutputType2 = OutputType1;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
+#[derive(Clone, Copy, Debug, Default, Deserialize, Hash, Eq, PartialEq, Serialize)]
 struct Point {
     xx: isize,
     yy: isize,
@@ -177,9 +177,28 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 }
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
-    let mut moons = po.data.as_ref().unwrap();
-    //dbg!(data);
-    0
+    let mut moons = po.data.as_ref().unwrap().to_owned();
+    let mut history = HashSet::new();
+
+    history.insert(moons.to_owned());
+    let mut count = 0;
+    loop {
+        count += 1;
+
+        apply_gravity(&mut moons);
+        apply_velocity(&mut moons);
+
+        if history.contains(&moons) {
+            break count;
+        }
+
+        history.insert(moons.to_owned());
+
+
+        if count % 1_000_000 == 0 {
+            println!("iteration {}", count)
+        }
+    }
 }
 
 #[cfg(test)]
