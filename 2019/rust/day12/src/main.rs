@@ -19,6 +19,8 @@ use std::{
     collections::{HashMap, HashSet, VecDeque},
     io,
 };
+use std::collections::hash_map::DefaultHasher;
+use std::hash::{Hash, Hasher};
 
 const DAY: i32 = 12;
 type InputTypeSingle = Point;
@@ -162,6 +164,12 @@ fn apply_velocity(moons: &mut Vec<Point>) {
     }
 }
 
+fn calc_hash<T: Hash>(t: &T) -> u64 {
+    let mut s = DefaultHasher::new();
+    t.hash(&mut s);
+    s.finish()
+}
+
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     let mut moons = po.data.as_ref().unwrap().to_owned();
 
@@ -180,7 +188,8 @@ fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
     let mut moons = po.data.as_ref().unwrap().to_owned();
     let mut history = HashSet::new();
 
-    history.insert(moons.to_owned());
+    let hash = calc_hash(&moons);
+    history.insert(hash);
     let mut count = 0;
     loop {
         count += 1;
@@ -188,12 +197,12 @@ fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
         apply_gravity(&mut moons);
         apply_velocity(&mut moons);
 
-        if history.contains(&moons) {
+        let hash = calc_hash(&moons);
+        if history.contains(&hash) {
             break count;
         }
 
-        history.insert(moons.to_owned());
-
+        history.insert(hash);
 
         if count % 1_000_000 == 0 {
             println!("iteration {}", count)
