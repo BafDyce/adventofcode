@@ -3,7 +3,9 @@
 Day       Time  Rank  Score       Time  Rank  Score
  15   02:05:48   937      0   02:25:05   804      0
 BENCHMARK RESULTS
-
+test bench::bench_parsing ... bench:      13,826 ns/iter (+/- 491)
+test bench::bench_part1   ... bench:  45,721,018 ns/iter (+/- 860,319)
+test bench::bench_part2   ... bench:  31,305,594 ns/iter (+/- 722,031)
 */
 
 // allow bench feature when using unstable flag
@@ -138,13 +140,13 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     let stdin = io::stdin();
     let mut stdin = stdin.lock().lines();
 
+    let mut pos_oxygen_system = (0, 0);
     let mut oxygen_found = false;
     let mut countdown = 50_000;
 
     loop {
         if let Some(result) = robot.run(input.as_number(), &mut outputs, 1) {
-            println!("Robot halted {}", result);
-            break (0, HashMap::new());
+            panic!("Robot halted {}", result);
         }
 
         match outputs.pop_front() {
@@ -215,13 +217,16 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
             }
             Some(2) => {
                 // oxygen system found
+                pos_oxygen_system = next_pos;
                 let field = area.entry( next_pos).or_insert( (Field::Oxygen, 0));
                 field.1 += 1;
 
                 // print only if we found it for the first time
                 if field.1 == 1 {
-                    print_field(&area, next_pos, csv);
-                    println!("oxygen @ {:?}; must find shortest path!", next_pos);
+                    if po.verbose {
+                        print_field(&area, next_pos, csv);
+                        println!("oxygen @ {:?}; must find shortest path!", next_pos);
+                    }
                     oxygen_found = true;
                 }
 
@@ -244,12 +249,49 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
             countdown -= 1;
 
             if countdown == 0 {
-                println!("END{}:", if csv {""} else {"(run with --config csv true to get csv-formatted output)"});
-                print_field(&area, input.step_back(next_pos), csv);
-                break (0, area);
+                if po.verbose {
+                    println!("END{}:", if csv {""} else {"(run with --config csv true to get csv-formatted output)"});
+                    print_field(&area, input.step_back(next_pos), csv);
+                }
+                break;
             }
         }
     }
+
+    bfs(area, (0, 0), pos_oxygen_system)
+}
+
+fn bfs(area: HashMap<(isize, isize), (Field, usize)>, start: (isize, isize), end: (isize, isize)) -> OutputType1 {
+    let mut checked = Vec::new();
+    let mut queue = VecDeque::new();
+    queue.push_back( (start, 0));
+    let mut shortest_path = 0;
+
+    while let Some((pos, distance)) = queue.pop_front() {
+        let adjacent = [
+            (pos.0 - 1, pos.1),
+            (pos.0 + 1, pos.1),
+            (pos.0, pos.1 - 1),
+            (pos.0, pos.1 + 1),
+        ];
+
+        for adjacent in adjacent.iter() {
+            if *adjacent == end {
+                shortest_path = distance + 1;
+                break;
+            }
+
+            if let Some( (Field::Empty, _)) = area.get(adjacent) {
+                if !queue.iter().any(|&(pos, _)| pos == *adjacent) && !checked.contains(adjacent) {
+                    queue.push_back( (*adjacent, distance + 1) );
+                }
+            }
+        }
+
+        checked.push(pos);
+    }
+
+    (shortest_path, area)
 }
 
 fn oxygen_spread(area: &mut HashMap<(isize, isize), (Field, usize)>) -> usize {
@@ -339,19 +381,6 @@ mod tests {
         let params = ["appname", "--input", inputname];
         import_magic_with_params(DAY, parse_input, &params).unwrap()
     }
-
-    fn test_case_helper(inputname: &str, sol1: OutputType1, sol2: OutputType2) {
-        let po = import_helper(inputname);
-        let res1 = part1(&po);
-        assert_eq!(sol1, res1, "part1");
-        let res2 = part2(&po, Some(res1));
-        assert_eq!(sol2, res2, "part2");
-    }
-
-    #[test]
-    fn example_1() {
-        test_case_helper("example1", 8, 8)
-    }
 }
 
 #[cfg(all(feature = "unstable", test))]
@@ -390,6 +419,7 @@ mod bench {
     #[bench]
     fn bench_part2(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
-        bb.iter(|| test::black_box(part2(&puzzle_options, None)));
+        let part1_result = part1(&puzzle_options);
+        bb.iter(|| test::black_box(part2(&puzzle_options, Some(part1_result.to_owned()))));
     }
 }
