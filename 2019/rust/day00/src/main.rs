@@ -5,7 +5,7 @@ BENCHMARK RESULTS
 */
 
 // allow bench feature when using unstable flag
-// use: $ cargo +nightly bench --features unstable
+// use: $ rustup run nightly cargo bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
 
 #[macro_use]
