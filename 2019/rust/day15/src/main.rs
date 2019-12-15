@@ -1,5 +1,7 @@
 /*
-
+      -------Part 1--------   -------Part 2--------
+Day       Time  Rank  Score       Time  Rank  Score
+ 15   02:05:48   937      0   02:25:05   804      0
 BENCHMARK RESULTS
 
 */
@@ -9,15 +11,12 @@ BENCHMARK RESULTS
 #![cfg_attr(feature = "unstable", feature(test))]
 
 #[macro_use]
-extern crate lazy_static;
-#[macro_use]
 extern crate serde_derive;
 
 mod intcode;
 use intcode::*;
 
 use aoc_import_magic::{import_magic, PuzzleOptions};
-use regex::Regex;
 use std::{
     collections::{HashMap, VecDeque},
     io::{self, BufRead},
@@ -55,15 +54,6 @@ impl Movement {
             Movement::West => Movement::South,
             Movement::South => Movement::East,
             Movement::East => Movement::North,
-        }
-    }
-
-    fn turn_right(&mut self) {
-        *self = match self {
-            Movement::North => Movement::East,
-            Movement::West => Movement::North,
-            Movement::South => Movement::West,
-            Movement::East => Movement::South,
         }
     }
 
@@ -125,67 +115,12 @@ fn main() -> Result<(), io::Error> {
     Ok(())
 }
 
-fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
+fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: bool) -> InputType {
     // IF intcode
     input[0]
         .split(",")
         .map(|xx| xx.parse::<IntcodeNumber>().unwrap())
         .collect()
-}
-
-fn part1_attempt1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    let program = po.data.as_ref().unwrap();
-
-    let mut robot = IntcodeProcessor::new(program);
-    let mut area: HashMap<(isize, isize), Field> = HashMap::new();
-    area.insert( (0, 0), Field::Empty );
-
-    let mut outputs = VecDeque::new();
-    let mut input = Movement::North;
-    let mut next_pos = (-1, 0);
-
-    loop {
-        if let Some(result) = robot.run(input.as_number(), &mut outputs, 1) {
-            println!("Robot halted {}", result);
-            break (0, HashMap::new());
-        }
-
-        match outputs.pop_front() {
-            None => panic!("No output!"),
-            Some(0) => {
-                println!("wall @ {:?}", next_pos);
-                // wall
-                // -> turn left
-                area.insert( next_pos, Field::Wall );
-                let current_pos = next_pos;
-                loop {
-                    input.turn_left();
-                    next_pos = input.get_next_pos(current_pos);
-                    println!("trying {:?}", next_pos);
-
-                    match area.get(&next_pos) {
-                        Some(Field::Empty) | None => break,
-                        _ => {},
-                    }
-                }
-            }
-            Some(1) => {
-                println!("empty @ {:?}", next_pos);
-                // successful move
-                area.insert( next_pos, Field::Empty );
-                next_pos = input.get_next_pos(next_pos);
-            }
-            Some(2) => {
-                // oxygen system found
-                area.insert( next_pos, Field::Oxygen);
-                println!("oxygen @ {:?}; must find shortest path!", next_pos);
-                break (0, HashMap::new());
-            }
-            Some(other) => {
-                panic!("Invalid output {}", other);
-            }
-        }
-    }
 }
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
@@ -204,11 +139,8 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     let mut stdin = stdin.lock().lines();
 
     let mut oxygen_found = false;
-    let mut countdown = 100_000;
+    let mut countdown = 50_000;
 
-    //let mut check_queue = VecDeque::new();
-
-    let mut steps = 0;
     loop {
         if let Some(result) = robot.run(input.as_number(), &mut outputs, 1) {
             println!("Robot halted {}", result);
@@ -218,7 +150,6 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
         match outputs.pop_front() {
             None => panic!("No output!"),
             Some(0) => {
-                //println!("wall @ {:?}", next_pos);
                 // wall
                 // -> turn left
                 area.insert( next_pos, (Field::Wall, 1) );
@@ -240,14 +171,14 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
                 let field = area.entry(next_pos).or_insert((Field::Empty, 0));
                 field.1 += 1;
 
+                // lets check the next space in our direction
                 next_pos = input.get_next_pos(next_pos);
-
                 match area.get( &next_pos ) {
                     None => {}, // Havent seen that one yet -> go for it!
                     Some(_) => {
-                        // check all four neighbors, choose:
+                        // We have seen it already, so check all four neighbors, choose:
                         // 1) unknown, if available
-                        // 2) empty field
+                        // 2) empty field (which we have visited the least often so far)
                         let current_pos = input.step_back(next_pos);
                         let mut direction = input;
 
@@ -262,49 +193,39 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
                             ));
                         }
 
-                        if let Some((new_input, new_next_pos, _)) = options.iter().find(|&&(dir, _, field)| field.is_none() ) {
-                            // first, find an unknown neighbor
+                        if let Some((new_input, new_next_pos, _)) = options.iter().find(|&&(_, _, field)| field.is_none() ) {
+                            // we have an unknown neighbor
                             input = *new_input;
                             next_pos = *new_next_pos;
                         } else if let Some((new_input, new_next_pos, _)) = options
                             .iter()
-                            .filter(|&&(dir, pos, field)| !input.opposit_of(dir) && field.is_some() && field.unwrap().0 == Field::Empty )
+                            .filter(|&&(dir, _, field)| !input.opposit_of(dir) && field.is_some() && field.unwrap().0 == Field::Empty )
                             .min_by(|(_, _, aa), (_, _, bb)| aa.unwrap().1.cmp(&bb.unwrap().1)) {
-                            // multiple adjacent empty spaces => DONT go to the one we just came from
-                            input = *new_input;
-                            next_pos = *new_next_pos;
-                        } else if let Some((new_input, new_next_pos, _)) = options.iter().rev().find(|&&(dir, _, field)| field.is_some() && field.unwrap().0 == Field::Empty ) {
-                            // we hit a dead end .. need to go back .. we should be able to simplify that if^^
+                            // multiple adjacent empty spaces => DONT go to the one we just came from and choose the one we have visited the fewest amount of times so far
                             input = *new_input;
                             next_pos = *new_next_pos;
                         } else {
-                            panic!("damn..")
+                            // we hit a dead end .. need to go back (turn around by 180 degrees)
+                            input.turn_left();
+                            input.turn_left();
+                            next_pos = input.get_next_pos(current_pos);
                         }
                     }
                 }
-
-                for __ in 0 .. 4 {
-                    if let Some(_) = area.get(&next_pos) {
-                        next_pos = input.step_back(next_pos);
-                        input.turn_left();
-                        next_pos = input.get_next_pos(next_pos);
-                    } else {
-                        break;
-                    }
-                }
-
             }
             Some(2) => {
                 // oxygen system found
                 let field = area.entry( next_pos).or_insert( (Field::Oxygen, 0));
                 field.1 += 1;
 
+                // print only if we found it for the first time
                 if field.1 == 1 {
                     print_field(&area, next_pos, csv);
                     println!("oxygen @ {:?}; must find shortest path!", next_pos);
                     oxygen_found = true;
                 }
 
+                // start to go in any direction
                 input.turn_left();
                 next_pos = input.get_next_pos(next_pos);
             }
@@ -323,7 +244,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
             countdown -= 1;
 
             if countdown == 0 {
-                println!("END (run with --config csv true to get csv-formatted output):");
+                println!("END{}:", if csv {""} else {"(run with --config csv true to get csv-formatted output)"});
                 print_field(&area, input.step_back(next_pos), csv);
                 break (0, area);
             }
@@ -357,9 +278,8 @@ fn oxygen_spread(area: &mut HashMap<(isize, isize), (Field, usize)>) -> usize {
     count
 }
 
-fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
+fn part2(_po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
     let mut area = res1.unwrap().1;
-
     let mut minutes = 0;
 
     loop {
@@ -377,6 +297,7 @@ fn print_field(
     me: (IntcodeNumber, IntcodeNumber),
     csv: bool,
 ) {
+    let csv = if csv {","} else {""};
     let mut xx_min = std::isize::MAX;
     let mut xx_max = std::isize::MIN;
     let mut yy_min = std::isize::MAX;
@@ -391,8 +312,6 @@ fn print_field(
 
     for xx in xx_min ..= xx_max {
         for yy in yy_min ..= yy_max {
-    //for yy in yy_min ..= yy_max {
-    //    for xx in xx_min ..= xx_max {
             let cc = if xx == me.0 && yy == me.1 {
                 'x'
             } else if xx == 0 && yy == 0 {
@@ -401,11 +320,11 @@ fn print_field(
                 match field.get( &(xx, yy) ) {
                     Some((Field::Wall, _)) => '#',
                     Some((Field::Empty, _)) => '.',
-                    Some((Field::Oxygen, _)) => '@',
+                    Some((Field::Oxygen, _)) => 'O',
                     None => ' ',
                 }
             };
-            print!("{}{}", cc, if csv {","} else {""});
+            print!("{}{}", cc, csv);
         }
         println!("");
     }
