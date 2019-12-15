@@ -1,26 +1,23 @@
 /*
-
+      -------Part 1--------   --------Part 2--------
+Day       Time  Rank  Score       Time   Rank  Score
+ 10   00:49:44   955      0       >24h  11771      0
 BENCHMARK RESULTS
-
+test bench::bench_parsing ... bench:       5,305 ns/iter (+/- 944)
+test bench::bench_part1   ... bench:  24,233,709 ns/iter (+/- 892,249)
+test bench::bench_part2   ... bench:      76,488 ns/iter (+/- 3,422)
 */
 
 // allow bench feature when using unstable flag
-// use: $ cargo +nightly bench --features unstable
+// use: $ rustup run nightly cargo bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
 
-
-
-use nalgebra::{ComplexField, RealField};
-
-#[macro_use]
-extern crate lazy_static;
 #[macro_use]
 extern crate serde_derive;
 
 use aoc_import_magic::{import_magic, PuzzleOptions};
-use regex::Regex;
 use std::{
-    collections::{HashMap, VecDeque, HashSet},
+    collections::HashMap,
     io,
 };
 
@@ -30,20 +27,11 @@ enum Position {
     Asteroid,
 }
 
-impl Position {
-    fn print(&self) {
-        match self {
-            Position::Empty => print!("."),
-            Position::Asteroid => print!("#"),
-        }
-    }
-}
-
 const DAY: i32 = 10;
 type InputTypeSingle = Position;
 type InputType = Vec<Vec<InputTypeSingle>>;
 type OutputType1 = (usize, (usize, usize));
-type OutputType2 = (usize, usize);
+type OutputType2 = (usize, (usize, usize));
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
 
@@ -76,12 +64,11 @@ fn main() -> Result<(), io::Error> {
 
     let res2 = part2(&puzzle, res1);
     println!("Part 2 result: {:?}", res2);
-    println!("{}", 100 * res2.0 + res2.1);
 
     Ok(())
 }
 
-fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
+fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: bool) -> InputType {
     // PARSE input
     input
         .into_iter()
@@ -104,13 +91,12 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
 
     let mut detected = HashMap::<(usize, usize), f64>::new();
 
-    let mut count = 0;
     for step_x in (0 .. max_x).rev() {
         for step_y in (0 .. max_y).rev() {
             if step_x == 0 && step_y == 0 {
                 continue;
             }
-            // left down
+            // right down
             let mut check_x = xx + step_x;
             let mut check_y = yy + step_y;
 
@@ -132,12 +118,12 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
                 check_y += step_y;
             }
 
-            // left up
+            // right up
             if xx >= step_x {
                 let mut check_x = xx - step_x;
                 let mut check_y = yy + step_y;
 
-                while check_x >= 0 && check_y < max_y {
+                while check_y < max_y {
                     if space[check_x][check_y] == Position::Asteroid {
                         detected.insert((check_x, check_y), calc_winkel((check_x as isize - xx as isize, check_y as isize - yy as isize)));
                         if step_x > check_x {
@@ -165,13 +151,12 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
                 }
             }
 
-
-            // right up
+            // left up
             if xx >= step_x && yy >= step_y {
                 let mut check_x = xx - step_x;
                 let mut check_y = yy - step_y;
 
-                while check_x >= 0 && check_y >= 0 {
+                loop {
                     if space[check_x][check_y] == Position::Asteroid {
                         detected.insert((check_x, check_y), calc_winkel((check_x as isize - xx as isize, check_y as isize - yy as isize)));
                         if step_x > check_x || step_y > check_y {
@@ -179,13 +164,13 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
                         }
                         check_x -= step_x;
                         check_y -= step_y;
-                        while check_x >= 0 && check_y >= 0 {
+                        loop {
                             detected.remove(&(check_x, check_y));
                             if step_x > check_x || step_y > check_y {
                                 break;
                             }
                             check_x -= step_x;
-                    check_y -= step_y;
+                            check_y -= step_y;
                         }
 
                         break;
@@ -199,15 +184,12 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
                 }
             }
 
-
-
-
-            // right down
+            // left down
             if yy >= step_y {
                 let mut check_x = xx + step_x;
                 let mut check_y = yy - step_y;
 
-                while check_x < max_x && check_y >= 0 {
+                while check_x < max_x {
                     if space[check_x][check_y] == Position::Asteroid {
                         detected.insert((check_x, check_y), calc_winkel((check_x as isize - xx as isize, check_y as isize - yy as isize)));
                         if step_y > check_y {
@@ -215,13 +197,13 @@ fn get_hitable_asteroids(space: &Vec<Vec<Position>>, xx: usize, yy: usize) -> Ha
                         }
                         check_x += step_x;
                         check_y -= step_y;
-                        while check_x < max_x && check_y >= 0 {
+                        while check_x < max_x {
                             detected.remove(&(check_x, check_y));
                             if step_y > check_y {
                                 break;
                             }
                             check_x += step_x;
-                    check_y -= step_y;
+                            check_y -= step_y;
                         }
 
                         break;
@@ -248,7 +230,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 
     for (xx, row) in space.iter().enumerate() {
         for (yy, field) in row.iter().enumerate() {
-            if space[xx][yy] == Position::Asteroid {
+            if *field == Position::Asteroid {
                 let count = count_asteroids_in_direct_sight(space, xx, yy);
                 //max_count = usize::max(max_count, count);
                 if count > max_count {
@@ -262,108 +244,49 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     (max_count, pos)
 }
 
-#[derive(Debug)]
-struct Laser {
-    xx: usize,
-    yy: usize,
-    rotation: f64,
-}
-
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
-    let mut space = po.data.as_ref().unwrap().to_owned();
+    let space = po.data.as_ref().unwrap().to_owned();
 
     let xx = (res1.unwrap().1).0;
     let yy = (res1.unwrap().1).1;
 
-    let mut laser = Laser {
-        xx: xx,
-        yy: yy,
-        rotation: 0f64,
-    };
-
-    let mut count = 0;
-    loop {
-        match shoot_next(&mut space, &mut laser) {
-            Some(pos) => {
-                count += 1;
-                if count == 200 {
-                    return pos;
-                }
-            }
-            _ => panic!("oO count = {}", count),
-        }
-    }
-/*
-    let bb = (3f64, 2f64);
-
-    let winkel = calc_winkel((3, 2));
-    println!("{}", winkel);
-*/
-    (0, 0)
-}
-
-fn shoot_next(space: &mut Vec<Vec<Position>>, laser: &mut Laser) -> Option<(usize, usize)> {
-    let asteroids = get_hitable_asteroids(space, laser.xx, laser.yy);
-    println!("number of asteroids: {}", asteroids.len());
-    //dbg!(&asteroids);
-
-    let mut candidates: Vec<((usize, usize), f64)> = asteroids.into_iter()/*.filter(|&(kk, vv)| vv >= laser.rotation)*/.collect();
-    //candidates.sort_by_key(|(kk, vv)| vv);
-    println!("number of asteroids: {}", candidates.len());
+    let asteroids = get_hitable_asteroids(&space, xx, yy);
+    let mut candidates: Vec<((usize, usize), f64)> = asteroids.into_iter().collect();
     candidates.sort_by(| (_, aa), (_, bb)| aa.partial_cmp(bb).unwrap());
-    println!("{}", candidates.len());
-    return Some(candidates[199].0);
 
-    if candidates.is_empty() {
-        let mut candidates: Vec<((usize, usize), f64)> = get_hitable_asteroids(space, laser.xx, laser.yy).into_iter().filter(|&(kk, vv)| !vv.is_nan()).collect();
-        //candidates.sort_by_key(|(kk, vv)| vv);
-        //dbg!(&candidates);
-        candidates.sort_by(| (_, aa), (_, bb)| aa.partial_cmp(bb).unwrap());
-
-        let pos = candidates[0].0;
-        space[pos.0][pos.1] = Position::Empty;
-
-        laser.rotation = dbg!(candidates[0].1);
-        return Some(pos);
-    }
-
-    let (pos, rotation) = candidates[0];
-    println!("{:?}", (pos, rotation));
-
-    space[pos.0][pos.1] = Position::Empty;
-    laser.rotation = dbg!(rotation);
-
-    Some(pos)
+    let result = candidates[199].0;
+    (result.1 * 100 + result.0, result)
 }
+
 
 fn calc_winkel((xx, yy): (isize, isize)) -> f64 {
-    /*let pos = (pos.0 as f64, pos.1 as f64);
+    if xx == 0 {
+        return if yy > 0 {
+            90f64
+        } else if yy < 0 {
+            270f64
+        } else {
+            0f64
+        };
+    } else if yy == 0 {
+        return if xx > 0 {
+            180f64
+        } else {
+            0f64
+        };
+    }
 
-    let tmp: f64 = ComplexField::from_real( (pos.0 * pos.0 + pos.1 * pos.1) as f64 );
-    let radius = tmp.sqrt();
+    let angle = f64::atan(xx as f64 / yy as f64);
+    let angle = angle.to_degrees();
 
-    let tmp: f64 = (pos.0 * pos.0 - pos.1 * pos.1 + radius * radius) / (2f64 * pos.0 * radius);
-    let winkel = tmp.acos();
-
-    //let pi: f64 = RealField::pi();
-    //let grad: f64 = (360f64 / (2f64 * pi) ) * winkel;
-
-    winkel*/
-    let pi: f64 = RealField::pi();
-    let tmp: f64 = ComplexField::from_real( yy as f64 / xx as f64 );
-    let tmp = tmp.atan();
-    let grad: f64 = (360f64 / (2f64 * pi)) * tmp;
-
-    let grad = match (xx.is_positive(), yy.is_positive()) {
-        (true, true) => grad + 90f64,
-        (true, false) => grad + 360f64,
-        (false, true) => grad + 360f64,
-        (false, false) => grad + 270f64,
+    let angle = match (xx.is_positive(), yy.is_positive()) {
+        (true, true) => angle + 90f64,
+        (true, false) => angle + 270f64,
+        (false, true) => angle * -1f64,
+        (false, false) => angle + 270f64,
     };
 
-    println!("{}/{} -> {}", xx, yy, grad);
-
-    grad
+    angle
 }
 
 #[cfg(test)]
@@ -385,8 +308,28 @@ mod tests {
     }
 
     #[test]
-    fn example_1() {
-        test_case_helper("example1", 8, 8)
+    fn test_angle_calculation() {
+        let data = [
+            ( (-2, 0), 0f64, 1f64 ),
+            ( (-2, 2), 44f64, 46f64 ),
+            ( (0, 2), 0f64, 90f64 ),
+            ( (2, 2), 134f64, 136f64 ),
+            ( (2, 0), 179f64, 181f64 ),
+            ( (2, -2), 224f64, 226f64 ),
+            ( (0, -2), 269f64, 271f64 ),
+            ( (-2, -2), 314f64, 316f64 ),
+            ( (-2, 0), 0f64, 1f64 ),
+        ];
+
+        for &(pos, lower, upper) in data.iter() {
+            let angle = calc_winkel(pos);
+            assert!(angle >= lower && angle <= upper, format!("{:?} -> {}", pos, angle));
+        }
+    }
+
+    #[test]
+    fn example_3() {
+        test_case_helper("example3", (210, (13, 11)), (802, (2, 8)))
     }
 }
 
@@ -426,6 +369,7 @@ mod bench {
     #[bench]
     fn bench_part2(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
-        bb.iter(|| test::black_box(part2(&puzzle_options, None)));
+        let result_1 = part1(&puzzle_options);
+        bb.iter(|| test::black_box(part2(&puzzle_options, Some(result_1))));
     }
 }
