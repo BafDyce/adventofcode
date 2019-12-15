@@ -14,7 +14,7 @@ impl IntcodeProcessor {
     pub fn new(code: &Vec<IntcodeNumber>) -> Self {
         IntcodeProcessor {
             stack: code.to_owned(),
-            .. Default::default()
+            ..Default::default()
         }
     }
 
@@ -100,10 +100,7 @@ impl IntcodeProcessor {
                     let param_2 = self.get_value_of_parameter(2);
 
                     let addr = self.get_addr_from_param(3);
-                    self.write_into_addr(
-                        addr,
-                        if param_1 < param_2 { 1 } else { 0 },
-                    );
+                    self.write_into_addr(addr, if param_1 < param_2 { 1 } else { 0 });
 
                     4
                 }
@@ -113,10 +110,7 @@ impl IntcodeProcessor {
                     let param_2 = self.get_value_of_parameter(2);
 
                     let addr = self.get_addr_from_param(3);
-                    self.write_into_addr(
-                        addr,
-                        if param_1 == param_2 { 1 } else { 0 },
-                    );
+                    self.write_into_addr(addr, if param_1 == param_2 { 1 } else { 0 });
 
                     4
                 }
@@ -131,7 +125,10 @@ impl IntcodeProcessor {
                     break Some(last_output);
                 }
                 other => {
-                    panic!("Invalid opcode {} @ {} ({})", other, self.ip, self.stack[self.ip]);
+                    panic!(
+                        "Invalid opcode {} @ {} ({})",
+                        other, self.ip, self.stack[self.ip]
+                    );
                 }
             }
         }

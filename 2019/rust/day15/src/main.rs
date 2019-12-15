@@ -61,19 +61,19 @@ impl Movement {
 
     fn step_back(&self, (xx, yy): (isize, isize)) -> (isize, isize) {
         match self {
-            Movement::North => (xx+1, yy),
-            Movement::South => (xx-1, yy),
-            Movement::West => (xx, yy+1),
-            Movement::East => (xx, yy-1),
+            Movement::North => (xx + 1, yy),
+            Movement::South => (xx - 1, yy),
+            Movement::West => (xx, yy + 1),
+            Movement::East => (xx, yy - 1),
         }
     }
 
     fn get_next_pos(&self, (xx, yy): (isize, isize)) -> (isize, isize) {
         match self {
-            Movement::North => (xx-1, yy),
-            Movement::South => (xx+1, yy),
-            Movement::West => (xx, yy-1),
-            Movement::East => (xx, yy+1),
+            Movement::North => (xx - 1, yy),
+            Movement::South => (xx + 1, yy),
+            Movement::West => (xx, yy - 1),
+            Movement::East => (xx, yy + 1),
         }
     }
 
@@ -131,7 +131,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 
     let mut robot = IntcodeProcessor::new(program);
     let mut area: HashMap<(isize, isize), (Field, usize)> = HashMap::new();
-    area.insert( (0, 0), (Field::Empty, 1) );
+    area.insert((0, 0), (Field::Empty, 1));
 
     let mut outputs = VecDeque::new();
     let mut input = Movement::North;
@@ -154,7 +154,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
             Some(0) => {
                 // wall
                 // -> turn left
-                area.insert( next_pos, (Field::Wall, 1) );
+                area.insert(next_pos, (Field::Wall, 1));
                 let current_pos = input.step_back(next_pos);
                 loop {
                     input.turn_left();
@@ -162,7 +162,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 
                     match area.get(&next_pos) {
                         Some((Field::Empty, _)) | None => break,
-                        _ => {},
+                        _ => {}
                     }
                 }
             }
@@ -175,8 +175,8 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 
                 // lets check the next space in our direction
                 next_pos = input.get_next_pos(next_pos);
-                match area.get( &next_pos ) {
-                    None => {}, // Havent seen that one yet -> go for it!
+                match area.get(&next_pos) {
+                    None => {} // Havent seen that one yet -> go for it!
                     Some(_) => {
                         // We have seen it already, so check all four neighbors, choose:
                         // 1) unknown, if available
@@ -185,24 +185,27 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
                         let mut direction = input;
 
                         let mut options = Vec::new();
-                        for __ in 0 .. 4 {
+                        for __ in 0..4 {
                             direction.turn_left();
                             let possible_pos = direction.get_next_pos(current_pos);
-                            options.push((
-                                direction,
-                                possible_pos,
-                                area.get(&possible_pos),
-                            ));
+                            options.push((direction, possible_pos, area.get(&possible_pos)));
                         }
 
-                        if let Some((new_input, new_next_pos, _)) = options.iter().find(|&&(_, _, field)| field.is_none() ) {
+                        if let Some((new_input, new_next_pos, _)) =
+                            options.iter().find(|&&(_, _, field)| field.is_none())
+                        {
                             // we have an unknown neighbor
                             input = *new_input;
                             next_pos = *new_next_pos;
                         } else if let Some((new_input, new_next_pos, _)) = options
                             .iter()
-                            .filter(|&&(dir, _, field)| !input.opposit_of(dir) && field.is_some() && field.unwrap().0 == Field::Empty )
-                            .min_by(|(_, _, aa), (_, _, bb)| aa.unwrap().1.cmp(&bb.unwrap().1)) {
+                            .filter(|&&(dir, _, field)| {
+                                !input.opposit_of(dir)
+                                    && field.is_some()
+                                    && field.unwrap().0 == Field::Empty
+                            })
+                            .min_by(|(_, _, aa), (_, _, bb)| aa.unwrap().1.cmp(&bb.unwrap().1))
+                        {
                             // multiple adjacent empty spaces => DONT go to the one we just came from and choose the one we have visited the fewest amount of times so far
                             input = *new_input;
                             next_pos = *new_next_pos;
@@ -218,7 +221,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
             Some(2) => {
                 // oxygen system found
                 pos_oxygen_system = next_pos;
-                let field = area.entry( next_pos).or_insert( (Field::Oxygen, 0));
+                let field = area.entry(next_pos).or_insert((Field::Oxygen, 0));
                 field.1 += 1;
 
                 // print only if we found it for the first time
@@ -250,7 +253,14 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 
             if countdown == 0 {
                 if po.verbose {
-                    println!("END{}:", if csv {""} else {"(run with --config csv true to get csv-formatted output)"});
+                    println!(
+                        "END{}:",
+                        if csv {
+                            ""
+                        } else {
+                            "(run with --config csv true to get csv-formatted output)"
+                        }
+                    );
                     print_field(&area, input.step_back(next_pos), csv);
                 }
                 break;
@@ -261,10 +271,14 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     bfs(area, (0, 0), pos_oxygen_system)
 }
 
-fn bfs(area: HashMap<(isize, isize), (Field, usize)>, start: (isize, isize), end: (isize, isize)) -> OutputType1 {
+fn bfs(
+    area: HashMap<(isize, isize), (Field, usize)>,
+    start: (isize, isize),
+    end: (isize, isize),
+) -> OutputType1 {
     let mut checked = Vec::new();
     let mut queue = VecDeque::new();
-    queue.push_back( (start, 0));
+    queue.push_back((start, 0));
     let mut shortest_path = 0;
 
     while let Some((pos, distance)) = queue.pop_front() {
@@ -281,9 +295,9 @@ fn bfs(area: HashMap<(isize, isize), (Field, usize)>, start: (isize, isize), end
                 break;
             }
 
-            if let Some( (Field::Empty, _)) = area.get(adjacent) {
+            if let Some((Field::Empty, _)) = area.get(adjacent) {
                 if !queue.iter().any(|&(pos, _)| pos == *adjacent) && !checked.contains(adjacent) {
-                    queue.push_back( (*adjacent, distance + 1) );
+                    queue.push_back((*adjacent, distance + 1));
                 }
             }
         }
@@ -296,12 +310,12 @@ fn bfs(area: HashMap<(isize, isize), (Field, usize)>, start: (isize, isize), end
 
 fn oxygen_spread(area: &mut HashMap<(isize, isize), (Field, usize)>) -> usize {
     let mut neighbors = Vec::new();
-    for ( (xx, yy), (field, _) ) in area.iter() {
+    for ((xx, yy), (field, _)) in area.iter() {
         if *field == Field::Oxygen {
-            neighbors.push( (*xx - 1, *yy) );
-            neighbors.push( (*xx + 1, *yy) );
-            neighbors.push( (*xx, *yy - 1) );
-            neighbors.push( (*xx, *yy + 1) );
+            neighbors.push((*xx - 1, *yy));
+            neighbors.push((*xx + 1, *yy));
+            neighbors.push((*xx, *yy - 1));
+            neighbors.push((*xx, *yy + 1));
         }
     }
 
@@ -310,7 +324,7 @@ fn oxygen_spread(area: &mut HashMap<(isize, isize), (Field, usize)>) -> usize {
 
     let mut count = 0;
     for neighbor in neighbors {
-        let field = area.entry(neighbor).or_insert( (Field::Wall, 0));
+        let field = area.entry(neighbor).or_insert((Field::Wall, 0));
         if field.0 == Field::Empty {
             field.0 = Field::Oxygen;
             count += 1;
@@ -339,7 +353,7 @@ fn print_field(
     me: (IntcodeNumber, IntcodeNumber),
     csv: bool,
 ) {
-    let csv = if csv {","} else {""};
+    let csv = if csv { "," } else { "" };
     let mut xx_min = std::isize::MAX;
     let mut xx_max = std::isize::MIN;
     let mut yy_min = std::isize::MAX;
@@ -352,14 +366,14 @@ fn print_field(
         yy_max = isize::max(yy_max, yy);
     }
 
-    for xx in xx_min ..= xx_max {
-        for yy in yy_min ..= yy_max {
+    for xx in xx_min..=xx_max {
+        for yy in yy_min..=yy_max {
             let cc = if xx == me.0 && yy == me.1 {
                 'x'
             } else if xx == 0 && yy == 0 {
                 'o'
             } else {
-                match field.get( &(xx, yy) ) {
+                match field.get(&(xx, yy)) {
                     Some((Field::Wall, _)) => '#',
                     Some((Field::Empty, _)) => '.',
                     Some((Field::Oxygen, _)) => 'O',
