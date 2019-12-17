@@ -61,11 +61,27 @@ fn fft(signal: &Vec<isize>) -> Vec<isize> {
     let mut signal = signal.to_owned();
 
     for __ in 1 ..= 100 {
-        // /println!("{:?}", signal);
         let mut res = Vec::new();
         for nn in 1 ..= signal.len() {
             let tmp = gen_fft_sequence(nn).zip(signal.iter()).map(|(aa, bb)| aa * bb).sum::<isize>();
             let tmp = tmp % 10;
+            let tmp = tmp.abs();
+            res.push(tmp);
+        }
+        signal = res;
+    }
+
+    signal
+}
+
+fn fft2(signal: &Vec<isize>) -> Vec<isize> {
+    let mut signal = signal.to_owned();
+
+    for __ in 1 ..= 100 {
+        let mut res = Vec::new();
+        for nn in 1 ..= signal.len() {
+            let tmp = gen_fft_sequence(nn).zip(signal.iter()).map(|(aa, bb)| aa * bb).sum::<isize>();
+            let tmp = (tmp * 10_000) % 10;
             let tmp = tmp.abs();
             res.push(tmp);
         }
@@ -94,22 +110,19 @@ fn gen_fft_sequence(nn: usize) -> std::iter::Skip<std::iter::Cycle<std::iter::Ch
         .skip(1)
 }
 
-fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
+fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
     let signal = po.data.as_ref().unwrap().to_owned();
-    let signal_len = signal.len();
-
-    let real_signal: Vec<isize> = signal.into_iter().cycle().take( signal_len * 10000 ).collect();
-    let offset = (real_signal[6]
-        + real_signal[5] * 10
-        + real_signal[4] * 100
-        + real_signal[3] * 1_000
-        + real_signal[2] * 10_000
-        + real_signal[1] * 100_000
-        + real_signal[0] * 1_000_000)
+    let offset = (signal[6]
+        + signal[5] * 10
+        + signal[4] * 100
+        + signal[3] * 1_000
+        + signal[2] * 10_000
+        + signal[1] * 100_000
+        + signal[0] * 1_000_000)
         as usize;
 
-    let result = fft(&real_signal);
-    format!("{}{}{}{}{}{}{}{}", result[0+offset], result[1+offset], result[2+offset], result[3+offset], result[4+offset], result[5+offset], result[6+offset], result[7+offset])
+    let result: Vec<isize> = fft2(&signal).into_iter().cycle().skip(offset).take(8).collect();
+    format!("{}{}{}{}{}{}{}{}", result[0], result[1], result[2], result[3], result[4], result[5], result[6], result[7])
 }
 
 #[cfg(test)]
@@ -132,17 +145,38 @@ mod tests {
 
     #[test]
     fn example_2() {
-        test_case_helper("example2", "24176176".to_string(), 8)
+        let po = import_helper("example2");
+        assert_eq!(part1(&po), "24176176".to_string())
     }
 
     #[test]
     fn example_3() {
-        test_case_helper("example3", "73745418".to_string(), 8)
+        let po = import_helper("example3");
+        assert_eq!(part1(&po), "73745418".to_string())
     }
 
     #[test]
     fn example_4() {
-        test_case_helper("example4", "52432133".to_string(), 8)
+        let po = import_helper("example4");
+        assert_eq!(part1(&po), "52432133".to_string())
+    }
+
+    #[test]
+    fn example_5() {
+        let po = import_helper("example5");
+        assert_eq!(part2(&po, None), "84462026".to_string())
+    }
+
+    #[test]
+    fn example_6() {
+        let po = import_helper("example6");
+        assert_eq!(part2(&po, None), "78725270".to_string())
+    }
+
+    #[test]
+    fn example_7() {
+        let po = import_helper("example7");
+        assert_eq!(part2(&po, None), "53553731".to_string())
     }
 }
 
