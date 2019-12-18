@@ -78,12 +78,13 @@ impl Maze {
 
         let mut checked = Vec::new();
         let mut queue = VecDeque::new();
-        queue.push_back( ((person.xx, person.yy), 0, vec![]));
+        queue.push_back( ((person.xx, person.yy), 0));
 
-        while let Some((pos, distance, tmp_keys)) = queue.pop_front() {
+        while let Some((pos, distance)) = queue.pop_front() {
             match self.maze[pos.0][pos.1] {
-                Field::Key(key) => {
+                Field::Key(key) if !person.keys.contains(&key) => {
                     keys.push( (key, distance, pos) );
+                    continue;
                 }
                 _ => {}
             }
@@ -111,18 +112,9 @@ impl Maze {
             };
 
             for adj in adjacent.iter() {
-                if self.is_walkable(*adj, person, &tmp_keys) {
-                    if !queue.iter().any(|&(pos, _, _)| pos == *adj) && !checked.contains(adj) {
-                        let tmp_keys = match self.maze[pos.0][pos.1] {
-                            Field::Key(key) => {
-                                let mut tmp_keys = tmp_keys.to_owned();
-                                tmp_keys.push(key);
-
-                                tmp_keys
-                            }
-                            _ => tmp_keys.to_owned(),
-                        };
-                        queue.push_back((*adj, distance + 1, tmp_keys));
+                if self.is_walkable(*adj, person) {
+                    if !queue.iter().any(|&(pos, _)| pos == *adj) && !checked.contains(adj) {
+                        queue.push_back((*adj, distance + 1));
                     }
                 }
             }
@@ -133,12 +125,12 @@ impl Maze {
         keys
     }
 
-    fn is_walkable(&self, (xx, yy): (usize, usize), person: &Person, additional_keys: &Vec<char>) -> bool {
+    fn is_walkable(&self, (xx, yy): (usize, usize), person: &Person) -> bool {
         match self.maze[xx][yy] {
             Field::Entrance => true,
             Field::Open => true,
             Field::Key(_) => true,
-            Field::Door(key) => person.keys.contains(&key) || additional_keys.contains(&key),
+            Field::Door(key) => person.keys.contains(&key),
             _ => false,
         }
     }
@@ -168,6 +160,22 @@ struct Person {
     yy: usize,
     keys: Vec<char>,
     steps: usize,
+}
+
+impl Person {
+    fn with_new_key(&self, key: char) -> Self {
+        Person {
+            xx: self.xx,
+            yy: self.yy,
+            keys: {
+                let mut keys = self.keys.to_owned();
+                keys.push(key);
+                keys
+            },
+            steps: self.steps,
+        }
+    }
+
 }
 
 fn main() -> Result<(), io::Error> {
@@ -216,7 +224,6 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     }
 
     let (mut entrance_xx, mut entrance_yy) = (0, 0);
-    let mut number_of_keys = 0;
     let mut keys = Vec::new();
     let mut doors = Vec::new();
     for (xx, row) in maze.maze.iter().enumerate() {
@@ -240,6 +247,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     }
 
     let mut target_key = '0';
+    let number_of_keys = keys.len();
     for key in keys {
         if ! doors.contains(&key) {
             target_key = *key;
@@ -258,52 +266,50 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
         steps: 0,
     };
 
-    while person.keys.len() < number_of_keys {
-        let keys = maze.reachable_keys(&person);
-        println!("reachable keys: {:?}", keys);
-        break;
+    let mut absolute_best = match po.config.get("limit") {
+        Some(limit) => limit.parse().unwrap(),
+        None => std::usize::MAX,
+    };
+    check_it(&maze, person, number_of_keys, &mut absolute_best)
+}
+
+fn check_it(maze: &Maze, person: Person, target_number_of_keys: usize, absolute_best: &mut usize) -> usize {
+    if person.keys.len() == target_number_of_keys {
+        println!("found path: {:?} -> {}", person.keys, person.steps);
+        *absolute_best = usize::min(*absolute_best, person.steps);
+        return person.steps;
+    } else if person.steps >= *absolute_best {
+        return std::usize::MAX;
     }
 
-    let mut checked = Vec::new();
-    let mut queue = VecDeque::new();
-    queue.push_back(('0', 0, (entrance_xx, entrance_yy), vec![]));
+    let mut checks = Vec::new();
+    for (key, distance, keypos) in maze.reachable_keys(&person) {
+        //if po.verbose {
+        //    println!("can get to key {} @ {:?} in {} steps", key, keypos, distance);
+        //}
 
-    while let Some((key, my_distance, keypos, tmp_keys)) = queue.pop_front() {
-        if po.verbose {
-            println!("checking key = {} | dist = {} | pos = {:?} | tmp_keys = {:?}", key, my_distance, keypos, tmp_keys);
-        }
-        if key == target_key {
-            return my_distance;
-        }
-
-        let person = Person {
+        let new_person = Person {
             xx: keypos.0,
             yy: keypos.1,
-            keys: tmp_keys.to_owned(),
-            steps: my_distance,
+            keys: {
+                let mut keys = person.keys.to_owned();
+                keys.push(key);
+                keys
+            },
+            steps: person.steps + distance,
         };
-        for (key, distance, keypos) in maze.reachable_keys(&person) {
-            /*if key == target_key {
-                return my_distance + distance;
-            }*/
 
-            if !queue.iter().any(|&(check_key, _, _, _)| check_key == key) && !checked.contains(&key) {
-                let new_tmp_keys = {
-                    let mut keys = tmp_keys.to_owned();
-                    keys.push(key);
-                    keys
-                };
-                queue.push_back((key, my_distance + distance, keypos, new_tmp_keys));
-            }
+        if new_person.steps > *absolute_best {
+            continue;
         }
 
-        checked.push(key);
-        if checked.len() == number_of_keys {
-            return my_distance;
-        }
+        checks.push(check_it(maze, new_person, target_number_of_keys, absolute_best));
     }
 
-    0
+    match checks.into_iter().min() {
+        Some(steps) => steps,
+        None => std::usize::MAX,
+    }
 }
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
