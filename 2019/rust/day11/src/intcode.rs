@@ -8,6 +8,7 @@ pub struct IntcodeProcessor {
     ram: HashMap<usize, IntcodeNumber>,
     ip: usize,
     relbase: IntcodeNumber,
+    output: IntcodeNumber,
 }
 
 impl IntcodeProcessor {
@@ -18,15 +19,8 @@ impl IntcodeProcessor {
         }
     }
 
-    pub fn run(
-        &mut self,
-        input: IntcodeNumber,
-        outputs: &mut VecDeque<IntcodeNumber>,
-        pause_after_n_outputs: usize,
-    ) -> Option<IntcodeNumber> {
-        let mut last_output = 0;
-        let mut output_counter = 0;
-
+    pub fn run(&mut self, input: IntcodeNumber, outputs: &mut VecDeque<IntcodeNumber>) -> Option<IntcodeNumber> {
+        let mut out_count = 0;
         loop {
             self.ip += match self.stack[self.ip] % 100 {
                 1 => {
@@ -58,12 +52,12 @@ impl IntcodeProcessor {
                 }
                 4 => {
                     // get output
-                    last_output = self.get_value_of_parameter(1);
-                    // /println!("out: {}", last_output);
-                    outputs.push_back(last_output);
-                    output_counter += 1;
+                    self.output = self.get_value_of_parameter(1);
+                    //println!("out: {}",self.output);
+                    outputs.push_back(self.output);
 
-                    if output_counter == pause_after_n_outputs {
+                    out_count += 1;
+                    if out_count == 2 {
                         self.ip += 2;
                         break None;
                     }
@@ -128,7 +122,8 @@ impl IntcodeProcessor {
                     2
                 }
                 99 => {
-                    break Some(last_output);
+                    //println!("return");
+                    break Some(self.output);
                 }
                 other => {
                     panic!("Invalid opcode {} @ {} ({})", other, self.ip, self.stack[self.ip]);

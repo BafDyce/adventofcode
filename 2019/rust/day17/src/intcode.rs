@@ -20,7 +20,7 @@ impl IntcodeProcessor {
 
     pub fn run(
         &mut self,
-        input: IntcodeNumber,
+        mut input: VecDeque<IntcodeNumber>,
         outputs: &mut VecDeque<IntcodeNumber>,
         pause_after_n_outputs: usize,
     ) -> Option<IntcodeNumber> {
@@ -52,7 +52,7 @@ impl IntcodeProcessor {
                 3 => {
                     // store input
                     let addr = self.get_addr_from_param(1);
-                    self.write_into_addr(addr, input);
+                    self.write_into_addr(addr, input.pop_front().unwrap());
 
                     2
                 }

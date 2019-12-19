@@ -1,11 +1,13 @@
 /*
-
+      -------Part 1--------   -------Part 2--------
+Day       Time  Rank  Score       Time  Rank  Score
+ 11   00:50:32  1393      0   00:57:12  1215      0
 BENCHMARK RESULTS
 
 */
 
 // allow bench feature when using unstable flag
-// use: $ rustup run nightly cargo bench --features unstable
+// use: $ cargo +nightly bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
 
 #[macro_use]
@@ -23,26 +25,66 @@ use std::{
     io,
 };
 
-const DAY: i32 = 0;
-type InputTypeSingle = usize;
+const DAY: i32 = 11;
+type InputTypeSingle = IntcodeNumber;
 type InputType = Vec<InputTypeSingle>;
 type OutputType1 = usize;
 type OutputType2 = OutputType1;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
-struct Data {}
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Serialize)]
+struct Robot {
+    xx: i128,
+    yy: i128,
+    dir: Dir,
+}
 
-impl Data {
-    pub fn new() -> Self {
-        Data {}
+impl Robot {
+    fn pos(&self) -> (i128, i128) {
+        (self.xx, self.yy)
+    }
+
+    fn turn(&mut self, dir: i128) {
+        self.dir.turn(dir)
+    }
+
+    fn step(&mut self) {
+        match &self.dir {
+            Dir::Up => self.xx += 1,
+            Dir::Down => self.xx -= 1,
+            Dir::Left => self.yy -= 1,
+            Dir::Right => self.yy += 1,
+        }
     }
 }
 
-impl From<()> for Data {
-    fn from(from: ()) -> Data {
-        Data {}
+#[derive(Clone, Copy, Debug, Deserialize, PartialEq, Serialize)]
+enum Dir {
+    Up,
+    Right,
+    Down,
+    Left,
+}
+
+impl Dir {
+    fn turn(&mut self, dir: i128) {
+        *self = match *self {
+            Dir::Up if dir == 0 => Dir::Left,
+            Dir::Up if dir == 1 => Dir::Right,
+            Dir::Right if dir == 0 => Dir::Up,
+            Dir::Right if dir == 1 => Dir::Down,
+            Dir::Down if dir == 0 => Dir::Right,
+            Dir::Down if dir == 1 => Dir::Left,
+            Dir::Left if dir == 0 => Dir::Down,
+            Dir::Left if dir == 1 => Dir::Up,
+            _ => panic!("Invalid turn spec! {:?}, {}", self, dir),
+        }
     }
+}
+
+enum Color {
+    White,
+    Black,
 }
 
 fn main() -> Result<(), io::Error> {
@@ -69,38 +111,79 @@ fn main() -> Result<(), io::Error> {
 }
 
 fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
-    // PARSE input
-    input
-        .into_iter()
-        .map(|line| {
-            // Parsing logic
-            // single numeric types
-
-            line.parse::<InputTypeSingle>().unwrap_or_default(); // <-- REMOVE THIS IF NECESSARY!!
-
-            // regex parsing stuff
-            lazy_static! {
-                // (?x)
-                // (?P<name>xxx)
-                static ref RE: Regex = Regex::new(
-                    r"([[:alpha:]])*"
-                ).unwrap();
-            }
-
-            let caps = RE.captures(&line).unwrap();
-            // let thingy = &caps["thingy"];
-            // let xx = caps["xx"].chars().next().unwrap();
-            caps.len()
-        })
+    input[0]
+        .split(",")
+        .map(|xx| xx.parse::<InputTypeSingle>().unwrap())
         .collect()
 }
 
+fn run_robot(program: &Vec<IntcodeNumber>, start_color: i128) -> HashMap<(i128, i128), i128> {
+    let mut panel: HashMap<(i128, i128), i128> = HashMap::new();
+
+    let mut robot_cpu = IntcodeProcessor::new(program);
+    let mut robot = Robot {
+        xx: 0,
+        yy: 0,
+        dir: Dir::Up,
+    };
+
+    panel.insert( robot.pos(), start_color);
+    let mut outputs = VecDeque::new();
+
+    loop {
+        let current_color = match panel.get(&robot.pos()) {
+            Some(color) => *color,
+            None => 0,
+        };
+        if let Some(_finished) = robot_cpu.run(current_color, &mut outputs) {
+            break;
+        };
+
+        let color = outputs.pop_front().unwrap();
+        let dir = outputs.pop_front().unwrap();
+
+        panel.insert( robot.pos(), color );
+        robot.turn(dir);
+        robot.step();
+    }
+
+    panel
+}
+
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    po.data.as_ref().unwrap().into_iter().sum()
+    let program = po.data.as_ref().unwrap();
+    run_robot(program, 0).len()
 }
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
-    po.data.as_ref().unwrap().into_iter().sum()
+    let program = po.data.as_ref().unwrap();
+    let panel = run_robot(program, 1);
+
+    let mut xx_min = std::i128::MAX;
+    let mut xx_max = std::i128::MIN;
+    let mut yy_min = std::i128::MAX;
+    let mut yy_max = std::i128::MIN;
+
+    for (xx, yy) in panel.keys() {
+        xx_min = i128::min(xx_min, *xx);
+        xx_max = i128::max(xx_max, *xx);
+        yy_min = i128::min(yy_min, *yy);
+        yy_max = i128::max(yy_max, *yy);
+    }
+
+    for xx in xx_min ..= xx_max {
+        for yy in yy_min ..= yy_max {
+            let cc = match panel.get( &(xx, yy) ) {
+                Some(0) => '.',
+                Some(1) => '#',
+                _ => '.',
+            };
+            print!("{}", cc);
+        }
+        println!("");
+    }
+
+    0
 }
 
 #[cfg(test)]

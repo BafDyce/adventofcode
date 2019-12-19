@@ -1,49 +1,31 @@
 /*
-
+      -------Part 1--------   -------Part 2--------
+Day       Time  Rank  Score       Time  Rank  Score
+  9   03:23:35  3232      0   03:25:02  3172      0
 BENCHMARK RESULTS
-
+test bench::bench_parsing ... bench:     403,885 ns/iter (+/- 20,371)
+test bench::bench_part1   ... bench:      33,794 ns/iter (+/- 1,743)
+test bench::bench_part2   ... bench:  59,368,435 ns/iter (+/- 3,808,183)
 */
 
 // allow bench feature when using unstable flag
-// use: $ rustup run nightly cargo bench --features unstable
+// use: $ cargo +nightly bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
-
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate serde_derive;
 
 mod intcode;
 use intcode::*;
 
 use aoc_import_magic::{import_magic, PuzzleOptions};
-use regex::Regex;
-use std::{
-    collections::{HashMap, VecDeque},
-    io,
-};
+use std::{collections::HashMap, io};
 
-const DAY: i32 = 0;
-type InputTypeSingle = usize;
+
+const DAY: i32 = 9;
+type InputTypeSingle = IntcodeNumber;
 type InputType = Vec<InputTypeSingle>;
-type OutputType1 = usize;
+type OutputType1 = IntcodeNumber;
 type OutputType2 = OutputType1;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
-struct Data {}
-
-impl Data {
-    pub fn new() -> Self {
-        Data {}
-    }
-}
-
-impl From<()> for Data {
-    fn from(from: ()) -> Data {
-        Data {}
-    }
-}
 
 fn main() -> Result<(), io::Error> {
     println!("AoC 2019 | Day {}", DAY);
@@ -68,39 +50,21 @@ fn main() -> Result<(), io::Error> {
     Ok(())
 }
 
-fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
-    // PARSE input
-    input
-        .into_iter()
-        .map(|line| {
-            // Parsing logic
-            // single numeric types
-
-            line.parse::<InputTypeSingle>().unwrap_or_default(); // <-- REMOVE THIS IF NECESSARY!!
-
-            // regex parsing stuff
-            lazy_static! {
-                // (?x)
-                // (?P<name>xxx)
-                static ref RE: Regex = Regex::new(
-                    r"([[:alpha:]])*"
-                ).unwrap();
-            }
-
-            let caps = RE.captures(&line).unwrap();
-            // let thingy = &caps["thingy"];
-            // let xx = caps["xx"].chars().next().unwrap();
-            caps.len()
-        })
+fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: bool) -> InputType {
+    input[0]
+        .split(",")
+        .map(|xx| xx.parse::<InputTypeSingle>().unwrap())
         .collect()
 }
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    po.data.as_ref().unwrap().into_iter().sum()
+    let mut cpu = IntcodeProcessor::new(po.data.as_ref().unwrap());
+    cpu.run(1)
 }
 
-fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
-    po.data.as_ref().unwrap().into_iter().sum()
+fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
+    let mut cpu = IntcodeProcessor::new(po.data.as_ref().unwrap());
+    cpu.run(2)
 }
 
 #[cfg(test)]
@@ -123,7 +87,17 @@ mod tests {
 
     #[test]
     fn example_1() {
-        test_case_helper("example1", 8, 8)
+        test_case_helper("example1", 99, 99)
+    }
+
+    #[test]
+    fn example_2() {
+        test_case_helper("example2", 1219070632396864, 1219070632396864)
+    }
+
+    #[test]
+    fn example_3() {
+        test_case_helper("example3", 1125899906842624, 1125899906842624)
     }
 }
 

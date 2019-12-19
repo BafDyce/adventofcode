@@ -3,7 +3,43 @@ use std::collections::{HashMap, VecDeque};
 pub type IntcodeNumber = i128;
 
 #[derive(Debug, Default)]
+pub struct IntcodeManager {
+    io: IntcodeIOManager,
+    cpus: Vec<IntcodeProcessor>,
+}
+
+impl IntcodeManager {
+    pub fn new(code: &Vec<IntcodeNumber>, amount_cpus: usize) -> Self {
+        IntcodeManager {
+            io: IntcodeIOManager::new(amount_cpus),
+            cpus: {
+                let mut cpus = Vec::new();
+                for id in 0 .. amount_cpus {
+                    cpus.push(IntcodeProcessor::new(code, IntcodeProcessorId::new(id)));
+                }
+
+                cpus
+            }
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Default)]
+pub struct IntcodeProcessorId {
+    id: usize,
+}
+
+impl IntcodeProcessorId {
+    pub fn new(id: usize) -> Self {
+        IntcodeProcessorId {
+            id,
+        }
+    }
+}
+
+#[derive(Debug, Default)]
 pub struct IntcodeProcessor {
+    id: IntcodeProcessorId,
     stack: Vec<IntcodeNumber>,
     ram: HashMap<usize, IntcodeNumber>,
     ip: usize,
@@ -11,21 +47,16 @@ pub struct IntcodeProcessor {
 }
 
 impl IntcodeProcessor {
-    pub fn new(code: &Vec<IntcodeNumber>) -> Self {
+    pub fn new(code: &Vec<IntcodeNumber>, id: IntcodeProcessorId) -> Self {
         IntcodeProcessor {
+            id,
             stack: code.to_owned(),
             .. Default::default()
         }
     }
 
-    pub fn run(
-        &mut self,
-        input: IntcodeNumber,
-        outputs: &mut VecDeque<IntcodeNumber>,
-        pause_after_n_outputs: usize,
-    ) -> Option<IntcodeNumber> {
-        let mut last_output = 0;
-        let mut output_counter = 0;
+    pub fn run(&mut self, input: IntcodeNumber) -> IntcodeNumber {
+        let mut output = 0;
 
         loop {
             self.ip += match self.stack[self.ip] % 100 {
@@ -58,15 +89,8 @@ impl IntcodeProcessor {
                 }
                 4 => {
                     // get output
-                    last_output = self.get_value_of_parameter(1);
-                    // /println!("out: {}", last_output);
-                    outputs.push_back(last_output);
-                    output_counter += 1;
-
-                    if output_counter == pause_after_n_outputs {
-                        self.ip += 2;
-                        break None;
-                    }
+                    output = self.get_value_of_parameter(1);
+                    println!("out: {}", output);
 
                     2
                 }
@@ -128,7 +152,7 @@ impl IntcodeProcessor {
                     2
                 }
                 99 => {
-                    break Some(last_output);
+                    break output;
                 }
                 other => {
                     panic!("Invalid opcode {} @ {} ({})", other, self.ip, self.stack[self.ip]);
@@ -190,5 +214,32 @@ impl IntcodeProcessor {
             2 => (self.load_from_addr(self.ip + param_idx) + self.relbase) as usize,
             other => panic!("get_addr_from_param: Invalid mode ({})", other),
         }
+    }
+}
+
+#[derive(Debug, Default)]
+pub struct IntcodeIOManager {
+    ios: Vec<VecDeque<IntcodeNumber>>,
+}
+
+impl IntcodeIOManager {
+    fn new(amount: usize) -> Self {
+        let mut manager = Self::default();
+
+        for __ in 0 .. amount {
+            manager.ios.push(VecDeque::new());
+        }
+
+        manager
+    }
+
+    fn get_input(&mut self, cid: IntcodeProcessorId) -> Option<IntcodeNumber> {
+        let idx_input = cid.id;
+        self.ios[idx_input].pop_front()
+    }
+
+    fn save_output(&mut self, cid: IntcodeProcessorId, out: IntcodeNumber) {
+        let idx_output = (cid.id + 1) % self.ios.len();
+        self.ios[idx_output].push_back(out)
     }
 }

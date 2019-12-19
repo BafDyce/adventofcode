@@ -1,4 +1,4 @@
-use std::collections::{HashMap, VecDeque};
+use std::collections::HashMap;
 
 pub type IntcodeNumber = i128;
 
@@ -18,14 +18,8 @@ impl IntcodeProcessor {
         }
     }
 
-    pub fn run(
-        &mut self,
-        input: IntcodeNumber,
-        outputs: &mut VecDeque<IntcodeNumber>,
-        pause_after_n_outputs: usize,
-    ) -> Option<IntcodeNumber> {
-        let mut last_output = 0;
-        let mut output_counter = 0;
+    pub fn run(&mut self, input: IntcodeNumber) -> IntcodeNumber {
+        let mut output = 0;
 
         loop {
             self.ip += match self.stack[self.ip] % 100 {
@@ -58,15 +52,8 @@ impl IntcodeProcessor {
                 }
                 4 => {
                     // get output
-                    last_output = self.get_value_of_parameter(1);
-                    // /println!("out: {}", last_output);
-                    outputs.push_back(last_output);
-                    output_counter += 1;
-
-                    if output_counter == pause_after_n_outputs {
-                        self.ip += 2;
-                        break None;
-                    }
+                    output = self.get_value_of_parameter(1);
+                    println!("out: {}", output);
 
                     2
                 }
@@ -128,7 +115,7 @@ impl IntcodeProcessor {
                     2
                 }
                 99 => {
-                    break Some(last_output);
+                    break output;
                 }
                 other => {
                     panic!("Invalid opcode {} @ {} ({})", other, self.ip, self.stack[self.ip]);

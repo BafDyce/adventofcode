@@ -18,15 +18,7 @@ impl IntcodeProcessor {
         }
     }
 
-    pub fn run(
-        &mut self,
-        input: IntcodeNumber,
-        outputs: &mut VecDeque<IntcodeNumber>,
-        pause_after_n_outputs: usize,
-    ) -> Option<IntcodeNumber> {
-        let mut last_output = 0;
-        let mut output_counter = 0;
-
+    pub fn run(&mut self, input: IntcodeNumber, outputs: &mut VecDeque<IntcodeNumber>) -> Option<IntcodeNumber> {
         loop {
             self.ip += match self.stack[self.ip] % 100 {
                 1 => {
@@ -58,14 +50,12 @@ impl IntcodeProcessor {
                 }
                 4 => {
                     // get output
-                    last_output = self.get_value_of_parameter(1);
-                    // /println!("out: {}", last_output);
-                    outputs.push_back(last_output);
-                    output_counter += 1;
-
-                    if output_counter == pause_after_n_outputs {
+                    let output = self.get_value_of_parameter(1);
+                    //println!("out: {}", output);
+                    outputs.push_back(output);
+                    if outputs.len() == 3 {
                         self.ip += 2;
-                        break None;
+                        return None;
                     }
 
                     2
@@ -128,7 +118,7 @@ impl IntcodeProcessor {
                     2
                 }
                 99 => {
-                    break Some(last_output);
+                    break Some(0);
                 }
                 other => {
                     panic!("Invalid opcode {} @ {} ({})", other, self.ip, self.stack[self.ip]);
