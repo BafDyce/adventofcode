@@ -19,7 +19,7 @@ use intcode::*;
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use regex::Regex;
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::{HashMap, HashSet, VecDeque},
     fmt,
     io,
 };
@@ -73,20 +73,24 @@ struct Maze {
 }
 
 impl Maze {
-    fn reachable_keys(&self, person: &Person) -> Vec<(char, usize, (usize, usize))> {
-        let mut keys = Vec::new();
+    fn get_key_distances(&self, xx: usize, yy: usize) -> HashMap<char, (usize, HashSet<char>)> {
+        let mut distances = HashMap::new();
 
         let mut checked = Vec::new();
         let mut queue = VecDeque::new();
-        queue.push_back( ((person.xx, person.yy), 0));
+        queue.push_back( ((xx, yy), 0, HashSet::new()) );
 
-        while let Some((pos, distance)) = queue.pop_front() {
-            match self.maze[pos.0][pos.1] {
-                Field::Key(key) if !person.keys.contains(&key) => {
-                    keys.push( (key, distance, pos) );
-                    continue;
+        while let Some((pos, dist, mut doors)) = queue.pop_front() {
+            if dist > 0 {
+                match self.maze[pos.0][pos.1] {
+                    Field::Key(key) => {
+                        distances.insert(key, (dist, doors.clone()));
+                    }
+                    Field::Door(door) => {
+                        doors.insert(door);
+                    }
+                    _ => {}
                 }
-                _ => {}
             }
 
             let adjacent = {
@@ -112,9 +116,9 @@ impl Maze {
             };
 
             for adj in adjacent.iter() {
-                if self.is_walkable(*adj, person) {
-                    if !queue.iter().any(|&(pos, _)| pos == *adj) && !checked.contains(adj) {
-                        queue.push_back((*adj, distance + 1));
+                if self.is_walkable(*adj) {
+                    if !queue.iter().any(|&(pos, _, _)| pos == *adj) && !checked.contains(adj) {
+                        queue.push_back((*adj, dist + 1, doors.clone()));
                     }
                 }
             }
@@ -122,15 +126,15 @@ impl Maze {
             checked.push(pos);
         }
 
-        keys
+        distances
     }
 
-    fn is_walkable(&self, (xx, yy): (usize, usize), person: &Person) -> bool {
+    fn is_walkable(&self, (xx, yy): (usize, usize)) -> bool {
         match self.maze[xx][yy] {
             Field::Entrance => true,
             Field::Open => true,
             Field::Key(_) => true,
-            Field::Door(key) => person.keys.contains(&key),
+            Field::Door(key) => true,
             _ => false,
         }
     }
@@ -218,98 +222,64 @@ fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bo
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     let maze = po.data.as_ref().unwrap();
+    // outer HashMap:
+    // key of entry: key
+    // value of entry: inner HashMap
+    //  inner HashMap:
+    //  key of entry: key
+    //  value of entry: (shortes_path_distance, HashSet<doors in between>)
+    let mut key_distances: HashMap<char, HashMap<char, (usize, HashSet<char>)>> = HashMap::new();
 
     if po.verbose {
         println!("{}", maze);
     }
 
-    let (mut entrance_xx, mut entrance_yy) = (0, 0);
-    let mut keys = Vec::new();
-    let mut doors = Vec::new();
+    // populate key_distances
     for (xx, row) in maze.maze.iter().enumerate() {
         for (yy, field) in row.iter().enumerate() {
             match field {
                 Field::Entrance => {
-                    entrance_xx = xx;
-                    entrance_yy = yy;
+                    key_distances.insert('@', maze.get_key_distances(xx, yy));
                 },
-                Field::Key(key) => keys.push(key),
-                Field::Door(door) => doors.push(door),
+                Field::Key(key) => {
+                    key_distances.insert(*key, maze.get_key_distances(xx, yy));
+                }
                 _ => {}
             }
         }
     }
 
     if po.verbose {
-        println!("entrance @ {} / {}", entrance_xx, entrance_yy);
-        println!("keys ({}): {:?}", keys.len(), keys);
-        println!("doors ({}): {:?}", doors.len(), doors);
+        println!("key_distances: {:#?}", key_distances);
     }
 
-    let mut target_key = '0';
-    let number_of_keys = keys.len();
-    for key in keys {
-        if ! doors.contains(&key) {
-            target_key = *key;
-            break;
-        }
-    }
+    //key_distances.get(&'@').unwrap().iter().filter(|(key, (dist, doors))| doors.is_empty()).for_each(|entry| {
+    //    println!("possible option: {:?}", entry);
+    //});
+    check(&key_distances, &'@', &HashSet::new());
 
-    if po.verbose {
-        println!("target key: {}", target_key);
-    }
-
-    let mut person = Person {
-        xx: entrance_xx,
-        yy: entrance_yy,
-        keys: Vec::new(),
-        steps: 0,
-    };
-
-    let mut absolute_best = match po.config.get("limit") {
-        Some(limit) => limit.parse().unwrap(),
-        None => std::usize::MAX,
-    };
-    check_it(&maze, person, number_of_keys, &mut absolute_best)
+    0
 }
 
-fn check_it(maze: &Maze, person: Person, target_number_of_keys: usize, absolute_best: &mut usize) -> usize {
-    if person.keys.len() == target_number_of_keys {
-        println!("found path: {:?} -> {}", person.keys, person.steps);
-        *absolute_best = usize::min(*absolute_best, person.steps);
-        return person.steps;
-    } else if person.steps >= *absolute_best {
-        return std::usize::MAX;
-    }
-
-    let mut checks = Vec::new();
-    for (key, distance, keypos) in maze.reachable_keys(&person) {
-        //if po.verbose {
-        //    println!("can get to key {} @ {:?} in {} steps", key, keypos, distance);
-        //}
-
-        let new_person = Person {
-            xx: keypos.0,
-            yy: keypos.1,
-            keys: {
-                let mut keys = person.keys.to_owned();
-                keys.push(key);
+fn check(key_distances: &HashMap<char, HashMap<char, (usize, HashSet<char>)>>, from: &char, keys: &HashSet<char>) -> usize {
+    println!("checking {}", from);
+    key_distances
+        .get(from)
+        .unwrap()
+        .iter()
+        .filter(|(key, (dist, doors))| {
+            from != *key && doors.is_subset(keys)
+        })
+        .map(|entry| {
+            println!("possible option: {:?}", entry);
+            let new_keys = {
+                let mut keys = keys.clone();
+                keys.insert(*entry.0);
                 keys
-            },
-            steps: person.steps + distance,
-        };
-
-        if new_person.steps > *absolute_best {
-            continue;
-        }
-
-        checks.push(check_it(maze, new_person, target_number_of_keys, absolute_best));
-    }
-
-    match checks.into_iter().min() {
-        Some(steps) => steps,
-        None => std::usize::MAX,
-    }
+            };
+            check(key_distances, entry.0, &new_keys)
+        })
+        .min().unwrap()
 }
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
