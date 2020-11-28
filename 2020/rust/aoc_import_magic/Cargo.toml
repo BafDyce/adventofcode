@@ -1,0 +1,12 @@
+[package]
+name = "aoc_import_magic"
+version = "0.1.0"
+authors = ["Fabian Würfl <bafdyce@tuta.io>"]
+edition = "2018"
+
+
+[dependencies]
+clap = "2.33.0"
+serde = "1"
+serde_derive = "1"
+serde_json = "1"

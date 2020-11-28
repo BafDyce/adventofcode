@@ -1,13 +1,7 @@
 
 # adventofcode
-My personal implementations for
-[Advent of Code (AoC)](https://adventofcode.com/)
 
-
-> **2019 WIP**: After finishing each days puzzle, I push it onto the
-> [2019](https://gitlab.com/BafDyce/adventofcode/tree/2019) branch. Every few
-> days I will merge it into master. So, if you don't see the latest solutions,
-> be sure to check out the right branch!
+My personal implementations for [Advent of Code (AoC)](https://adventofcode.com/)
 
 # Leaderboard entries (only top 100)
 | Year | Day | Language | Rank part 1 | Rank part 2 | Link |
@@ -18,6 +12,11 @@ My personal implementations for
 
 # Solved challenges
 Implementations for other languages will hopefully come too some day.
+
+## 2020
+
+| [AoC](https://adventofcode.com/2020) | Rust |
+|--------------------------------------|------|
 
 ## 2019
 
