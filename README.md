@@ -30,6 +30,23 @@ Implementations for other languages will hopefully come too some day.
 |[Day 6 - "Universal Orbit Map"](https://adventofcode.com/2019/day/6)| [main.rs](./2019/rust/day06/src/main.rs) |
 |[Day 7 - "Amplification Circuit"](https://adventofcode.com/2019/day/7)| [main.rs](./2019/rust/day07/src/main.rs) |
 |[Day 8 - "Space Image Format"](https://adventofcode.com/2019/day/8)| [main.rs](./2019/rust/day08/src/main.rs) |
+|[Day 9 - "Sensor Boost"](https://adventofcode.com/2019/day/9)| [main.rs](./2019/rust/day09/src/main.rs) |
+|[Day 10 - "Monitoring Station"](https://adventofcode.com/2019/day/10)| [main.rs](./2019/rust/day10/src/main.rs) |
+|[Day 11 - "Space Police"](https://adventofcode.com/2019/day/11)| [main.rs](./2019/rust/day11/src/main.rs) |
+|[Day 12 - "The N-Body Problem"](https://adventofcode.com/2019/day/12)| [main.rs](./2019/rust/day12/src/main.rs) |
+|[Day 13 - "Care Package"](https://adventofcode.com/2019/day/13)| [main.rs](./2019/rust/day13/src/main.rs) |
+|[Day 14 - "Space Stoichiometry"](https://adventofcode.com/2019/day/14)| [main.rs](./2019/rust/day14/src/main.rs) |
+|[Day 15 - "Oxygen System"](https://adventofcode.com/2019/day/15)| [main.rs](./2019/rust/day15/src/main.rs) |
+|[Day 16 - "Flawed Frequency Transmission"](https://adventofcode.com/2019/day/16)| [main.rs](./2019/rust/day16/src/main.rs) |
+|[Day 17 - "Set and Forget"](https://adventofcode.com/2019/day/17)| [main.rs](./2019/rust/day17/src/main.rs) |
+|[Day 18 - "Many-Worlds Interpretation"](https://adventofcode.com/2019/day/18)| [main.rs](./2019/rust/day18/src/main.rs) |
+|[Day 19 - "Tractor Beam"](https://adventofcode.com/2019/day/19)| [main.rs](./2019/rust/day19/src/main.rs) |
+|[Day 20 - "Donut Maze"](https://adventofcode.com/2019/day/20)| [main.rs](./2019/rust/day20/src/main.rs) |
+|[Day 21 - "Springdroid Adventure"](https://adventofcode.com/2019/day/21)| [main.rs](./2019/rust/day21/src/main.rs) |
+|[Day 22 - "Slam Shuffle"](https://adventofcode.com/2019/day/22)| [main.rs](./2019/rust/day22/src/main.rs) |
+|[Day 23 - "Category Six"](https://adventofcode.com/2019/day/23)| [main.rs](./2019/rust/day23/src/main.rs) |
+|[Day 24 - "Planet of Discord"](https://adventofcode.com/2019/day/24)| [main.rs](./2019/rust/day24/src/main.rs) |
+|[Day 25 - "Cryostasis"](https://adventofcode.com/2019/day/25)| [main.rs](./2019/rust/day25/src/main.rs) |
 
 
 ## 2018
