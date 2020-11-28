@@ -75,17 +75,20 @@ fn fft(signal: &Vec<isize>) -> Vec<isize> {
 }
 
 fn fft2(signal: &Vec<isize>) -> Vec<isize> {
-    let mut signal = signal.to_owned();
+    let real_length = signal.len() * 10000;
+    let mut signal: Vec<isize> = signal.iter().cycle().take(real_length).map(|xx| *xx).collect();
 
-    for __ in 1 ..= 100 {
+    for ii in 1 ..= 100 {
         let mut res = Vec::new();
         for nn in 1 ..= signal.len() {
             let tmp = gen_fft_sequence(nn).zip(signal.iter()).map(|(aa, bb)| aa * bb).sum::<isize>();
-            let tmp = (tmp * 10_000) % 10;
+            let tmp = tmp % 10;
             let tmp = tmp.abs();
             res.push(tmp);
+            print!(".");
         }
         signal = res;
+        println!("| iteration {} done", ii);
     }
 
     signal
