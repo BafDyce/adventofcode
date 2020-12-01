@@ -1,6 +1,12 @@
 /*
 
-BENCHMARK RESULTS
+running 6 tests
+test tests::example_1 ... ignored
+test bench::bench_parsing       ... bench:       6,976 ns/iter (+/- 655)
+test bench::bench_part1         ... bench:       8,473 ns/iter (+/- 373)
+test bench::bench_part1_initial ... bench:       2,473 ns/iter (+/- 166)
+test bench::bench_part2         ... bench:      27,134 ns/iter (+/- 1,552)
+test bench::bench_part2_initial ... bench:     942,981 ns/iter (+/- 7,275)
 
 */
 
@@ -8,9 +14,10 @@ BENCHMARK RESULTS
 // use: $ rustup run nightly cargo bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
 
+
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use std::{
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     io,
 };
 
@@ -54,17 +61,21 @@ fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: 
         .collect()
 }
 
+/// "Improved" version. On paper, this algorithm is O(n), compared to O(n^2) for the initial
+/// solution, however for my actual puzzle input it is almost 4 times as slow!?
 fn part1(po: &TodaysPuzzleOptions) -> OutputType {
-    for aa in po.data.as_ref().unwrap().iter() {
-        for bb in po.data.as_ref().unwrap().iter() {
-            if aa == bb {
-                continue;
-            }
+    let mut seen = HashSet::new();
 
-            if aa + bb == 2020 {
-                println!("aa: {}, bb: {}", aa ,bb);
-                return aa * bb;
-            }
+    for number in po.data.as_ref().unwrap().iter() {
+        if *number >= 2020 {
+            continue;
+        }
+
+        let diff = 2020 - number;
+        if seen.contains(&diff) {
+            return *number * diff;
+        } else {
+            seen.insert(*number);
         }
     }
 
@@ -72,24 +83,65 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType {
 }
 
 
+/// More efficient solution
 fn part2(po: &TodaysPuzzleOptions) -> OutputType {
-    for aa in po.data.as_ref().unwrap().iter() {
-        for bb in po.data.as_ref().unwrap().iter() {
-            for cc in po.data.as_ref().unwrap().iter() {
-                if aa == bb || aa == cc || bb == cc {
-                    continue;
-                }
+    let numbers: HashSet<usize> = po.data.as_ref().unwrap().iter().map(ToOwned::to_owned).collect();
 
-                if aa + bb + cc == 2020 {
-                    println!("aa: {}, bb: {}", aa ,bb);
-                    return aa * bb * cc;
-                }
+    for (idx, aa) in numbers.iter().enumerate() {
+        for bb in numbers.iter().skip(idx + 1) {
+            if aa + bb >= 2020 {
+                continue;
             }
 
+            let diff = 2020 - aa - bb;
+            if numbers.contains(&diff) {
+                return aa * bb * diff;
+            }
         }
     }
 
     0
+}
+
+// Initial implementations (those that got me the stars at first)
+mod initial {
+    use super::{OutputType, TodaysPuzzleOptions};
+
+    pub(super) fn part1(po: &TodaysPuzzleOptions) -> OutputType {
+        for aa in po.data.as_ref().unwrap().iter() {
+            for bb in po.data.as_ref().unwrap().iter() {
+                if aa == bb {
+                    continue;
+                }
+
+                if aa + bb == 2020 {
+                    return aa * bb;
+                }
+            }
+        }
+
+        0
+    }
+
+
+    pub(super) fn part2(po: &TodaysPuzzleOptions) -> OutputType {
+        for aa in po.data.as_ref().unwrap().iter() {
+            for bb in po.data.as_ref().unwrap().iter() {
+                for cc in po.data.as_ref().unwrap().iter() {
+                    if aa == bb || aa == cc || bb == cc {
+                        continue;
+                    }
+
+                    if aa + bb + cc == 2020 {
+                        return aa * bb * cc;
+                    }
+                }
+
+            }
+        }
+
+        0
+    }
 }
 
 #[cfg(test)]
@@ -110,9 +162,18 @@ mod tests {
         assert_eq!(sol2, res2, "part2");
     }
 
+    fn test_case_helper_initial(inputname: &str, sol1: OutputType, sol2: OutputType) {
+        let po = import_helper(inputname);
+        let res1 = initial::part1(&po);
+        assert_eq!(sol1, res1, "part1");
+        let res2 = initial::part2(&po);
+        assert_eq!(sol2, res2, "part2");
+    }
+
     #[test]
     fn example_1() {
-        test_case_helper("example1", 514579, 241861950)
+        test_case_helper_initial("example1", 514579, 241861950);
+        test_case_helper("example1", 514579, 241861950);
     }
 }
 
@@ -152,6 +213,18 @@ mod bench {
     #[bench]
     fn bench_part2(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
-        bb.iter(|| test::black_box(part2(&puzzle_options, None)));
+        bb.iter(|| test::black_box(part2(&puzzle_options)));
+    }
+
+    #[bench]
+    fn bench_part1_initial(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| test::black_box(initial::part1(&puzzle_options)));
+    }
+
+    #[bench]
+    fn bench_part2_initial(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| test::black_box(initial::part2(&puzzle_options)));
     }
 }
