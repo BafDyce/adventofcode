@@ -44,7 +44,7 @@ test -d "${projectdir}" && {
     # configure files
     pushd $projectdir &> /dev/null
     sed -i "s/aoc-2020-00/aoc-2020-${day_leading_0}/" Cargo.toml
-    sed -i "s/const DAY: u32 = 0;/const DAY: u32 = ${day_normal};/" src/main.rs
+    sed -i "s/const DAY: i32 = 0;/const DAY: u32 = ${day_normal};/" src/main.rs
     popd &> /dev/null
 }
 
@@ -55,7 +55,7 @@ line_2019=$(rg --line-number '## 2019' ../../README.md | cut -d: -f1)
 tail -n +${line_2020} ../../README.md | head -n $(($line_2019 - $line_2020)) | rg "\[Day $day_normal\]" && {
     echo Nothing to do
 } || {
-    line_to_insert="|[Day $day_normal](./2020/_tasks/day${day_leading_0}.md)| [main.rs](./2020/rust/day${day_leading_0}/src/main.rs) |"
+    line_to_insert="|[Day $day_normal](https://adventofcode.com/2020/day/${day_normal})| [main.rs](./2020/rust/day${day_leading_0}/src/main.rs) |"
     line_number_to_insert=$(($line_2020 + $day_normal + 3))
     # echo $line_to_insert
     # echo line $line_number_to_insert
