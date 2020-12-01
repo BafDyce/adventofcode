@@ -1,0 +1,19 @@
+[package]
+name = "aoc-2020-01"
+version = "0.1.0"
+authors = ["Fabian Würfl <bafdyce@tuta.io>"]
+edition = "2018"
+
+[features]
+unstable = []
+
+[dependencies]
+aoc_import_magic = { path = "../aoc_import_magic" }
+clap = "2.33.0"
+lazy_static = "1.4"
+rand = "^0.7.2"
+rand_distr = "0.2"
+regex = "1"
+serde = "1"
+serde_derive = "1"
+serde_json = "1"

@@ -17,6 +17,7 @@ Implementations for other languages will hopefully come too some day.
 
 | [AoC](https://adventofcode.com/2020) | Rust |
 |--------------------------------------|------|
+|[Day 1 - "Report Repair"](https://adventofcode.com/2020/day/1)| [main.rs](./2020/rust/day01/src/main.rs) |
 
 ## 2019
 
