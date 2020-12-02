@@ -20,7 +20,7 @@ use std::{
     io,
 };
 
-const DAY: i32 = 0;
+const DAY: u32 = 0;
 type InputTypeSingle = usize;
 type InputType = Vec<InputTypeSingle>;
 type OutputType1 = usize;
@@ -40,29 +40,6 @@ impl From<()> for Data {
     fn from(from: ()) -> Data {
         Data {}
     }
-}
-
-fn main() -> Result<(), io::Error> {
-    println!("AoC 2020 | Day {}", DAY);
-
-    // This function is pure magic (see ../../aoc_import_magic/lib.rs) because it
-    // 1. parses command line arguments
-    // 2. reads the input file for the correct day
-    // 3. uses `parse_input` as a parsing function
-    // 4. returns a nice usable struct which contains everything which we need for the actual puzzle
-    let puzzle = import_magic(DAY, parse_input)?;
-    let res1 = if puzzle.skip_p1 {
-        None
-    } else {
-        let res1 = part1(&puzzle);
-        println!("Part 1 result: {}", res1);
-        Some(res1)
-    };
-
-    let res2 = part2(&puzzle, res1);
-    println!("Part 2 result: {}", res2);
-
-    Ok(())
 }
 
 fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
@@ -98,6 +75,34 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
     po.data.as_ref().unwrap().into_iter().sum()
+}
+
+
+// =================================================================================================
+// End of actual logic
+// What follows is the main function glue as well as tests + benchmarking code
+// =================================================================================================
+fn main() -> Result<(), io::Error> {
+    println!("AoC 2020 | Day {}", DAY);
+
+    // This function is pure magic (see ../../aoc_import_magic/lib.rs) because it
+    // 1. parses command line arguments
+    // 2. reads the input file for the correct day
+    // 3. uses `parse_input` as a parsing function
+    // 4. returns a nice usable struct which contains everything which we need for the actual puzzle
+    let puzzle = import_magic(DAY, parse_input)?;
+    let res1 = if puzzle.skip_p1 {
+        None
+    } else {
+        let res1 = part1(&puzzle);
+        println!("Part 1 result: {}", res1);
+        Some(res1)
+    };
+
+    let res2 = part2(&puzzle, res1);
+    println!("Part 2 result: {}", res2);
+
+    Ok(())
 }
 
 #[cfg(test)]

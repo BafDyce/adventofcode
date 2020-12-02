@@ -44,7 +44,7 @@ test -d "${projectdir}" && {
     # configure files
     pushd $projectdir &> /dev/null
     sed -i "s/aoc-2020-00/aoc-2020-${day_leading_0}/" Cargo.toml
-    sed -i "s/const DAY: i32 = 0;/const DAY: u32 = ${day_normal};/" src/main.rs
+    sed -i "s/const DAY: u32 = 0;/const DAY: u32 = ${day_normal};/" src/main.rs
     popd &> /dev/null
 }
 
