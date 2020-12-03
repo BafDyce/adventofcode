@@ -82,6 +82,10 @@ where
 
         Ok(self)
     }
+
+    pub fn get_data(&self) -> &T {
+        self.data.as_ref().unwrap()
+    }
 }
 
 fn args<'a, 'b>(day: u32) -> App<'a, 'b> {

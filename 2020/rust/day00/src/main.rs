@@ -70,11 +70,11 @@ fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bo
 }
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    po.data.as_ref().unwrap().into_iter().sum()
+    po.get_data().into_iter().count()
 }
 
 fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
-    po.data.as_ref().unwrap().into_iter().sum()
+    po.get_data().into_iter().count()
 }
 
 

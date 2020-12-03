@@ -110,7 +110,7 @@ fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: 
 }
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    let map = po.data.as_ref().unwrap();
+    let map = po.get_data();
     let mut pos = Position::new();
     let mut count = 0;
 
@@ -128,7 +128,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 }
 
 fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
-    let map = po.data.as_ref().unwrap();
+    let map = po.get_data();
     let steps = vec![
         Position {
             col: 1, row: 1,
