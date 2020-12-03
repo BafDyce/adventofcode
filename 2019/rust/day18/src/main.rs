@@ -13,9 +13,6 @@ extern crate lazy_static;
 #[macro_use]
 extern crate serde_derive;
 
-mod intcode;
-use intcode::*;
-
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use regex::Regex;
 use std::{
