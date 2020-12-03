@@ -19,6 +19,7 @@ Implementations for other languages will hopefully come too some day.
 |--------------------------------------|------|
 |[Day 1 - "Report Repair"](https://adventofcode.com/2020/day/1)| [main.rs](./2020/rust/day01/src/main.rs) |
 |[Day 2](https://adventofcode.com/2020/day/2)| [main.rs](./2020/rust/day02/src/main.rs) |
+|[Day 3](https://adventofcode.com/2020/day/3)| [main.rs](./2020/rust/day03/src/main.rs) |
 
 ## 2019
 
