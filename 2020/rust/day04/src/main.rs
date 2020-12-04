@@ -8,80 +8,46 @@ BENCHMARK RESULTS
 // use: $ rustup run nightly cargo bench --features unstable
 #![cfg_attr(feature = "unstable", feature(test))]
 
-#[macro_use]
-extern crate lazy_static;
-#[macro_use]
-extern crate serde_derive;
-
 use aoc_import_magic::{import_magic, PuzzleOptions};
-use regex::Regex;
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::HashMap,
     io,
 };
 
 const DAY: u32 = 4;
-type InputTypeSingle = usize;
 type InputType = Vec<Vec<String>>;
-type OutputType1 = usize;
-type OutputType2 = OutputType1;
+type OutputType = usize;
 type TodaysPuzzleOptions = PuzzleOptions<InputType>;
 
-#[derive(Clone, Copy, Debug, Default, Deserialize, PartialEq, Serialize)]
-struct Data {}
 
-impl Data {
-    pub fn new() -> Self {
-        Data {}
-    }
-}
+fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: bool) -> InputType {
+    // What we have: Our input file as a list of lines.
+    // What we want: A list of items where each passport is in a single item
 
-impl From<()> for Data {
-    fn from(from: ()) -> Data {
-        Data {}
-    }
-}
-
-fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
-    /*let mut data = HashMap::new();
-
-    for line in input {
-        for item in line.split_whitespace() {
-            if item.starts_with("byr:") {
-
-            }
-        }
-    }*/
-    input.join("\n").split("\n\n").map(|line| line.split_whitespace().map(ToOwned::to_owned).collect()).collect()
-
-
-    /*
+    // How?
     input
-        .into_iter()
-        .map(|line| {
-            // regex parsing stuff
-            /*lazy_static! {
-                // (?x)
-                // (?P<name>xxx)
-                static ref RE: Regex = Regex::new(
-                    r"()*"
-                ).unwrap();
-            }
-
-            let caps = RE.captures(&line).unwrap();
-            // let thingy = &caps["thingy"];
-            // let xx = caps["xx"].chars().next().unwrap();
-            caps.len()*/
-            line.split_whitespace()
-        })
-        .collect()*/
+        // we join everything together again
+        .join("\n")
+        // Data for the same passport can be split across multuple lines but we know that there is at least one empty
+        // line between two passports. This means, we can simply split at two new lines following each other
+        .split("\n\n")
+        // So, now we have one item per passport, but we still have line breaks within passports. So we split at all
+        // whitespace characters (even spaces, tabs, etc.). As a result, we'll have each "data token" in a separate
+        // item (of the sublist)
+        //
+        // .map(ToOwned::to_owned) is required to create strings which we own from the references which split() returns
+        // the .collect() at the end, collects all "data items" into a list (one list containing all data for a pass)
+        .map(|line| line.split_whitespace().map(ToOwned::to_owned).collect())
+        // now collect all passports into a list
+        .collect()
 }
 
-fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
-    //println!("{:?}", po.get_data());
-
+fn part1(po: &TodaysPuzzleOptions) -> OutputType {
     let mut count = 0;
+
     for passport in po.get_data().into_iter() {
+        // We keep track of the specified data items in a hashmap, initializing everything with false. if something
+        // exists, we'll set the value to true.
         let mut data: HashMap<&str, bool> = [
             ("byr", false),
             ("iyr", false),
@@ -90,11 +56,18 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
             ("hcl", false),
             ("ecl", false),
             ("pid", false),
+            // cid is not required, so we can ignore it
             //("cid", false),
+        // this line just converts our list of tuples into a hashmap. See how .collect() does the right thing (
+        // collecting into a HashMap, while it collected into a list before? Thats some of the magic you get from the
+        // rust compiler <3)
         ].iter().cloned().collect();
 
         for item in passport {
+            // Here comes a simple showcase of Rust's amazing pattern matching capabilities
+            // We're only interested in the first three characters of each data item
             match &item[0..3] {
+                // and if they match a specific "word" ..
                 xx @ "byr" |
                 xx @ "iyr" |
                 xx @ "eyr" |
@@ -102,12 +75,26 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
                 xx @ "hcl" |
                 xx @ "ecl" |
                 xx @ "pid" => {
+                    // then we set its corresponding value to true
                     data.insert(xx, true);
                 }
+                // For all other strings, we do nothing. Rust's `match` REQUIRES handling of ALL possible patterns, but
+                // we can also specify a wildcard (but we must do this explicitely). If we would omit the line, we would
+                // get an error message similar to the following:
+                //
+                // error[E0004]: non-exhaustive patterns: `&_` not covered
+                //  --> src/main.rs:69:19
+                //  |
+                //69 |             match &item[0..3] {
+                //  |                   ^^^^^^^^^^^ pattern `&_` not covered
+                //  |
+                //  = help: ensure that all possible cases are being handled, possibly by adding wildcards or more match arms
+                //  = note: the matched value is of type `&str`
                 _ => {}
             }
         }
 
+        // Now we can just check if all values in the hashmap are true and increase the counter if they are.
         if data.values().into_iter().all(|&x| x) {
             count += 1;
         }
@@ -116,9 +103,11 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     count
 }
 
-fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
+fn part2(po: &TodaysPuzzleOptions) -> OutputType {
     let mut count = 0;
+
     for passport in po.get_data().into_iter() {
+        // same approach as before
         let mut data: HashMap<&str, bool> = [
             ("byr", false),
             ("iyr", false),
@@ -127,78 +116,86 @@ fn part2(po: &TodaysPuzzleOptions, res1: Option<OutputType1>) -> OutputType2 {
             ("hcl", false),
             ("ecl", false),
             ("pid", false),
-            //("cid", false),
         ].iter().cloned().collect();
 
         for item in passport {
-            dbg!(item);
+            // But this time, we actually have to check the values as well, so we need to handle each data point in
+            // their own match arm.
             match &item[0..3] {
                 xx @ "byr" => {
-                    match &item[4..].parse() {
-                        Ok(1920 ..= 2002) => {
-                            println!("correct");
-                            data.insert(xx, true);
-                        },
-                        _ => {},
+                    // Behold of some more rust pattern magic power!
+                    // Here .parse() will try to parse the given string into a number. The result will either be an
+                    // Ok(number) or an Err(error). And here we tell rust in a single line to only consider cases where
+                    // the number is in a specific range
+                    if let Ok(1920 ..= 2002) = &item[4..].parse() {
+                        data.insert(xx, true);
                     }
+
+                    // We *could* also write a match like this (i made this in the original implementation):
+                    //
+                    //match &item[4..].parse() {
+                    //   Ok(2020 ..= 2030) => {
+                    //        data.insert(xx, true);
+                    //    },
+                    //    _ => {},
+                    //}
                 }
                 xx @ "iyr" => {
-                    match &item[4..].parse() {
-                        Ok(2010 ..= 2020) => {
-                            println!("correct");
-                            data.insert(xx, true);
-                        },
-                        _ => {},
+                    // Something, I would also like to show here is the dbg!() macro, as I had to use it a couple of
+                    // times. Instead of writing the following line (as in the code below) ..
+                    //
+                    // if let Ok(2010 ..= 2020) = &item[4..].parse() {
+                    //
+                    // .. we can insert the dbg!() macro:
+                    //
+                    // if let Ok(2010 ..= 2020) = dbg!(&item[4..]).parse() {
+                    //
+                    // As a result, the code continues to work but the program would print the following at runtime:
+                    // [src/main.rs:154] &item[4..] = "2019"
+                    // [src/main.rs:154] &item[4..] = "2017"
+                    // [src/main.rs:154] &item[4..] = "2026"
+                    // [src/main.rs:154] &item[4..] = "2006"
+                    if let Ok(2010 ..= 2020) = &item[4..].parse() {
+                        data.insert(xx, true);
                     }
                 }
                 xx @ "eyr" => {
-                    match &item[4..].parse() {
-                        Ok(2020 ..= 2030) => {
-                            println!("correct");
-                            data.insert(xx, true);
-                        },
-                        _ => {},
+                    if let Ok(2020 ..= 2030) = &item[4..].parse() {
+                        data.insert(xx, true);
                     }
                 }
                 xx @ "hgt" => {
-                    //dbg!(item);
                     if item.ends_with("cm") {
-                        match &item[4..item.len()-2].parse() {
-                            Ok(150 ..= 193) => {
-                                println!("correct");
-                                data.insert(xx, true);
-                            },
-                            _ => {},
+                        if let Ok(150 ..= 193) = &item[4..item.len()-2].parse() {
+                            data.insert(xx, true);
                         }
                     } else if item.ends_with("in") {
-                        match &item[4..item.len()-2].parse() {
-                            Ok(59 ..= 76) => {
-                                println!("correct");
-                                data.insert(xx, true);
-                            },
-                            _ => {},
+                        if let Ok(59 ..= 76) = &item[4..item.len()-2].parse() {
+                            data.insert(xx, true);
                         }
                     }
 
                 }
                 xx @ "hcl" => {
-                    if item.chars().nth(4).unwrap() == '#' && item[5..].chars().all(|cc| cc.is_ascii_hexdigit()) {
-                        println!("correct");
+                    // check if the 4th character is a # (we cannot use item[4] because Rust strings do not support
+                    // indexing because of utf-8 support and resulting variable character/byte boundaries. Specifying
+                    // anges, e.g. item[5..] works though :D)
+                    // Also, luckily Rust already provides convenience functions like is_ascii_hexdigit()
+                    if item.chars().nth(4) == Some('#') && item[5..].chars().all(|cc| cc.is_ascii_hexdigit()) {
                         data.insert(xx, true);
                     }
                 }
                 xx @ "ecl" => {
-                    match dbg!(&item[4..]) {
+                    match &item[4..] {
                         "amb" | "blu" | "brn" | "gry" | "grn" | "hzl" | "oth" => {
-                            println!("correct");
                             data.insert(xx, true);
                         }
                         _ => {},
                     }
                 }
                 xx @ "pid" => {
+                    // 13 == 3 ("pid") + 1 (":") + 9 (digits)
                     if item.len() == 13 && item[5..].chars().all(|cc| cc.is_ascii_digit()) {
-                        println!("correct");
                         data.insert(xx, true);
                     }
                 }
@@ -228,15 +225,12 @@ fn main() -> Result<(), io::Error> {
     // 3. uses `parse_input` as a parsing function
     // 4. returns a nice usable struct which contains everything which we need for the actual puzzle
     let puzzle = import_magic(DAY, parse_input)?;
-    let res1 = if puzzle.skip_p1 {
-        None
-    } else {
+    if !puzzle.skip_p1 {
         let res1 = part1(&puzzle);
         println!("Part 1 result: {}", res1);
-        Some(res1)
-    };
+    }
 
-    let res2 = part2(&puzzle, res1);
+    let res2 = part2(&puzzle);
     println!("Part 2 result: {}", res2);
 
     Ok(())
