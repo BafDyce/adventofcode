@@ -1,7 +1,8 @@
 /*
-test bench::bench_parsing ... bench:     273,519 ns/iter (+/- 4,098)
-test bench::bench_part1   ... bench:         262 ns/iter (+/- 6)
-test bench::bench_part2   ... bench:      26,596 ns/iter (+/- 705)
+test bench::bench_parsing       ... bench:     261,028 ns/iter (+/- 18,042)
+test bench::bench_part1         ... bench:         322 ns/iter (+/- 21)
+test bench::bench_part2         ... bench:      10,722 ns/iter (+/- 287)
+test bench::bench_part2_initial ... bench:      26,563 ns/iter (+/- 984)
 */
 
 // allow bench feature when using unstable flag
@@ -66,6 +67,26 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 }
 
 fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
+    // key = row number, value = list of seats numbers (columns)
+    let mut plane = Vec::new();
+
+    // populate plane
+    for seat in po.get_data() {
+        plane.push(seat.id());
+    }
+
+    plane.sort();
+    for (aa, bb) in plane.iter().zip(plane.iter().skip(1)) {
+        if bb - aa > 1 {
+            return aa + 1;
+        }
+    }
+
+    0
+}
+
+// Initial solution (slightly cleaned up) which brought me the star
+fn part2_initial(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
     // key = row number, value = list of seats numbers (columns)
     let mut plane: HashMap<usize, Vec<_>> = HashMap::new();
 
@@ -186,6 +207,12 @@ mod bench {
     fn bench_part1(bb: &mut Bencher) {
         let puzzle_options = import_helper("real1");
         bb.iter(|| test::black_box(part1(&puzzle_options)));
+    }
+
+    #[bench]
+    fn bench_part2_initial(bb: &mut Bencher) {
+        let puzzle_options = import_helper("real1");
+        bb.iter(|| test::black_box(part2_initial(&puzzle_options, None)));
     }
 
     #[bench]
