@@ -1,7 +1,7 @@
 /*
 test bench::bench_parsing       ... bench:     261,028 ns/iter (+/- 18,042)
 test bench::bench_part1         ... bench:         322 ns/iter (+/- 21)
-test bench::bench_part2         ... bench:      10,722 ns/iter (+/- 287)
+test bench::bench_part2         ... bench:       9,045 ns/iter (+/- 287)
 test bench::bench_part2_initial ... bench:      26,563 ns/iter (+/- 984)
 */
 
@@ -67,17 +67,20 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
 }
 
 fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
-    // key = row number, value = list of seats numbers (columns)
-    let mut plane = Vec::new();
+    // reserve enough space upfront, to prevent on-demand allocations during population phase
+    let mut plane = Vec::with_capacity(po.get_data().len());
 
     // populate plane
     for seat in po.get_data() {
         plane.push(seat.id());
     }
 
+    // sort seat ids
     plane.sort();
+
+    // find hole in the list and return it
     for (aa, bb) in plane.iter().zip(plane.iter().skip(1)) {
-        if bb - aa > 1 {
+        if bb - aa == 2 {
             return aa + 1;
         }
     }
@@ -86,6 +89,7 @@ fn part2(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
 }
 
 // Initial solution (slightly cleaned up) which brought me the star
+#[allow(unused)]
 fn part2_initial(po: &TodaysPuzzleOptions, _res1: Option<OutputType1>) -> OutputType2 {
     // key = row number, value = list of seats numbers (columns)
     let mut plane: HashMap<usize, Vec<_>> = HashMap::new();
