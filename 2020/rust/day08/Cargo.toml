@@ -1,0 +1,12 @@
+[package]
+name = "aoc-2020-08"
+version = "0.1.0"
+authors = ["Fabian Würfl <bafdyce@tuta.io>"]
+edition = "2018"
+
+[features]
+unstable = []
+
+[dependencies]
+aoc_import_magic = { path = "../aoc_import_magic" }
+clap = "2.33.0"
