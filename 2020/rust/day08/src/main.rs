@@ -3,9 +3,10 @@
 Day       Time  Rank  Score       Time  Rank  Score
   8   00:15:46  4222      0   00:54:11  5832      0
 
-test bench::bench_parsing ... bench:      59,136 ns/iter (+/- 10,002)
-test bench::bench_part1   ... bench:      10,181 ns/iter (+/- 620)
-test bench::bench_part2   ... bench:   9,915,242 ns/iter (+/- 318,146)
+test bench::bench_parsing        ... bench:      64,744 ns/iter (+/- 2,801)
+test bench::bench_part1          ... bench:      10,092 ns/iter (+/- 161)
+test bench::bench_part2          ... bench:   1,962,547 ns/iter (+/- 19,544)
+test bench::bench_part2_original ... bench:   8,511,750 ns/iter (+/- 1,373,254)
 
 */
 
@@ -58,19 +59,21 @@ impl From<String> for Instruction {
 fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: bool) -> InputType {
     input
         .into_iter()
-        .map(|line| { Instruction::from(line)})
+        .map(Instruction::from)
         .collect()
 }
 
-fn part1(po: &TodaysPuzzleOptions) -> OutputType {
-    let program = po.get_data();
-
+// return value:
+// .1: did it terminate?
+// .2: value of acc after program has terminated or value of acc before first instruction was
+//  executed twice
+fn execute(program: &Vec<Instruction>) -> (bool, i32) {
     let mut acc = 0;
     let mut ip = 0;
     let mut ips_executed = HashSet::new();
     ips_executed.insert(0);
 
-    loop {
+    while ip < program.len() {
         let instr = program[ip];
         let acc_before = acc;
         let ip_change = match instr.op {
@@ -84,16 +87,53 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType {
 
         let ip_next = (ip as i32 + ip_change) as usize;
         if ips_executed.get(&ip_next).is_some() {
-            // yes, we can also return data from loops ;)
-            break acc_before;
+            return (false, acc_before);
         } else {
             ips_executed.insert(ip_next);
             ip = ip_next;
         }
     }
+
+    (true, acc)
+}
+
+fn flip_instruction(instr: &mut Instruction) {
+    instr.op = match instr.op {
+        unchanged @ Opcode::Acc => unchanged,
+        Opcode::Jmp => Opcode::Nop,
+        Opcode::Nop => Opcode::Jmp,
+    }
+}
+
+fn part1(po: &TodaysPuzzleOptions) -> OutputType {
+    let program = po.get_data();
+
+    execute(&program).1
 }
 
 fn part2(po: &TodaysPuzzleOptions) -> OutputType {
+    let mut program = po.get_data().clone();
+
+    for ii in 0..program.len() {
+        let instr = &mut program[ii];
+        if instr.op == Opcode::Acc {
+            continue;
+        }
+
+        flip_instruction(instr);
+
+        if let (true, result) = execute(&program) {
+            return result;
+        }
+
+        // flip back before going to next one
+        flip_instruction(&mut program[ii]);
+    }
+
+    0
+}
+
+fn part2_original(po: &TodaysPuzzleOptions) -> OutputType {
     let mut program = po.get_data().clone();
     let verbose = po.config.get("verbose").is_some();
 
@@ -350,5 +390,11 @@ mod bench {
     fn bench_part2(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
         bb.iter(|| test::black_box(part2(&puzzle_options)));
+    }
+
+    #[bench]
+    fn bench_part2_original(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| test::black_box(part2_original(&puzzle_options)));
     }
 }
