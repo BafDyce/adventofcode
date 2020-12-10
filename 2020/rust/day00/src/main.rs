@@ -16,7 +16,7 @@ extern crate serde_derive;
 use aoc_import_magic::{import_magic, PuzzleOptions};
 use regex::Regex;
 use std::{
-    collections::{HashMap, VecDeque},
+    collections::{HashMap, HashSet, VecDeque},
     io,
 };
 
@@ -68,6 +68,16 @@ fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bo
         })
         .collect()
 }
+
+/*
+fn parse_input_empty_lines(input: Vec<String>, _config: &HashMap<String, String>, _verbose: bool) -> InputType {
+    input
+        .join("\n")
+        .split("\n\n")
+        .map(|line| line.split('\n').map(ToOwned::to_owned).collect())
+        .collect()
+}
+*/
 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     po.get_data().into_iter().count()
