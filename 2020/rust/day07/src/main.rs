@@ -49,6 +49,9 @@ fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: 
     input
         .into_iter()
         .map(|line| {
+            // lazy_static: Everything in that block will be evaluated (initialized) at runtime upon
+            // first use, but reused afterwards. So, even if the function is called multiple times,
+            // the regex will only be compiled once.
             lazy_static! {
                 // First I tried to create a regex which matches everything in "rest" in repeated
                 // groups, but I couldnt find out how.. So I went this split approach instead.
