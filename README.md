@@ -28,6 +28,7 @@ Implementations for other languages will hopefully come too some day.
 |[Day 9](https://adventofcode.com/2020/day/9)| [main.rs](./2020/rust/day09/src/main.rs) |
 |[Day 10](https://adventofcode.com/2020/day/10)| [main.rs](./2020/rust/day10/src/main.rs) |
 |[Day 11](https://adventofcode.com/2020/day/11)| [main.rs](./2020/rust/day11/src/main.rs) |
+|[Day 12](https://adventofcode.com/2020/day/12)| [main.rs](./2020/rust/day12/src/main.rs) |
 
 ## 2019
 
