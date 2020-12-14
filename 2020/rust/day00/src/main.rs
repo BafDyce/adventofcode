@@ -42,7 +42,7 @@ impl From<()> for Data {
     }
 }
 
-fn parse_input(input: Vec<String>, config: &HashMap<String, String>, verbose: bool) -> InputType {
+fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: bool) -> InputType {
     // PARSE input
     input
         .into_iter()
@@ -125,17 +125,23 @@ mod tests {
         import_magic_with_params(DAY, parse_input, &params).unwrap()
     }
 
-    fn test_case_helper(inputname: &str, sol1: OutputType1, sol2: OutputType2) {
+    fn test_case_helper(inputname: &str, sol1: Option<OutputType1>, sol2: Option<OutputType2>) {
         let po = import_helper(inputname);
-        let res1 = part1(&po);
-        assert_eq!(sol1, res1, "part1");
-        let res2 = part2(&po, Some(res1));
-        assert_eq!(sol2, res2, "part2");
+
+        if let Some(sol1) = sol1 {
+            let res1 = part1(&po);
+            assert_eq!(sol1, res1, "part1");
+        }
+
+        if let Some(sol2) = sol2 {
+            let res2 = part2(&po);
+            assert_eq!(sol2, res2, "part2");
+        }
     }
 
     #[test]
     fn example_1() {
-        test_case_helper("example1", 8, 8)
+        test_case_helper("example1", Some(17), None)
     }
 }
 
