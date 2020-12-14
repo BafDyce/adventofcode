@@ -30,6 +30,7 @@ Implementations for other languages will hopefully come too some day.
 |[Day 11](https://adventofcode.com/2020/day/11)| [main.rs](./2020/rust/day11/src/main.rs) |
 |[Day 12](https://adventofcode.com/2020/day/12)| [main.rs](./2020/rust/day12/src/main.rs) |
 |[Day 13](https://adventofcode.com/2020/day/13)| [main.rs](./2020/rust/day13/src/main.rs) |
+|[Day 14](https://adventofcode.com/2020/day/14)| [main.rs](./2020/rust/day14/src/main.rs) |
 
 ## 2019
 
