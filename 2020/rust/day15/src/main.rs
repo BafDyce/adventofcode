@@ -3,9 +3,10 @@
 Day       Time  Rank  Score       Time  Rank  Score
  15   00:32:48  3743      0   00:34:00  2246      0
 
-test bench::bench_parsing ... bench:         187 ns/iter (+/- 4)
-test bench::bench_part1   ... bench:     111,132 ns/iter (+/- 581)
-test bench::bench_part2   ... bench: 2,348,068,690 ns/iter (+/- 111,414,202)
+test bench::bench_parsing            ... bench:         238 ns/iter (+/- 2)
+test bench::bench_part1              ... bench:       4,803 ns/iter (+/- 48)
+test bench::bench_part2              ... bench: 770,005,035 ns/iter (+/- 37,676,927)
+test bench::bench_play_game_original ... bench: 2,227,066,500 ns/iter (+/- 82,754,742)
 
 */
 
@@ -30,6 +31,30 @@ fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: 
 }
 
 fn play_game(start_numbers: &InputType, end_turn: usize) -> OutputType {
+    let mut spoken_numbers: Vec<Option<usize>> = Vec::with_capacity(end_turn);
+    spoken_numbers.resize(end_turn, None);
+
+    for (idx, number) in start_numbers.iter().enumerate() {
+        spoken_numbers[*number] = Some(idx+1);
+    }
+
+    let mut last_number = *start_numbers.last().unwrap();
+    for turn in start_numbers.len() + 1 ..= end_turn {
+        let speak_number = match spoken_numbers[last_number] {
+            Some(turn_before) => {
+                turn - 1 - turn_before
+            }
+            None => 0
+        };
+        spoken_numbers[last_number] = Some(turn - 1);
+
+        last_number = speak_number;
+    }
+    last_number
+}
+
+#[allow(dead_code)]
+fn play_game_original(start_numbers: &InputType, end_turn: usize) -> OutputType {
     let mut spoken_numbers: HashMap<usize, (usize, Option<usize>)> = start_numbers
         .iter()
         .enumerate()
@@ -75,7 +100,7 @@ fn part1(po: &TodaysPuzzleOptions) -> OutputType {
 }
 
 fn part2(po: &TodaysPuzzleOptions) -> OutputType {
-    play_game(po.get_data(), 30000000)
+    play_game(po.get_data(), 30_000_000)
 }
 
 
@@ -200,5 +225,11 @@ mod bench {
     fn bench_part2(bb: &mut Bencher) {
         let puzzle_options = tests::import_helper("real1");
         bb.iter(|| test::black_box(part2(&puzzle_options)));
+    }
+
+    #[bench]
+    fn bench_play_game_original(bb: &mut Bencher) {
+        let puzzle_options = tests::import_helper("real1");
+        bb.iter(|| test::black_box(play_game_original(puzzle_options.get_data(), 30_000_000)));
     }
 }
