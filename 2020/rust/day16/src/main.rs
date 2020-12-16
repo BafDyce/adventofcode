@@ -3,9 +3,9 @@
 Day       Time  Rank  Score       Time  Rank  Score
  16   00:43:47  4769      0   01:18:00  2714      0
 
-test bench::bench_parsing ... bench:     137,156 ns/iter (+/- 3,327)
-test bench::bench_part1   ... bench:       8,030 ns/iter (+/- 222)
-test bench::bench_part2   ... bench:     560,917 ns/iter (+/- 7,447)
+test bench::bench_parsing ... bench:     137,253 ns/iter (+/- 1,176)
+test bench::bench_part1   ... bench:      14,456 ns/iter (+/- 831)
+test bench::bench_part2   ... bench:     559,044 ns/iter (+/- 9,259)
 
 */
 
@@ -42,6 +42,7 @@ struct TicketData {
 struct Ticket {
     numbers: Vec<usize>,
 }
+
 #[derive(Clone, Debug, Default, Deserialize, PartialEq, Serialize)]
 struct TicketClass {
     name: String,
@@ -49,22 +50,13 @@ struct TicketClass {
 }
 
 impl TicketData {
-    fn ticket_scanning_rate(&self) -> usize {
-        let valid_ranges: Vec<(&(usize, usize), &(usize, usize))> = self.classes.iter().map(|class| {
-            (
-                (&class.ranges[0]),
-                (&class.ranges[1]),
-            )
-        }).collect();
-
+    fn ticket_scanning_error_rate(&self) -> usize {
         let mut error_rate = 0;
         for ticket in &self.others {
             for &number in &ticket.numbers {
-                let numbercheck = valid_ranges.iter().any(|((low_1, high_1), (low_2, high_2))| {
-                    (number >= *low_1 && number <= *high_1) || (number >= *low_2 && number <= *high_2)
-                });
+                let number_invalid_at_least_once = self.classes.iter().all(|class| !class.is_valid_number(number));
 
-                if ! numbercheck {
+                if number_invalid_at_least_once {
                     error_rate += number;
                 }
             }
@@ -74,21 +66,12 @@ impl TicketData {
     }
 
     fn get_valid_tickets(&self) -> Vec<&Ticket> {
-        let valid_ranges: Vec<(&(usize, usize), &(usize, usize))> = self.classes.iter().map(|class| {
-            (
-                (&class.ranges[0]),
-                (&class.ranges[1]),
-            )
-        }).collect();
-
         self.others.iter().filter(|ticket| {
             let mut ticket_valid = true;
             for &number in &ticket.numbers {
-                let numbercheck = valid_ranges.iter().any(|((low_1, high_1), (low_2, high_2))| {
-                    (number >= *low_1 && number <= *high_1) || (number >= *low_2 && number <= *high_2)
-                });
+                let number_invalid_at_least_once = self.classes.iter().all(|class| !class.is_valid_number(number));
 
-                ticket_valid = ticket_valid && numbercheck;
+                ticket_valid = ticket_valid && !number_invalid_at_least_once;
             }
 
             ticket_valid
@@ -100,8 +83,7 @@ impl From<Vec<String>> for TicketData {
     fn from(from: Vec<String>) -> TicketData {
         let mut classes = Vec::new();
         let mut data = from.into_iter();
-        // ranges
-        //for line in data {
+
         while let Some(line) = data.next() {
             if line.is_empty() {
                 break;
@@ -110,10 +92,11 @@ impl From<Vec<String>> for TicketData {
             classes.push(TicketClass::from(line));
         }
 
-        // "your ticket line"
+        // "your ticket line" (empty line was already consumed above)
         let _ = data.next();
         let mine = Ticket::from(data.next().unwrap());
 
+        // empty line, followed by "nearby tickets:"
         let _ = data.next();
         let _ = data.next();
 
@@ -126,12 +109,12 @@ impl From<Vec<String>> for TicketData {
 }
 
 impl TicketClass {
-    fn valid_number(&self, number: usize) -> bool {
+    fn is_valid_number(&self, number: usize) -> bool {
         self.ranges.iter().any(|&(low, high)| number >= low && number <= high)
     }
 
     fn all_valid_numbers(&self, numbers: &HashSet<usize>) -> bool {
-        numbers.iter().all(|number| self.valid_number(*number))
+        numbers.iter().all(|number| self.is_valid_number(*number))
     }
 }
 
@@ -171,15 +154,16 @@ fn parse_input(input: Vec<String>, _config: &HashMap<String, String>, _verbose: 
 fn part1(po: &TodaysPuzzleOptions) -> OutputType1 {
     let data = po.get_data();
 
-    data.ticket_scanning_rate()
+    data.ticket_scanning_error_rate()
 }
 
 fn part2(po: &TodaysPuzzleOptions) -> OutputType2 {
     let data = po.get_data();
 
     let valid_tickets = data.get_valid_tickets();
-    let mut field_numbers: HashMap<usize, HashSet<usize>> = HashMap::new();
 
+    // For each field, collect all observed values
+    let mut field_numbers: HashMap<usize, HashSet<usize>> = HashMap::new();
     for ticket in valid_tickets {
         for (field, number) in ticket.numbers.iter().enumerate() {
             let entry = field_numbers.entry(field).or_default();
@@ -187,7 +171,8 @@ fn part2(po: &TodaysPuzzleOptions) -> OutputType2 {
         }
     }
 
-    //dbg!(&field_numbers);
+    // For each field, collect the list of classes which would be possible (i.e. allow all observed numbers for that
+    // field)
     let mut possible_classes: HashMap<_, _> = field_numbers.into_iter().map(|(field, numbers)| {
         let possible_classes: Vec<_> = data.classes.iter().filter_map(|class| {
             if class.all_valid_numbers(&numbers) {
@@ -200,42 +185,50 @@ fn part2(po: &TodaysPuzzleOptions) -> OutputType2 {
         (field, possible_classes)
     }).collect();
 
-    //dbg!(&possible_classes);
+    // How many fields do we have? That's the number of fields we need to compute.
     let target = data.classes.len();
+    // For each field, save the class (once we know it)
     let mut fields = HashMap::new();
 
-    loop {
-        let mut next_hit = None;
-        for (field, candidates) in &possible_classes {
+    // Loop is guaranteed to terminate at some point:
+    // Either we find 1 or more next_hits and increase the length of fields, OR we dont find a next_hit and return from
+    // the function altogether.
+    while fields.len() != target {
+        // scan possible_classes for those with only one item remaining (if only one candidate is remaining, then this
+        // must be it)
+        // We must create owned copies of the data so that we dont create references to `possible_classes` (as this
+        // would prevent us from removing entries further down)
+        let next_hits: Vec<_> = possible_classes.iter().filter_map(|(field, candidates)| {
             if candidates.len() == 1 {
-                next_hit = Some((*field, candidates[0].to_owned()));
-                break;
+                Some((*field, candidates[0].to_owned()))
+            } else {
+                None
             }
+        }).collect();
+
+        // just in case
+        if next_hits.is_empty() {
+            println!("[ERROR] No candidate found!");
+            dbg!(&fields);
+            dbg!(&possible_classes);
+            return 0;
         }
 
-        match next_hit {
-            Some((field, field_name)) => {
-                for candidates in possible_classes.values_mut() {
-                    //candidates.remove_item(&next_hit.1)
-                    if let Some(position) = candidates.iter().position(|item| **item == field_name) {
-                        candidates.remove(position);
-                    }
+        for (field, field_name) in next_hits {
+            // remove this name from the candidates list of all fields (if present)
+            for candidates in possible_classes.values_mut() {
+                if let Some(position) = candidates.iter().position(|item| **item == field_name) {
+                    candidates.remove(position);
                 }
+            }
 
-                fields.insert(field, field_name);
-            }
-            None => {
-                println!("[ERROR] No candidate found!");
-                dbg!(&fields);
-                dbg!(&possible_classes);
-            }
+            // and store the information that we found it
+            fields.insert(field, field_name);
         }
 
-        if fields.len() == target {
-            break;
-        }
     }
 
+    // now just filter for the relevant fields and multiply the values from our ticket
     fields.into_iter().filter_map(|(position, name)| {
         if name.starts_with("departure") {
             Some(data.mine.numbers[position])
@@ -296,7 +289,7 @@ mod tests {
 
     #[test]
     fn example_1() {
-        test_case_helper("example1", Some(17), None)
+        test_case_helper("example1", Some(71), None)
     }
 }
 
